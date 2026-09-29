@@ -153,7 +153,7 @@ export default function Header() {
                   transition={{ delay: 0.05 * NAV_ITEMS.length + 0.05 }}
                   className="pt-2"
                 >
-                  <Button asChild className="w-full bg-chart-2 font-heading text-black font-bold">
+                  <Button asChild className="w-full bg-chart-2 font-heading text-secondary font-bold">
                     <Link href="/login" onClick={closeMenu}>
                       <LogIn />
                       Log in

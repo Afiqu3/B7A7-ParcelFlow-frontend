@@ -1,5 +1,6 @@
 import DeliveryTrajectory from "@/assets/svg/DeliveryTrajectory";
 import Logo from "@/assets/svg/Logo";
+import LoginForm from "@/components/form/login-form";
 import CheckIcon from "@/components/layout/authentication/CheckIcon";
 import LeftSide from "@/components/layout/authentication/LeftSide";
 import type { Metadata } from "next";
@@ -16,7 +17,11 @@ export default function LoginPage() {
         <LeftSide headingTextOne="Welcome" headingTextTwo="back." descriptionText="Your parcels, payments and deliveries — right where you left them." />
       </div>
 
-      <div className="relative hidden bg-muted col-span-2"></div>
+      <div className="flex flex-1 items-center justify-center bg-accent col-span-3">
+        <div className="w-full max-w-xs">
+            <LoginForm />
+          </div>
+      </div>
     </div>
   );
 }
