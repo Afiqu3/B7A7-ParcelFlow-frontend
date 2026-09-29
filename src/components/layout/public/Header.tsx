@@ -28,7 +28,7 @@ export default function Header() {
   const { data: user, isLoading } = useGetMe();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-[#0F2056] backdrop-blur-md py-1.5">
+    <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-brand backdrop-blur-md py-1.5">
       <nav className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link
           href="/"
@@ -77,7 +77,7 @@ export default function Header() {
             // <UserMenu user={user} />
             null
           ) : (
-            <Button asChild size="lg" className="hidden sm:inline-flex font-heading  text-black font-bold">
+            <Button asChild size="lg" className="hidden sm:inline-flex font-heading  text-black font-bold bg-chart-2">
               <Link href="/login">
                 <LogIn />
                 Log in
@@ -153,7 +153,7 @@ export default function Header() {
                   transition={{ delay: 0.05 * NAV_ITEMS.length + 0.05 }}
                   className="pt-2"
                 >
-                  <Button asChild className="w-full">
+                  <Button asChild className="w-full bg-chart-2 font-heading text-black font-bold">
                     <Link href="/login" onClick={closeMenu}>
                       <LogIn />
                       Log in

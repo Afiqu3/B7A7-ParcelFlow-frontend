@@ -1,5 +1,6 @@
 import Footer from "@/components/layout/public/Footer";
 import Header from "@/components/layout/public/Header";
+import type { Metadata } from "next";
 import { ReactNode } from "react";
 
 export default function layout({ children }: { children: ReactNode }) {
