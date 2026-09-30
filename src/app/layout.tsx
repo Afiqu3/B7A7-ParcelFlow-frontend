@@ -6,43 +6,46 @@ import { Toaster } from "@/components/ui/sonner";
 import Providers from "@/providers";
 
 const instrumentSansHeading = Instrument_Sans({
-  subsets: ["latin"],
-  variable: "--font-heading",
+    subsets: ["latin"],
+    variable: "--font-heading",
 });
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+    variable: "--font-geist-sans",
+    subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+    variable: "--font-geist-mono",
+    subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "ParcelFlow",
+    title: "ParcelFlow",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
-  return (
-    <html
-      lang="en"
-      className={cn(
-        "h-full",
-        "antialiased",
-        geistSans.variable,
-        geistMono.variable,
-        instrumentSansHeading.variable,
-      )}
-      suppressHydrationWarning={true}
-    >
-      <Providers>
-        <body className="min-h-full flex flex-col" suppressHydrationWarning={true}>
-          {children}
-          <Toaster />
-        </body>
-      </Providers>
-    </html>
-  );
+    return (
+        <html
+            lang="en"
+            className={cn(
+                "h-full",
+                "antialiased",
+                geistSans.variable,
+                geistMono.variable,
+                instrumentSansHeading.variable,
+            )}
+            suppressHydrationWarning={true}
+        >
+            <body
+                className="min-h-full flex flex-col"
+                suppressHydrationWarning={true}
+            >
+                <Providers>
+                    {children}
+                    <Toaster />
+                </Providers>
+            </body>
+        </html>
+    );
 }
