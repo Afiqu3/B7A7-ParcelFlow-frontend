@@ -1,0 +1,61 @@
+// Site-wide routes, section anchors and contact details used by the
+// public header, footer and landing page. Update values here, not inline.
+
+export const ROUTES = {
+  home: "/",
+  login: "/login",
+  register: "/register",
+  pricing: "/pricing",
+  rideWithUs: "/ride-with-us",
+  // Rider application flow isn't built yet — point this at it when it is.
+  riderApply: "/rider/apply",
+  about: "/about",
+  contact: "/contact",
+  terms: "/terms",
+  privacy: "/privacy",
+} as const;
+
+// Anchor ids for the landing page sections.
+export const SECTION_IDS = {
+  howItWorks: "how-it-works",
+  features: "features",
+  riders: "riders",
+} as const;
+
+// TODO: replace the placeholders with real support details.
+export const SUPPORT = {
+  email: "[SUPPORT EMAIL]",
+  phone: "[SUPPORT PHONE]",
+} as const;
+
+export type SocialPlatform =
+  | "facebook"
+  | "instagram"
+  | "linkedin"
+  | "youtube"
+  | "x";
+
+// TODO: replace with ParcelFlow's real profile URLs.
+export const SOCIAL_LINKS: {
+  platform: SocialPlatform;
+  label: string;
+  href: string;
+}[] = [
+  {
+    platform: "facebook",
+    label: "Facebook",
+    href: "https://www.facebook.com/",
+  },
+  {
+    platform: "instagram",
+    label: "Instagram",
+    href: "https://www.instagram.com/",
+  },
+  {
+    platform: "linkedin",
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/",
+  },
+  { platform: "youtube", label: "YouTube", href: "https://www.youtube.com/" },
+  { platform: "x", label: "X", href: "https://x.com/" },
+];

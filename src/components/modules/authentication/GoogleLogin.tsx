@@ -1,8 +1,10 @@
 "use client";
 
 import { useGoogleOAuth } from "@/hooks";
+import { isGoogleAuthEnabled } from "@/lib/env";
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/navigation";
+import { FetchError } from "ofetch";
 import { toast } from "sonner";
 
 export default function GoogleLoginComponent() {
@@ -28,10 +30,12 @@ export default function GoogleLoginComponent() {
           });
           router.push("/");
         },
-        onError: (err) => {
-          toast.error("Google OAuth Failed", {
+        onError: (err: FetchError) => {
+          toast.error("Authorization failure", {
             description:
-              err.message || "Something went wrong. Please try again",
+              err.data?.message ||
+              err.message ||
+              "Something went wrong. Please try again",
           });
         },
       },
@@ -43,6 +47,8 @@ export default function GoogleLoginComponent() {
       description: "Something went wrong. Please try again",
     });
   };
+
+  if (!isGoogleAuthEnabled) return null;
 
   return (
     <GoogleLogin

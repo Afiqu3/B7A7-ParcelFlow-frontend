@@ -1,63 +1,85 @@
 "use client";
 
-import Logo from "@/assets/svg/Logo";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { useGetMe } from "@/hooks";
-import { LinkItem } from "@/types";
 import { CircleHelp, LogIn, Menu, Receipt, Truck, X } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValueEvent,
+  useScroll,
+} from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import CtaLink from "@/components/modules/landing/CtaLink";
+import BrandMark from "@/components/shared/BrandMark";
+import { ROUTES } from "@/constants";
+import { useGetMe } from "@/hooks";
+import { cn } from "@/lib/utils";
+import type { LinkItem } from "@/types";
 
 const NAV_ITEMS: LinkItem[] = [
-  { label: "How it works", href: "/", icon: CircleHelp },
-  { label: "Pricing", href: "/pricing", icon: Receipt },
-  { label: "Ride with us", href: "/ride-with-us", icon: Truck },
+  { label: "How it works", href: ROUTES.home, icon: CircleHelp },
+  { label: "Pricing", href: ROUTES.pricing, icon: Receipt },
+  { label: "Ride with us", href: ROUTES.rideWithUs, icon: Truck },
 ];
 
+// "/" only matches the home page; other items also match their sub-routes.
 function isActive(pathname: string, href: string) {
-  return href === "/" ? pathname === "/" : pathname.startsWith(href);
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
 }
 
 export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const closeMenu = () => setOpen(false);
+
   const { data: user, isLoading } = useGetMe();
+  const isAuthed = !isLoading && Boolean(user?.success);
+
+  const { scrollY } = useScroll();
+  useMotionValueEvent(scrollY, "change", (y) => setScrolled(y > 8));
+
+  // Close the mobile menu with Escape.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-brand backdrop-blur-md py-1.5">
-      <nav className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <Link
-          href="/"
-          className="group flex items-center gap-2 rounded-md outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
-        >
-          <span className="flex size-9 items-center justify-center rounded-xl text-primary-foreground transition-transform duration-300 group-hover:-rotate-6">
-            <Logo />
-          </span>
-          <span className="font-heading text-lg font-bold tracking-tight text-popover">
-            Parcel<span className="text-chart-2">Flow</span>
-          </span>
-        </Link>
+    <header
+      className={cn(
+        "sticky top-0 z-50 w-full border-b border-white/10 bg-brand transition-shadow duration-300",
+        scrolled && "shadow-[0_8px_30px_-12px_rgba(3,8,30,0.6)]",
+      )}
+    >
+      <nav
+        aria-label="Main"
+        className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-5 sm:px-8"
+      >
+        <BrandMark />
 
-        <ul className="hidden items-center gap-1 md:flex">
+        <ul className="hidden items-center gap-1 lg:flex">
           {NAV_ITEMS.map((item) => {
             const active = isActive(pathname, item.href);
             return (
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className={`relative rounded-full px-4 py-2 text-sm font-heading font-medium transition-colors ${
-                    active ? "text-primary" : "text-popover hover:text-primary"
-                  }`}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "relative rounded-md px-3.5 py-2 font-heading text-[15px] font-semibold outline-none transition-colors focus-visible:ring-3 focus-visible:ring-brand-orange/50",
+                    active ? "text-white" : "text-white/80 hover:text-white",
+                  )}
                 >
                   {item.label}
                   {active ? (
                     <motion.span
                       layoutId="nav-underline"
-                      className="absolute inset-x-3 -bottom-px h-0.5 rounded-full bg-primary"
+                      className="absolute inset-x-3.5 -bottom-0.5 h-0.5 rounded-full bg-brand-orange"
                       transition={{
                         type: "spring",
                         stiffness: 380,
@@ -71,27 +93,34 @@ export default function Header() {
           })}
         </ul>
 
-        <div className="flex items-center gap-1.5 sm:gap-2">
-
-          {!isLoading && user?.success ? (
-            // <UserMenu user={user} />
-            null
-          ) : (
-            <Button asChild size="lg" className="hidden sm:inline-flex font-heading  text-black font-bold bg-chart-2">
-              <Link href="/login">
-                <LogIn />
+        <div className="flex items-center gap-2 sm:gap-3">
+          {isAuthed ? // <UserMenu user={user} />
+          null : (
+            <>
+              <Link
+                href={ROUTES.login}
+                className="hidden rounded-md px-3 py-2 font-heading text-[15px] font-semibold text-white/85 outline-none transition-colors hover:text-white focus-visible:ring-3 focus-visible:ring-brand-orange/50 sm:inline-flex"
+              >
                 Log in
               </Link>
-            </Button>
+              <CtaLink
+                href={ROUTES.register}
+                size="sm"
+                arrow
+                className="hidden rounded-lg sm:inline-flex"
+              >
+                Start shipping
+              </CtaLink>
+            </>
           )}
 
-          <Button
-            variant="ghost"
-            size="icon"
+          <button
+            type="button"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
+            aria-controls="mobile-menu"
             onClick={() => setOpen((prev) => !prev)}
-            className="md:hidden"
+            className="grid size-10 place-items-center rounded-lg text-white outline-none transition-colors hover:bg-white/10 focus-visible:ring-3 focus-visible:ring-brand-orange/50 lg:hidden"
           >
             <AnimatePresence initial={false} mode="wait">
               <motion.span
@@ -102,24 +131,39 @@ export default function Header() {
                 transition={{ duration: 0.15 }}
                 className="flex"
               >
-                {open ? <X className="size-5" /> : <Menu className="size-5 text-popover" />}
+                {open ? <X className="size-5" /> : <Menu className="size-5" />}
               </motion.span>
             </AnimatePresence>
-          </Button>
+          </button>
         </div>
       </nav>
 
+      {/* Mobile menu overlays the page (absolute) so opening/closing it
+          doesn't push the page content around. */}
       <AnimatePresence>
         {open ? (
           <motion.div
+            key="mobile-backdrop"
+            aria-hidden
+            onClick={closeMenu}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-x-0 top-16 bottom-0 bg-brand-deep/50 backdrop-blur-[2px] lg:hidden"
+          />
+        ) : null}
+        {open ? (
+          <motion.div
+            id="mobile-menu"
             key="mobile-menu"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="overflow-hidden border-t border-border/60 md:hidden"
+            className="absolute inset-x-0 top-full overflow-hidden border-b border-white/10 bg-brand shadow-[0_24px_40px_-16px_rgba(3,8,30,0.7)] lg:hidden"
           >
-            <ul className="flex flex-col gap-1 px-4 py-4 sm:px-6">
+            <ul className="mx-auto flex max-w-6xl flex-col gap-1 px-5 py-4 sm:px-8">
               {NAV_ITEMS.map((item, i) => {
                 const active = isActive(pathname, item.href);
                 return (
@@ -133,32 +177,43 @@ export default function Header() {
                       href={item.href}
                       onClick={closeMenu}
                       className={cn(
-                        "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
+                        "flex items-center gap-3 rounded-xl px-3 py-3 font-heading text-[15px] font-semibold transition-colors",
                         active
-                          ? "bg-primary/10 text-primary"
-                          : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                          ? "bg-white/10 text-white"
+                          : "text-white/80 hover:bg-white/5 hover:text-white",
                       )}
                     >
-                      <item.icon className="size-4" />
+                      <item.icon className="size-4 text-brand-orange" />
                       {item.label}
                     </Link>
                   </motion.li>
                 );
               })}
 
-              {!isLoading && !user?.success ? (
+              {!isAuthed ? (
                 <motion.li
                   initial={{ opacity: 0, x: -12 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.05 * NAV_ITEMS.length + 0.05 }}
-                  className="pt-2"
+                  className="mt-2 grid grid-cols-2 gap-2 border-t border-white/10 pt-4"
                 >
-                  <Button asChild className="w-full bg-chart-2 font-heading text-secondary font-bold">
-                    <Link href="/login" onClick={closeMenu}>
-                      <LogIn />
-                      Log in
-                    </Link>
-                  </Button>
+                  <CtaLink
+                    href={ROUTES.login}
+                    variant="outline"
+                    size="sm"
+                    onClick={closeMenu}
+                  >
+                    <LogIn className="size-4" />
+                    Log in
+                  </CtaLink>
+                  <CtaLink
+                    href={ROUTES.register}
+                    size="sm"
+                    arrow
+                    onClick={closeMenu}
+                  >
+                    Start shipping
+                  </CtaLink>
                 </motion.li>
               ) : null}
             </ul>

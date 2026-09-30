@@ -34,7 +34,7 @@ export default function LoginPage() {
           </Link>
         </div>
 
-        <div className="w-full lg:max-w-xs max-w-2xs">
+        <div className="w-full lg:max-w-sm max-w-2xs">
           <LoginForm />
         </div>
       </div>
