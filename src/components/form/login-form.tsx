@@ -160,6 +160,7 @@ export default function LoginForm() {
                           onBlur={field.handleBlur}
                           value={field.state.value}
                           aria-invalid={isInvalid}
+                          placeholder="you@mail.com"
                           className="border-2 border-gray-400"
                         />
                         <AnimatePresence>
@@ -209,6 +210,7 @@ export default function LoginForm() {
                             onChange={(e) => field.handleChange(e.target.value)}
                             onBlur={field.handleBlur}
                             value={field.state.value}
+                            placeholder="Enter your password"
                             className="border-2 border-gray-400"
                             aria-invalid={isInvalid}
                           />
@@ -304,7 +306,7 @@ export default function LoginForm() {
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <GoogleLoginComponent />
+            <GoogleLoginComponent text="continue_with" />
           </motion.div>
         </div>
 

@@ -7,7 +7,11 @@ import { useRouter } from "next/navigation";
 import { FetchError } from "ofetch";
 import { toast } from "sonner";
 
-export default function GoogleLoginComponent() {
+type googleLoginComponentProps = {
+  text: "continue_with" | "signin_with" | "signup_with" | "signin";
+}
+
+export default function GoogleLoginComponent({ text }: googleLoginComponentProps) {
   const router = useRouter();
   const { mutate: googleLogin } = useGoogleOAuth();
 
@@ -54,7 +58,7 @@ export default function GoogleLoginComponent() {
     <GoogleLogin
       theme="outline"
       shape="pill"
-      text="continue_with"
+      text={text}
       logo_alignment="center"
       onSuccess={handleGoogleSuccess}
       onError={handleGoogleError}

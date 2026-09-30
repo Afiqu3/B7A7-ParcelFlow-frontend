@@ -12,3 +12,22 @@ export const loginSchema = z.object({
   email: z.email("Enter a valid email"),
   password: z.string().min(1, "Password is required"),
 });
+
+export const registrationSchema = z.object({
+  name: z
+    .string("Enter a valid name")
+    .min(3, "Name must at least 3 characters long!!!")
+    .max(20),
+  email: z.email("Enter a valid email"),
+  password: z.string().min(1, "Password is required"),
+  phone: z
+    .string()
+    .refine((val) => val === "" || /^(?:\+?880|0)1[3-9]\d{8}$/.test(val), {
+      message: "Please provide valid Bangladeshi number",
+    }),
+  businessName: z
+    .string("Enter a valid business name")
+    .min(5, "Business name must at least 5 characters long!!!")
+    .max(20)
+    .optional(),
+});
