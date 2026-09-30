@@ -35,9 +35,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         geistMono.variable,
         instrumentSansHeading.variable,
       )}
+      suppressHydrationWarning={true}
     >
       <Providers>
-        <body className="min-h-full flex flex-col">
+        <body className="min-h-full flex flex-col" suppressHydrationWarning={true}>
           {children}
           <Toaster />
         </body>
