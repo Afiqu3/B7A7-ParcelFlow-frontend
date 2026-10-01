@@ -7,12 +7,12 @@ export const ROUTES = {
   register: "/register",
   pricing: "/pricing",
   rideWithUs: "/ride-with-us",
-  // Rider application flow isn't built yet — point this at it when it is.
   riderApply: "/rider/apply",
   about: "/about",
   contact: "/contact",
-  terms: "/terms",
-  privacy: "/privacy",
+  dashboard: "dashboard",
+  terms: "/",
+  privacy: "/",
 } as const;
 
 // Anchor ids for the landing page sections.
