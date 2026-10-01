@@ -3,15 +3,7 @@
 import { useLogin } from "@/hooks";
 import { useForm } from "@tanstack/react-form";
 import { ArrowRight, Eye, EyeClosed } from "lucide-react";
-import {
-  AnimatePresence,
-  MotionConfig,
-  motion,
-  stagger,
-  useAnimate,
-  useReducedMotion,
-  type Variants,
-} from "motion/react";
+import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -21,7 +13,6 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
-  FieldSeparator,
 } from "../ui/field";
 import { Input } from "../ui/input";
 import { Spinner } from "../ui/spinner";
@@ -30,53 +21,20 @@ import { loginSchema } from "@/validation";
 import { Marker, MarkerContent } from "../ui/marker";
 import GoogleLoginComponent from "../modules/authentication/GoogleLogin";
 import { FetchError } from "ofetch";
-
-const EASE_OUT = [0.22, 1, 0.36, 1] as const;
-
-// Parent: staggers each child's entrance.
-const containerVariants: Variants = {
-  hidden: {},
-  visible: {
-    transition: { delayChildren: stagger(0.05, { startDelay: 0.1 }) },
-  },
-};
-
-// Children: fade + rise into place.
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 12 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: EASE_OUT },
-  },
-};
-
-// Field errors: expand/collapse. Field uses `gap-2` (8px), so the negative
-// margin cancels that gap while collapsed to avoid a layout jump.
-const errorMotion = {
-  initial: { opacity: 0, height: 0, marginTop: -8 },
-  animate: { opacity: 1, height: "auto", marginTop: 0 },
-  exit: { opacity: 0, height: 0, marginTop: -8 },
-  transition: { duration: 0.2, ease: EASE_OUT },
-} as const;
+import {
+  containerVariants,
+  EASE_OUT,
+  errorMotion,
+  itemVariants,
+  useShake,
+} from "./form-motion";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
-  const [formScope, animate] = useAnimate<HTMLFormElement>();
-  const shouldReduceMotion = useReducedMotion();
+  const [formScope, shakeForm] = useShake<HTMLFormElement>();
 
   const { mutate: login, isPending: loginPending } = useLogin();
-
-  // Small horizontal shake to signal a failed attempt.
-  const shakeForm = () => {
-    if (shouldReduceMotion || !formScope.current) return;
-    animate(
-      formScope.current,
-      { x: [0, -8, 8, -5, 5, -2, 0] },
-      { duration: 0.4, ease: "easeInOut" },
-    );
-  };
 
   const form = useForm({
     defaultValues: {

@@ -16,6 +16,10 @@ export const googleOAuth = (payload: { idToken: string }) => {
   });
 };
 
+export const userLogout = () => {
+  return apiClient("/auth/logout", { method: "POST" });
+};
+
 export const getMe = () => {
   return apiClient<ApiResponse<User>>("/auth/me");
 };

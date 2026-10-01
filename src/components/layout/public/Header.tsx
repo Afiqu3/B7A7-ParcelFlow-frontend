@@ -16,6 +16,8 @@ import { ROUTES } from "@/constants";
 import { useGetMe } from "@/hooks";
 import { cn } from "@/lib/utils";
 import type { LinkItem } from "@/types";
+import UserMenu from "./UserMenu";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const NAV_ITEMS: LinkItem[] = [
   { label: "How it works", href: ROUTES.home, icon: CircleHelp },
@@ -35,8 +37,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const closeMenu = () => setOpen(false);
 
-  const { data: user, isLoading } = useGetMe();
-  const isAuthed = !isLoading && Boolean(user?.success);
+  const { data: user, isPending } = useGetMe();
 
   const { scrollY } = useScroll();
   useMotionValueEvent(scrollY, "change", (y) => setScrolled(y > 8));
@@ -94,8 +95,11 @@ export default function Header() {
         </ul>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          {isAuthed ? // <UserMenu user={user} />
-          null : (
+          {isPending ? (
+            <Skeleton aria-hidden className="size-9 rounded-full bg-white/15" />
+          ) : user ? (
+            <UserMenu user={user} />
+          ) : (
             <>
               <Link
                 href={ROUTES.login}
@@ -190,7 +194,7 @@ export default function Header() {
                 );
               })}
 
-              {!isAuthed ? (
+              {!isPending && !user ? (
                 <motion.li
                   initial={{ opacity: 0, x: -12 }}
                   animate={{ opacity: 1, x: 0 }}

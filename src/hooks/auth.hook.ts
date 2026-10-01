@@ -1,28 +1,85 @@
-import { getMe, googleOAuth, userLogin, userRegistration } from "@/api";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  getMe,
+  googleOAuth,
+  userLogin,
+  userLogout,
+  userRegistration,
+} from "@/api";
+import { User } from "@/types";
+import {
+  queryOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { FetchError } from "ofetch";
+
+const useRefreshMe = () => {
+  const queryClient = useQueryClient();
+  return () => queryClient.query({ ...meQueryOptions, staleTime: 0 });
+};
 
 export const useLogin = () => {
-    return useMutation({
-        mutationFn: userLogin,
-    });
+  const refreshMe = useRefreshMe();
+  return useMutation({
+    mutationFn: userLogin,
+    onSuccess: () => refreshMe(),
+  });
 };
 
 export const useRegistration = () => {
+  const refreshMe = useRefreshMe();
   return useMutation({
     mutationFn: userRegistration,
+    onSuccess: () => refreshMe(),
   });
-}
+};
 
 export const useGoogleOAuth = () => {
-    return useMutation({
-        mutationFn: googleOAuth,
-    });
+  const refreshMe = useRefreshMe();
+  return useMutation({
+    mutationFn: googleOAuth,
+    onSuccess: () => refreshMe(),
+  });
 };
 
-export const useGetMe = () => {
-    return useQuery({
-        queryKey: ["user"],
-        queryFn: getMe,
-        retry: false,
-    });
+export const useLogout = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: userLogout,
+    onSuccess: () => {
+      queryClient.setQueryData(meQueryOptions.queryKey, null);
+    },
+  });
 };
+
+const fetchMe = async (): Promise<User | null> => {
+  try {
+    const res = await getMe();
+    return res.success ? res.data : null;
+  } catch (err) {
+    if (
+      err instanceof FetchError &&
+      (err.status === 401 || err.status === 403)
+    ) {
+      return null;
+    }
+    throw err;
+  }
+};
+
+export const meQueryOptions = queryOptions({
+  queryKey: ["user"],
+  queryFn: fetchMe,
+  retry: false,
+});
+
+export const useGetMe = () => useQuery(meQueryOptions);
+
+// export const useGetMe = () => {
+//     return useQuery({
+//         queryKey: ["user"],
+//         queryFn: getMe,
+//         retry: false,
+//     });
+// };

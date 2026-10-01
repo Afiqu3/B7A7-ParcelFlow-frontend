@@ -4,7 +4,6 @@ export interface LoginPayload {
 }
 
 export interface RegisterMerchantPayload {
-	id: string;
 	name: string;
 	email: string;
 	password: string;
