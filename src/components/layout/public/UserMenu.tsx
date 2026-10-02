@@ -1,7 +1,9 @@
 "use client";
 
+import { LayoutDashboard, LogOut, UserRound } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,30 +13,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LayoutDashboard, LogOut, UserRound } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { LinkItem, User } from "@/types";
 import { useLogout } from "@/hooks";
+import { ROLE_HOME } from "@/routes";
+import type { LinkItem, User } from "@/types";
 
 const userMenuItems: LinkItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
 ];
 
-export default function UserMenu({ user }: {user: User}) {
+export default function UserMenu({ user }: { user: User }) {
   const router = useRouter();
 
   const { mutate: logout } = useLogout();
 
   const handleUserMenuAction = async (href: string) => {
     if (href === "/dashboard") {
-      if (user.role === "MERCHANT") {
-        router.push("/dashboard");
-      } else if (user.role === "RIDER") {
-        router.push("/landlord-dashboard");
-      } else if (user.role === "ADMIN") {
-        router.push("/admin-dashboard");
-      }
-
+      router.push(ROLE_HOME[user.role]);
       return;
     }
 

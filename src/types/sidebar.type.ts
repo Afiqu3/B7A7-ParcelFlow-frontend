@@ -1,10 +1,14 @@
+import type { LucideIcon } from "lucide-react";
+
 export interface SidebarItem {
   title: string;
   url: string;
+  icon?: LucideIcon;
 }
 
 export interface SidebarGroup {
-  title: string;
+  /** Shown above the group. Leave out for the top, unlabelled group. */
+  title?: string;
   items: SidebarItem[];
 }
 

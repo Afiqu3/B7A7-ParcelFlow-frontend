@@ -1,31 +1,32 @@
+import {
+  Bike,
+  LayoutDashboard,
+  Package,
+  Receipt,
+  Store,
+  Users,
+} from "lucide-react";
+import type { SidebarItems } from "@/types";
+
 const prefix = "/admin";
 
-export const adminRoutes = [
+export const adminRoutes: SidebarItems = [
   {
-    title: "Bookings",
+    items: [{ title: "Dashboard", url: prefix, icon: LayoutDashboard }],
+  },
+  {
+    title: "Operations",
     items: [
-      {
-        title: "Overview",
-        url: `${prefix}`,
-      },
-      {
-        title: "My Appointments",
-        url: `${prefix}/my-appointments`,
-      },
+      { title: "Parcels", url: `${prefix}/parcels`, icon: Package },
+      { title: "Riders", url: `${prefix}/riders`, icon: Bike },
+      { title: "Merchants", url: `${prefix}/merchants`, icon: Store },
     ],
   },
   {
-    title: "App Settings",
+    title: "Configuration",
     items: [
-      {
-        title: "Routing",
-        url: "#",
-      },
-      {
-        title: "Data Fetching",
-        url: "#",
-        isActive: true,
-      },
+      { title: "Pricing rules", url: `${prefix}/pricing`, icon: Receipt },
+      { title: "Users", url: `${prefix}/users`, icon: Users },
     ],
   },
 ];

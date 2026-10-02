@@ -1,31 +1,31 @@
+import {
+  ClipboardList,
+  HandCoins,
+  History,
+  LayoutDashboard,
+  UserRound,
+} from "lucide-react";
+import type { SidebarItems } from "@/types";
+
 const prefix = "/rider";
 
-export const riderRoutes = [
+export const riderRoutes: SidebarItems = [
   {
-    title: "Bookings",
+    items: [{ title: "Dashboard", url: prefix, icon: LayoutDashboard }],
+  },
+  {
+    title: "Deliveries",
     items: [
-      {
-        title: "Overview",
-        url: `${prefix}`,
-      },
-      {
-        title: "My Appointments",
-        url: `${prefix}/my-appointments`,
-      },
+      { title: "My tasks", url: `${prefix}/tasks`, icon: ClipboardList },
+      { title: "History", url: `${prefix}/history`, icon: History },
     ],
   },
   {
-    title: "App Settings",
-    items: [
-      {
-        title: "Routing",
-        url: "#",
-      },
-      {
-        title: "Data Fetching",
-        url: "#",
-        isActive: true,
-      },
-    ],
+    title: "Money",
+    items: [{ title: "COD collected", url: `${prefix}/cod`, icon: HandCoins }],
+  },
+  {
+    title: "Account",
+    items: [{ title: "Profile", url: `${prefix}/profile`, icon: UserRound }],
   },
 ];

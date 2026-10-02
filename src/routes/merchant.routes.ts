@@ -1,31 +1,39 @@
+import {
+  HandCoins,
+  LayoutDashboard,
+  Package,
+  Plus,
+  UserRound,
+  Wallet,
+} from "lucide-react";
+import type { SidebarItem, SidebarItems } from "@/types";
+
 const prefix = "/dashboard";
 
-export const merchantRoutes = [
+/** The orange button at the top of the merchant sidebar. */
+export const merchantQuickAction: SidebarItem = {
+  title: "New parcel",
+  url: `${prefix}/parcels/new`,
+  icon: Plus,
+};
+
+export const merchantRoutes: SidebarItems = [
   {
-    title: "Bookings",
+    items: [{ title: "Dashboard", url: prefix, icon: LayoutDashboard }],
+  },
+  {
+    title: "Shipping",
+    items: [{ title: "Parcels", url: `${prefix}/parcels`, icon: Package }],
+  },
+  {
+    title: "Money",
     items: [
-      {
-        title: "Overview",
-        url: `${prefix}`,
-      },
-      {
-        title: "My Appointments",
-        url: `${prefix}/my-appointments`,
-      },
+      { title: "Payments", url: `${prefix}/payments`, icon: Wallet },
+      { title: "COD collections", url: `${prefix}/cod`, icon: HandCoins },
     ],
   },
   {
-    title: "App Settings",
-    items: [
-      {
-        title: "Routing",
-        url: "#",
-      },
-      {
-        title: "Data Fetching",
-        url: "#",
-        isActive: true,
-      },
-    ],
+    title: "Account",
+    items: [{ title: "Profile", url: `${prefix}/profile`, icon: UserRound }],
   },
 ];
