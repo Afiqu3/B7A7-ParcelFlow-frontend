@@ -20,7 +20,7 @@ import UserMenu from "./UserMenu";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const NAV_ITEMS: LinkItem[] = [
-  { label: "How it works", href: ROUTES.home, icon: CircleHelp },
+  { label: "How it works", href: ROUTES.howItWorks, icon: CircleHelp },
   { label: "Pricing", href: ROUTES.pricing, icon: Receipt },
   { label: "Ride with us", href: ROUTES.rideWithUs, icon: Truck },
 ];
