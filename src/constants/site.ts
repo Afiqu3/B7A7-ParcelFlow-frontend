@@ -10,7 +10,7 @@ export const ROUTES = {
   riderApply: "/rider/apply",
   about: "/about",
   contact: "/contact",
-  dashboard: "dashboard",
+  dashboard: "/dashboard",
   terms: "/",
   privacy: "/",
 } as const;
@@ -20,6 +20,9 @@ export const SECTION_IDS = {
   howItWorks: "how-it-works",
   features: "features",
   riders: "riders",
+  // Pricing page
+  rates: "rates",
+  estimator: "estimator",
 } as const;
 
 // TODO: replace the placeholders with real support details.

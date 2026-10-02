@@ -34,7 +34,7 @@ export default function RegisterPage() {
           </Link>
         </div>
 
-        <div className="w-full lg:max-w-md max-w-2xs">
+        <div className="w-full lg:max-w-xl md:max-w-md max-w-2xs">
           <RegisterForm />
         </div>
       </div>
