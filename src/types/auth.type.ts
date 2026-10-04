@@ -4,13 +4,18 @@ export interface LoginPayload {
 }
 
 export interface RegisterMerchantPayload {
-	name: string;
-	email: string;
-	password: string;
-	merchantProfile?: IMerchantProfile;
+    name: string;
+    email: string;
+    password: string;
+    merchantProfile?: IMerchantProfile;
 }
 
 interface IMerchantProfile {
-	businessName?: string;
-	phone: string;
+    businessName?: string;
+    phone: string;
+}
+
+export interface VerifyEmailPayload {
+    email: string;
+    otp: string;
 }

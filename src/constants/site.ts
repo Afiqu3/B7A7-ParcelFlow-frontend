@@ -6,6 +6,7 @@ export const ROUTES = {
   howItWorks: "/how-it-works",
   login: "/login",
   register: "/register",
+  verifyAccount: "/register/verify-account",
   pricing: "/pricing",
   rideWithUs: "/ride-with-us",
   riderApply: "/rider/apply",
@@ -26,10 +27,10 @@ export const SECTION_IDS = {
   estimator: "estimator",
 } as const;
 
-// TODO: replace the placeholders with real support details.
+
 export const SUPPORT = {
-  email: "[SUPPORT EMAIL]",
-  phone: "[SUPPORT PHONE]",
+  email: "suuport.parcelflow@gmail.com",
+  phone: "01712345678",
 } as const;
 
 export type SocialPlatform =
@@ -39,7 +40,6 @@ export type SocialPlatform =
   | "youtube"
   | "x";
 
-// TODO: replace with ParcelFlow's real profile URLs.
 export const SOCIAL_LINKS: {
   platform: SocialPlatform;
   label: string;

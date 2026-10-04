@@ -1,21 +1,23 @@
 import Logo from "@/assets/svg/Logo";
-import RegisterForm from "@/components/form/register-from";
+import VerifyAccountForm from "@/components/form/verify-account-from";
 import LeftSide from "@/components/modules/authentication/LeftSide";
+import VerifyAccountFallback from "@/components/modules/authentication/VerifyAccountFallback";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
-    title: "Register-ParcelFlow",
+    title: "Verify-ParcelFlow",
 };
 
-export default function RegisterPage() {
+export default function VerifyAccountPage() {
     return (
         <div className="grid min-h-svh lg:grid-cols-5">
             <div className="lg:block bg-brand p-6 md:p-10 hidden col-span-2">
                 <LeftSide
-                    headingTextOne="Start"
-                    headingTextTwo="shipping."
-                    descriptionText="Create a merchant account, add your first parcel and see the price before you book."
+                    headingTextOne="One last"
+                    headingTextTwo="step."
+                    descriptionText="Confirm your email and your merchant account is ready to go."
                 />
             </div>
 
@@ -34,8 +36,10 @@ export default function RegisterPage() {
                     </Link>
                 </div>
 
-                <div className="w-full lg:max-w-xl md:max-w-md max-w-2xs">
-                    <RegisterForm />
+                <div className="w-full lg:max-w-lg md:max-w-md max-w-2xs">
+                    <Suspense fallback={<VerifyAccountFallback />}>
+                        <VerifyAccountForm />
+                    </Suspense>
                 </div>
             </div>
         </div>

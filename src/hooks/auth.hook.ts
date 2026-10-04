@@ -1,77 +1,78 @@
 import {
-  getMe,
-  googleOAuth,
-  userLogin,
-  userLogout,
-  userRegistration,
+    getMe,
+    googleOAuth,
+    userLogin,
+    userLogout,
+    userRegistration,
+    verifyAccount,
 } from "@/api";
 import { User } from "@/types";
 import {
-  queryOptions,
-  useMutation,
-  useQuery,
-  useQueryClient,
+    queryOptions,
+    useMutation,
+    useQuery,
+    useQueryClient,
 } from "@tanstack/react-query";
 import { FetchError } from "ofetch";
 
 const useRefreshMe = () => {
-  const queryClient = useQueryClient();
-  return () => queryClient.query({ ...meQueryOptions, staleTime: 0 });
+    const queryClient = useQueryClient();
+    return () => queryClient.query({ ...meQueryOptions, staleTime: 0 });
 };
 
 export const useLogin = () => {
-  const refreshMe = useRefreshMe();
-  return useMutation({
-    mutationFn: userLogin,
-    onSuccess: () => refreshMe(),
-  });
+    const refreshMe = useRefreshMe();
+    return useMutation({
+        mutationFn: userLogin,
+        onSuccess: () => refreshMe(),
+    });
 };
 
 export const useRegistration = () => {
-  const refreshMe = useRefreshMe();
-  return useMutation({
-    mutationFn: userRegistration,
-    onSuccess: () => refreshMe(),
-  });
+    const refreshMe = useRefreshMe();
+    return useMutation({
+        mutationFn: userRegistration,
+        onSuccess: () => refreshMe(),
+    });
 };
 
 export const useGoogleOAuth = () => {
-  const refreshMe = useRefreshMe();
-  return useMutation({
-    mutationFn: googleOAuth,
-    onSuccess: () => refreshMe(),
-  });
+    const refreshMe = useRefreshMe();
+    return useMutation({
+        mutationFn: googleOAuth,
+        onSuccess: () => refreshMe(),
+    });
 };
 
 export const useLogout = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: userLogout,
-    onSuccess: () => {
-      queryClient.setQueryData(meQueryOptions.queryKey, null);
-    },
-  });
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: userLogout,
+        onSuccess: () => {
+            queryClient.setQueryData(meQueryOptions.queryKey, null);
+        },
+    });
 };
 
 const fetchMe = async (): Promise<User | null> => {
-  try {
-    const res = await getMe();
-    return res.success ? res.data : null;
-  } catch (err) {
-    if (
-      err instanceof FetchError &&
-      (err.status === 401 || err.status === 403)
-    ) {
-      return null;
+    try {
+        const res = await getMe();
+        return res.success ? res.data : null;
+    } catch (err) {
+        if (
+            err instanceof FetchError &&
+            (err.status === 401 || err.status === 403)
+        ) {
+            return null;
+        }
+        throw err;
     }
-    throw err;
-  }
 };
 
 export const meQueryOptions = queryOptions({
-  queryKey: ["user"],
-  queryFn: fetchMe,
-  retry: false,
+    queryKey: ["user"],
+    queryFn: fetchMe,
+    retry: false,
 });
 
 export const useGetMe = () => useQuery(meQueryOptions);
@@ -83,3 +84,10 @@ export const useGetMe = () => useQuery(meQueryOptions);
 //         retry: false,
 //     });
 // };
+export const useVerifyAccount = () => {
+    const refreshMe = useRefreshMe();
+    return useMutation({
+        mutationFn: verifyAccount,
+        onSuccess: () => refreshMe(),
+    });
+};
