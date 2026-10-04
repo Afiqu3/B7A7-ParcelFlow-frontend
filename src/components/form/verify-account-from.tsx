@@ -1,7 +1,7 @@
 "use client";
 
 import { ROUTES } from "@/constants";
-import { useVerifyAccount } from "@/hooks";
+import { useResendMerchantVerifyCode, useVerifyAccount } from "@/hooks";
 import { emailVerifySchema } from "@/validation";
 import { useForm } from "@tanstack/react-form";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
@@ -34,6 +34,7 @@ export default function VerifyAccountForm() {
     const [resendTimer, setResendTimer] = useState(RESEND_COOLDOWN);
 
     const { mutate: verify, isPending: VerifyPending } = useVerifyAccount();
+    const { mutate: resendCode } = useResendMerchantVerifyCode();
 
     const email = searchParams.get("email") || "";
 
@@ -55,8 +56,8 @@ export default function VerifyAccountForm() {
         return () => clearInterval(timer);
     }, [resendTimer]);
 
-     const mm = String(Math.floor(resendTimer / 60)).padStart(2, "0");
-     const ss = String(resendTimer % 60).padStart(2, "0");
+    const mm = String(Math.floor(resendTimer / 60)).padStart(2, "0");
+    const ss = String(resendTimer % 60).padStart(2, "0");
 
     const form = useForm({
         defaultValues: {
@@ -76,6 +77,13 @@ export default function VerifyAccountForm() {
 
             verify(verifyData, {
                 onSuccess: (res) => {
+                    if (!res.success) {
+                        toast.error("Server Failure", {
+                            description:
+                                "Something went wrong. Please try again",
+                        });
+                        return;
+                    }
                     toast.success("Verifying Successfully", {
                         description: "Welcome to ParcelFlow",
                     });
@@ -93,6 +101,36 @@ export default function VerifyAccountForm() {
             });
         },
     });
+
+    const handleResendCode = () => {
+        setResendTimer(RESEND_COOLDOWN);
+        const resendCodeData = {
+            email,
+        };
+        resendCode(resendCodeData, {
+            onSuccess: (res) => {
+                if (!res.success) {
+                    toast.error("Server Failure", {
+                        description: "Something went wrong. Please try again",
+                    });
+                }
+
+                toast.success("Verification code send successfully", {
+                    description: "Check your Mail",
+                });
+            },
+
+            onError: (err: FetchError) => {
+                shakeForm();
+                toast.error("Verification failure", {
+                    description:
+                        err.data?.message ||
+                        err.message ||
+                        "Something went wrong. Please try again",
+                });
+            },
+        });
+    };
 
     return (
         <MotionConfig reducedMotion="user">
@@ -123,10 +161,7 @@ export default function VerifyAccountForm() {
 
                         <p className="text-balance text-sm text-secondary/80">
                             Enter the 6-digit code we sent to{" "}
-                            <span className="font-extrabold">
-                                {email}
-                            </span>
-                            .
+                            <span className="font-extrabold">{email}</span>.
                         </p>
                     </motion.div>
 
@@ -211,22 +246,6 @@ export default function VerifyAccountForm() {
 
                             <motion.div
                                 variants={itemVariants}
-                                className="flex flex-row justify-between items-center"
-                            >
-                                <p className="flex flex-row gap-2 items-center text-sm text-secondary">
-                                    <Clock size={15} /> Code expires in {mm}:{ss}
-                                </p>
-
-                                <Button
-                                    disabled={resendTimer > 0}
-                                    className="text-sm font-extrabold text-brand-orange"
-                                >
-                                    Resend code
-                                </Button>
-                            </motion.div>
-
-                            <motion.div
-                                variants={itemVariants}
                                 className="flex flex-col"
                             >
                                 <Button
@@ -273,6 +292,23 @@ export default function VerifyAccountForm() {
                             </motion.div>
                         </FieldGroup>
                     </form>
+
+                    <motion.div
+                        variants={itemVariants}
+                        className="flex flex-row justify-between items-center"
+                    >
+                        <p className="flex flex-row gap-2 items-center text-sm text-secondary">
+                            <Clock size={15} /> Code expires in {mm}:{ss}
+                        </p>
+
+                        <Button
+                            disabled={resendTimer > 240}
+                            onClick={handleResendCode}
+                            className="text-sm font-bold text-secondary bg-brand-orange"
+                        >
+                            Resend code
+                        </Button>
+                    </motion.div>
                 </div>
 
                 <motion.div variants={itemVariants} className="mt-5">

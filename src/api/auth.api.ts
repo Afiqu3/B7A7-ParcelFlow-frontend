@@ -20,8 +20,15 @@ export const verifyAccount = (payload: VerifyEmailPayload) => {
     return apiClient("/auth/verify-otp", { method: "POST", body: payload });
 };
 
+export const resendMerchantVerifyCode = (payload: { email: string }) => {
+    return apiClient("/auth/resend-otp", {
+        method: "POST",
+        body: payload,
+    });
+};
+
 export const googleOAuth = (payload: { idToken: string }) => {
-    return apiClient<ApiResponse<User>>("/auth/google", {
+    return apiClient("/auth/google", {
         method: "POST",
         body: payload,
     });

@@ -1,6 +1,7 @@
 import {
     getMe,
     googleOAuth,
+    resendMerchantVerifyCode,
     userLogin,
     userLogout,
     userRegistration,
@@ -29,10 +30,8 @@ export const useLogin = () => {
 };
 
 export const useRegistration = () => {
-    const refreshMe = useRefreshMe();
     return useMutation({
         mutationFn: userRegistration,
-        onSuccess: () => refreshMe(),
     });
 };
 
@@ -89,5 +88,11 @@ export const useVerifyAccount = () => {
     return useMutation({
         mutationFn: verifyAccount,
         onSuccess: () => refreshMe(),
+    });
+};
+
+export const useResendMerchantVerifyCode = () => {
+    return useMutation({
+        mutationFn: resendMerchantVerifyCode,
     });
 };
