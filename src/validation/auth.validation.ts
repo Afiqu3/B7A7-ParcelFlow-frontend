@@ -90,6 +90,18 @@ export const emailVerifySchema = z.object({
     otp: z.string().regex(/^\d{6}$/, "OTP must be 6 digits"),
 });
 
-export const ForgotPasswordSchema = z.object({
-	email: z.email("Invalid email address").trim().toLowerCase(),
+export const forgotPasswordSchema = z.object({
+    email: z.email("Invalid email address").trim().toLowerCase(),
 });
+
+export const resetPasswordSchema = z
+    .object({
+        email: z.email("Invalid email address").trim().toLowerCase(),
+        newPassword: strongPasswordSchema,
+        confirmPassword: z.string().min(1, "Please confirm your password"),
+        otp: z.string().regex(/^\d{6}$/, "OTP must be 6 digits"),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+        message: "Password do not match",
+        path: ["confirmPassword"],
+    });

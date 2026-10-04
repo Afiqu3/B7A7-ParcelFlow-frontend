@@ -2,7 +2,7 @@
 
 import { ROUTES } from "@/constants";
 import { useForgotPassword } from "@/hooks";
-import { ForgotPasswordSchema } from "@/validation";
+import { forgotPasswordSchema } from "@/validation";
 import { useForm } from "@tanstack/react-form";
 import { ArrowLeft, ArrowRight, Info, Lock } from "lucide-react";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
@@ -37,7 +37,7 @@ export default function ForgotPasswordForm() {
             email: email,
         },
         validators: {
-            onSubmit: ForgotPasswordSchema,
+            onSubmit: forgotPasswordSchema,
         },
         onSubmitInvalid: () => {
             shakeForm();
@@ -52,11 +52,14 @@ export default function ForgotPasswordForm() {
                     toast.success("OTP sent", {
                         description: "Please check your email",
                     });
-                    router.push("/");
+                    const params = new URLSearchParams({
+                        email: forgotPasswordData.email,
+                    });
+                    router.push(`/reset-password?${params.toString()}`);
                 },
                 onError: (err: FetchError) => {
                     shakeForm();
-                    toast.error("Authorization failure", {
+                    toast.error("Forget password failure", {
                         description:
                             err.data?.message ||
                             err.message ||

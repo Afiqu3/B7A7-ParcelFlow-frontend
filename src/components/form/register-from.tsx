@@ -85,7 +85,7 @@ export default function RegisterForm() {
         },
         onError: (err: FetchError) => {
           shakeForm();
-          toast.error("Authorization failure", {
+          toast.error("Registration failure", {
             description:
               err.data?.message ||
               err.message ||

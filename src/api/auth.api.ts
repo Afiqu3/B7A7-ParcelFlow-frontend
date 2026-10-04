@@ -3,6 +3,7 @@ import {
     ApiResponse,
     LoginPayload,
     RegisterMerchantPayload,
+    ResetPasswordPayload,
     User,
     VerifyEmailPayload,
 } from "@/types";
@@ -28,6 +29,13 @@ export const resendMerchantVerifyCode = (payload: { email: string }) => {
 
 export const forgotPassword = (payload: { email: string }) => {
     return apiClient("/auth/forgot-password", {
+        method: "POST",
+        body: payload,
+    });
+};
+
+export const resetPassword = (payload: ResetPasswordPayload) => {
+    return apiClient("/auth/reset-password", {
         method: "POST",
         body: payload,
     });

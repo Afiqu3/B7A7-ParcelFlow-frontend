@@ -19,3 +19,9 @@ export interface VerifyEmailPayload {
     email: string;
     otp: string;
 }
+
+export interface ResetPasswordPayload {
+	email: string;
+	newPassword: string;
+	otp: string;
+}
