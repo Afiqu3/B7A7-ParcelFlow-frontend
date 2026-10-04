@@ -1,23 +1,22 @@
 import Logo from "@/assets/svg/Logo";
-import VerifyAccountForm from "@/components/form/verify-account-from";
+import ForgotPasswordForm from "@/components/form/forgot-password-from";
 import LeftSide from "@/components/modules/authentication/LeftSide";
-import VerifyAccountFallback from "@/components/modules/authentication/VerifyAccountFallback";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-    title: "Verify Account-ParcelFlow",
+    title: "Forgot Password-ParcelFlow",
 };
 
-export default function VerifyAccountPage() {
+export default function ForgotPasswordPage() {
     return (
         <div className="grid min-h-svh lg:grid-cols-5">
             <div className="lg:block bg-brand p-6 md:p-10 hidden col-span-2">
                 <LeftSide
-                    headingTextOne="One last"
-                    headingTextTwo="step."
-                    descriptionText="Confirm your email and your merchant account is ready to go."
+                    headingTextOne="Locked"
+                    headingTextTwo="out?"
+                    descriptionText="It happens. We'll email you a code so you can set a new password."
                 />
             </div>
 
@@ -37,8 +36,8 @@ export default function VerifyAccountPage() {
                 </div>
 
                 <div className="w-full lg:max-w-xl md:max-w-md max-w-2xs">
-                    <Suspense fallback={<VerifyAccountFallback />}>
-                        <VerifyAccountForm />
+                    <Suspense fallback={<p></p>}>
+                        <ForgotPasswordForm />
                     </Suspense>
                 </div>
             </div>

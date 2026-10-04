@@ -1,4 +1,5 @@
 import {
+    forgotPassword,
     getMe,
     googleOAuth,
     resendMerchantVerifyCode,
@@ -94,5 +95,11 @@ export const useVerifyAccount = () => {
 export const useResendMerchantVerifyCode = () => {
     return useMutation({
         mutationFn: resendMerchantVerifyCode,
+    });
+};
+
+export const useForgotPassword = () => {
+    return useMutation({
+        mutationFn: forgotPassword,
     });
 };

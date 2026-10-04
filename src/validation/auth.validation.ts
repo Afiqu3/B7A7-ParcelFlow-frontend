@@ -89,3 +89,7 @@ export const merchantRegistrationSchema = z.object({
 export const emailVerifySchema = z.object({
     otp: z.string().regex(/^\d{6}$/, "OTP must be 6 digits"),
 });
+
+export const ForgotPasswordSchema = z.object({
+	email: z.email("Invalid email address").trim().toLowerCase(),
+});

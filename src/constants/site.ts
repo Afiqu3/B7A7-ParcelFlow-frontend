@@ -5,6 +5,7 @@ export const ROUTES = {
   home: "/",
   howItWorks: "/how-it-works",
   login: "/login",
+  forgotPassword: "/forgot-password",
   register: "/register",
   verifyAccount: "/register/verify-account",
   pricing: "/pricing",

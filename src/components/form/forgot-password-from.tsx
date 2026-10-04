@@ -1,21 +1,19 @@
 "use client";
 
 import { ROUTES } from "@/constants";
-import { useResendMerchantVerifyCode, useVerifyAccount } from "@/hooks";
-import { emailVerifySchema } from "@/validation";
+import { useForgotPassword } from "@/hooks";
+import { ForgotPasswordSchema } from "@/validation";
 import { useForm } from "@tanstack/react-form";
-import { REGEXP_ONLY_DIGITS } from "input-otp";
-import { ArrowLeft, ArrowRight, Clock, Info, Mail } from "lucide-react";
+import { ArrowLeft, ArrowRight, Info, Lock } from "lucide-react";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FetchError } from "ofetch";
-import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
-import { Field, FieldError, FieldGroup } from "../ui/field";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
+import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
+import { Input } from "../ui/input";
 import { Spinner } from "../ui/spinner";
 import {
     containerVariants,
@@ -25,73 +23,40 @@ import {
     useShake,
 } from "./form-motion";
 
-const RESEND_COOLDOWN = 300;
-
-export default function VerifyAccountForm() {
+export default function ForgotPasswordForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const [formScope, shakeForm] = useShake<HTMLFormElement>();
-    const [resendTimer, setResendTimer] = useState(RESEND_COOLDOWN);
-
-    const { mutate: verify, isPending: VerifyPending } = useVerifyAccount();
-    const { mutate: resendCode } = useResendMerchantVerifyCode();
-
     const email = searchParams.get("email") || "";
 
-    useEffect(() => {
-        if (!email) {
-            router.push("/");
-        }
-    }, [email, router]);
+    const [formScope, shakeForm] = useShake<HTMLFormElement>();
 
-    useEffect(() => {
-        if (resendTimer <= 0) {
-            return;
-        }
-
-        const timer = setInterval(() => {
-            setResendTimer((prev) => prev - 1);
-        }, 1000);
-
-        return () => clearInterval(timer);
-    }, [resendTimer]);
-
-    const mm = String(Math.floor(resendTimer / 60)).padStart(2, "0");
-    const ss = String(resendTimer % 60).padStart(2, "0");
+    const { mutate: forgot, isPending: forgotPending } = useForgotPassword();
 
     const form = useForm({
         defaultValues: {
-            otp: "",
+            email: email,
         },
         validators: {
-            onSubmit: emailVerifySchema,
+            onSubmit: ForgotPasswordSchema,
         },
         onSubmitInvalid: () => {
             shakeForm();
         },
         onSubmit: ({ value }) => {
-            const verifyData = {
-                email,
-                otp: value.otp,
+            const forgotPasswordData = {
+                email: value.email,
             };
 
-            verify(verifyData, {
+            forgot(forgotPasswordData, {
                 onSuccess: (res) => {
-                    if (!res.success) {
-                        toast.error("Server Failure", {
-                            description:
-                                "Something went wrong. Please try again",
-                        });
-                        return;
-                    }
-                    toast.success("Verifying Successfully", {
-                        description: "Welcome to ParcelFlow",
+                    toast.success("OTP sent", {
+                        description: "Please check your email",
                     });
                     router.push("/");
                 },
                 onError: (err: FetchError) => {
                     shakeForm();
-                    toast.error("Verification failure", {
+                    toast.error("Authorization failure", {
                         description:
                             err.data?.message ||
                             err.message ||
@@ -101,36 +66,6 @@ export default function VerifyAccountForm() {
             });
         },
     });
-
-    const handleResendCode = () => {
-        setResendTimer(RESEND_COOLDOWN);
-        const resendCodeData = {
-            email,
-        };
-        resendCode(resendCodeData, {
-            onSuccess: (res) => {
-                if (!res.success) {
-                    toast.error("Server Failure", {
-                        description: "Something went wrong. Please try again",
-                    });
-                }
-
-                toast.success("Verification code send successfully", {
-                    description: "Check your Mail",
-                });
-            },
-
-            onError: (err: FetchError) => {
-                shakeForm();
-                toast.error("Verification failure", {
-                    description:
-                        err.data?.message ||
-                        err.message ||
-                        "Something went wrong. Please try again",
-                });
-            },
-        });
-    };
 
     return (
         <MotionConfig reducedMotion="user">
@@ -145,23 +80,23 @@ export default function VerifyAccountForm() {
                         className="flex flex-col gap-2"
                     >
                         <Link
-                            href={ROUTES.register}
+                            href={ROUTES.login}
                             className="flex flex-row gap-2 items-center text-sm mb-7 text-brand-orange font-extrabold max-w-40"
                         >
-                            <ArrowLeft size={17} /> Back to sign-up
+                            <ArrowLeft size={17} /> Back to log in
                         </Link>
 
                         <div className="text-brand-orange p-4 bg-brand-orange/20 max-w-17 rounded-lg flex items-center justify-center">
-                            <Mail />
+                            <Lock />
                         </div>
 
                         <h1 className="text-4xl font-extrabold font-heading tracking-tight text-secondary">
-                            Verify your email
+                            Forgot your password?
                         </h1>
 
                         <p className="text-balance text-sm text-secondary/80">
-                            Enter the 6-digit code we sent to{" "}
-                            <span className="font-extrabold">{email}</span>.
+                            Enter the email on your account and we'll send you a
+                            6-digit code to reset it.
                         </p>
                     </motion.div>
 
@@ -173,7 +108,7 @@ export default function VerifyAccountForm() {
                         }}
                     >
                         <FieldGroup>
-                            <form.Field name="otp">
+                            <form.Field name="email">
                                 {(field) => {
                                     const isInvalid =
                                         field.state.meta.isTouched &&
@@ -182,45 +117,26 @@ export default function VerifyAccountForm() {
                                     return (
                                         <motion.div variants={itemVariants}>
                                             <Field data-invalid={isInvalid}>
-                                                <InputOTP
-                                                    maxLength={6}
+                                                <FieldLabel
+                                                    htmlFor={field.name}
+                                                    className="text-secondary font-heading font-bold"
+                                                >
+                                                    Email
+                                                </FieldLabel>
+                                                <Input
+                                                    id={field.name}
+                                                    name={field.name}
                                                     onChange={(e) =>
-                                                        field.handleChange(e)
+                                                        field.handleChange(
+                                                            e.target.value,
+                                                        )
                                                     }
                                                     onBlur={field.handleBlur}
                                                     value={field.state.value}
                                                     aria-invalid={isInvalid}
-                                                    name={field.name}
-                                                    id={field.name}
-                                                    pattern={REGEXP_ONLY_DIGITS}
-                                                >
-                                                    <InputOTPGroup className="flex flex-row gap-2">
-                                                        <InputOTPSlot
-                                                            className="rounded-sm sm:h-13 sm:w-12"
-                                                            index={0}
-                                                        />
-                                                        <InputOTPSlot
-                                                            className="rounded-sm sm:h-13 sm:w-12"
-                                                            index={1}
-                                                        />
-                                                        <InputOTPSlot
-                                                            className="rounded-sm sm:h-13 sm:w-12"
-                                                            index={2}
-                                                        />
-                                                        <InputOTPSlot
-                                                            className="rounded-sm sm:h-13 sm:w-12"
-                                                            index={3}
-                                                        />
-                                                        <InputOTPSlot
-                                                            className="rounded-sm sm:h-13 sm:w-12"
-                                                            index={4}
-                                                        />
-                                                        <InputOTPSlot
-                                                            className="rounded-sm sm:h-13 sm:w-12"
-                                                            index={5}
-                                                        />
-                                                    </InputOTPGroup>
-                                                </InputOTP>
+                                                    placeholder="you@mail.com"
+                                                    className="border-2 border-gray-400"
+                                                />
                                                 <AnimatePresence>
                                                     {isInvalid && (
                                                         <motion.div
@@ -250,14 +166,14 @@ export default function VerifyAccountForm() {
                             >
                                 <Button
                                     className="relative overflow-hidden bg-chart-2 text-secondary font-heading font-bold py-5 hover:bg-chart-3"
-                                    disabled={VerifyPending}
+                                    disabled={forgotPending}
                                     type="submit"
                                 >
                                     <AnimatePresence
                                         initial={false}
                                         mode="popLayout"
                                     >
-                                        {VerifyPending ? (
+                                        {forgotPending ? (
                                             <motion.span
                                                 key="pending"
                                                 initial={{ opacity: 0, y: 14 }}
@@ -269,7 +185,7 @@ export default function VerifyAccountForm() {
                                                 }}
                                                 className="inline-flex items-center gap-1.5"
                                             >
-                                                <Spinner /> Verifying
+                                                <Spinner /> Sending
                                             </motion.span>
                                         ) : (
                                             <motion.span
@@ -283,29 +199,11 @@ export default function VerifyAccountForm() {
                                                 }}
                                                 className="inline-flex items-center gap-1.5"
                                             >
-                                                Verify & continue
+                                                Send reset code
                                                 <ArrowRight className="transition-transform duration-200 group-hover/button:translate-x-1" />
                                             </motion.span>
                                         )}
                                     </AnimatePresence>
-                                </Button>
-                            </motion.div>
-
-                            <motion.div
-                                variants={itemVariants}
-                                className="flex flex-row justify-between items-center"
-                            >
-                                <p className="flex flex-row gap-2 items-center text-sm text-secondary">
-                                    <Clock size={15} /> Code expires in {mm}:
-                                    {ss}
-                                </p>
-
-                                <Button
-                                    disabled={resendTimer > 240}
-                                    onClick={handleResendCode}
-                                    className="text-sm font-bold text-secondary bg-brand-orange"
-                                >
-                                    Resend code
                                 </Button>
                             </motion.div>
                         </FieldGroup>
@@ -317,9 +215,9 @@ export default function VerifyAccountForm() {
                         <CardContent className="flex flex-row gap-2 text-xs text-secondary">
                             <Info size={23} />{" "}
                             <p>
-                                Can't find it? Check your spam folder. You can
-                                request a new code for up to 20 minutes after
-                                signing up.
+                                Signed up with Google? Your account doesn't have
+                                a password. Use Continue with Google on the
+                                log-in page instead.
                             </p>
                         </CardContent>
                     </Card>
