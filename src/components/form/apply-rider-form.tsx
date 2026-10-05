@@ -120,7 +120,7 @@ export default function ApplyRiderForm() {
                             email: riderData.user.email,
                         });
                         router.push(
-                            `/apply/verify-account?${params.toString()}`,
+                            `/apply-rider/verify?${params.toString()}`,
                         );
                     },
                     onError: (err: FetchError) => {

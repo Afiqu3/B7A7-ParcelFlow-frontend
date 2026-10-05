@@ -1,5 +1,5 @@
 import apiClient from "@/lib/apiClient";
-import { ApplyAsRiderPayload } from "@/types";
+import { ApplyAsRiderPayload, VerifyEmailPayload } from "@/types";
 
 export const applyAsRider = (payload: ApplyAsRiderPayload) => {
     const formData = new FormData();
@@ -11,4 +11,8 @@ export const applyAsRider = (payload: ApplyAsRiderPayload) => {
         method: "POST",
         body: formData,
     });
+};
+
+export const verifyRiderAccount = (payload: VerifyEmailPayload) => {
+    return apiClient("/rider/apply/verify-email", { method: "POST", body: payload });
 };
