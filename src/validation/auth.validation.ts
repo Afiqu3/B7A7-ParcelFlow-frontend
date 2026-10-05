@@ -53,7 +53,7 @@ export const strongPasswordSchema = PASSWORD_RULES.reduce(
     z.string().min(1, { error: "Password is required", abort: true }),
 );
 
-const BD_PHONE_REGEX = /^(?:\+?880|0)1[3-9]\d{8}$/;
+export const BD_PHONE_REGEX = /^(?:\+?880|0)1[3-9]\d{8}$/;
 
 export const loginSchema = z.object({
     email: z.email("Enter a valid email"),

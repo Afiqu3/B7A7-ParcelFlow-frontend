@@ -185,7 +185,7 @@ export default function ResetPasswordForm() {
                                                 <AnimatePresence>
                                                     {isInvalid && (
                                                         <motion.div
-                                                            key="email-error"
+                                                            key={`${field.name}-error`}
                                                             {...errorMotion}
                                                             className="overflow-hidden"
                                                         >
@@ -291,7 +291,7 @@ export default function ResetPasswordForm() {
                                                     {isInvalid &&
                                                         !field.state.value && (
                                                             <motion.div
-                                                                key="password-error"
+                                                                key={`${field.name}-error`}
                                                                 {...errorMotion}
                                                                 className="overflow-hidden"
                                                             >
@@ -362,7 +362,7 @@ export default function ResetPasswordForm() {
                                                     {isInvalid &&
                                                         !field.state.value && (
                                                             <motion.div
-                                                                key="password-error"
+                                                                key={`${field.name}-error`}
                                                                 {...errorMotion}
                                                                 className="overflow-hidden"
                                                             >

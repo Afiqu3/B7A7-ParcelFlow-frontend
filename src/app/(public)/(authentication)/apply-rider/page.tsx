@@ -1,23 +1,21 @@
 import Logo from "@/assets/svg/Logo";
-import ResetPasswordForm from "@/components/form/reset-password-form";
-import ResetPasswordFallback from "@/components/modules/authentication/ResetPasswordFallback";
+import ApplyRiderForm from "@/components/form/apply-rider-form";
 import LeftSide from "@/components/modules/authentication/LeftSide";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Suspense } from "react";
 
 export const metadata: Metadata = {
-    title: "Reset Password-ParcelFlow",
+    title: "Apply Rider-ParcelFlow",
 };
 
-export default function ResetPasswordPage() {
+export default function ApplyRiderPage() {
     return (
         <div className="grid min-h-svh lg:grid-cols-5">
             <div className="lg:block bg-brand p-6 md:p-10 hidden col-span-2">
                 <LeftSide
-                    headingTextOne="Almost"
-                    headingTextTwo="there."
-                    descriptionText="Pick a strong new password and you're back to shipping."
+                    headingTextOne="Ride with"
+                    headingTextTwo="ParcelFlow."
+                    descriptionText="Pick up and deliver parcels in your area. Our team reviews every application."
                 />
             </div>
 
@@ -37,9 +35,7 @@ export default function ResetPasswordPage() {
                 </div>
 
                 <div className="w-full lg:max-w-xl md:max-w-md max-w-2xs">
-                    <Suspense fallback={<ResetPasswordFallback />}>
-                        <ResetPasswordForm />
-                    </Suspense>
+                    <ApplyRiderForm />
                 </div>
             </div>
         </div>

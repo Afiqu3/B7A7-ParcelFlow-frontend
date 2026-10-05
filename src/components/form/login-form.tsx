@@ -23,6 +23,7 @@ import {
     itemVariants,
     useShake,
 } from "./form-motion";
+import { ROUTES } from "@/constants";
 
 export default function LoginForm() {
     const [showPassword, setShowPassword] = useState(false);
@@ -376,7 +377,7 @@ export default function LoginForm() {
                         <p>
                             Want to deliver parcels?{" "}
                             <Link
-                                href={""}
+                                href={ROUTES.riderApply}
                                 className="text-chart-3 font-bold font-heading text-sm underline hover:underline"
                             >
                                 Apply as a rider

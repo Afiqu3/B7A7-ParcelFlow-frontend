@@ -224,7 +224,7 @@ export default function VerifyAccountForm() {
                                                 <AnimatePresence>
                                                     {isInvalid && (
                                                         <motion.div
-                                                            key="email-error"
+                                                            key={`${field.name}-error`}
                                                             {...errorMotion}
                                                             className="overflow-hidden"
                                                         >
