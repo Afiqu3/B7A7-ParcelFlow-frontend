@@ -10,7 +10,7 @@ import {
     userRegistration,
     verifyAccount,
 } from "@/api";
-import { User } from "@/types";
+import type { User } from "@/types";
 import {
     queryOptions,
     useMutation,

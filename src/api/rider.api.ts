@@ -1,5 +1,5 @@
 import apiClient from "@/lib/apiClient";
-import { ApplyAsRiderPayload, VerifyEmailPayload } from "@/types";
+import type { ApplyAsRiderPayload, VerifyEmailPayload } from "@/types";
 
 export const applyAsRider = (payload: ApplyAsRiderPayload) => {
     const formData = new FormData();

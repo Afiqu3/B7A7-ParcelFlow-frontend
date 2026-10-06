@@ -1,5 +1,6 @@
-import { cookies } from "next/headers";
-import type { CSSProperties, ReactNode } from "react";
+"use client";
+
+import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { MotionProvider } from "@/components/modules/landing/motion";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import type { UserRole } from "@/types";
@@ -7,26 +8,48 @@ import DashboardContent, { DASHBOARD_CONTENT_ID } from "./dashboard-content";
 import { DashboardSidebar } from "./dashboard-sidebar";
 import DashboardTopbar from "./dashboard-topbar";
 
-// Cookie the shadcn sidebar writes when it's opened or collapsed. Reading
-// it here renders the right width on the server, so there's no flash.
+// Cookie the sidebar writes when it's opened or collapsed.
 const SIDEBAR_COOKIE = "sidebar_state";
 
-export default async function DashboardShell({
+function readSidebarPreference(): boolean | null {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie.match(
+    new RegExp(`(?:^|; )${SIDEBAR_COOKIE}=([^;]*)`),
+  );
+  if (!match) return null;
+  try {
+    return decodeURIComponent(match[1]) !== "false";
+  } catch {
+    return match[1] !== "false";
+  }
+}
+
+export default function DashboardShell({
   children,
   role,
 }: {
   children: ReactNode;
   role: UserRole;
 }) {
-  const cookieStore = await cookies();
-  const defaultOpen = cookieStore.get(SIDEBAR_COOKIE)?.value !== "false";
+  // Prerender and first paint assume expanded (the default when no cookie
+  // exists). The stored preference applies after mount, so `output:
+  // "export"` can prerender this route and hydration never mismatches.
+  // (Reading the cookie on the server via `cookies()` would forbid static
+  // rendering, so it lives here on the client instead.)
+  const [open, setOpen] = useState(true);
+
+  useEffect(() => {
+    const stored = readSidebarPreference();
+    if (stored !== null) setOpen(stored);
+  }, []);
 
   return (
     <MotionProvider>
       {/* font-sans: the app default (on <html>) is mono; the dashboard uses
           the same sans as the marketing pages. */}
       <SidebarProvider
-        defaultOpen={defaultOpen}
+        open={open}
+        onOpenChange={setOpen}
         className="font-sans"
         style={{ "--sidebar-width-icon": "4rem" } as CSSProperties}
       >
