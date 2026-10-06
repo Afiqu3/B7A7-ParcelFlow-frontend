@@ -1,6 +1,7 @@
 import apiClient from "@/lib/apiClient";
 import {
     ApiResponse,
+    ChangePasswordPayload,
     LoginPayload,
     RegisterMerchantPayload,
     ResetPasswordPayload,
@@ -36,6 +37,13 @@ export const forgotPassword = (payload: { email: string }) => {
 
 export const resetPassword = (payload: ResetPasswordPayload) => {
     return apiClient("/auth/reset-password", {
+        method: "POST",
+        body: payload,
+    });
+};
+
+export const changePassword = (payload: ChangePasswordPayload) => {
+    return apiClient("/auth/change-password", {
         method: "POST",
         body: payload,
     });

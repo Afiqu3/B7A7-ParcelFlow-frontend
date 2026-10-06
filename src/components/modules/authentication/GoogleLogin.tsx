@@ -2,6 +2,8 @@
 
 import { useGoogleOAuth } from "@/hooks";
 import { isGoogleAuthEnabled } from "@/lib/env";
+import { ROUTES } from "@/constants";
+import { shouldForcePasswordChange } from "@/utils";
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/navigation";
 import { FetchError } from "ofetch";
@@ -28,7 +30,15 @@ export default function GoogleLoginComponent({ text }: googleLoginComponentProps
     googleLogin(
       { idToken },
       {
-        onSuccess: () => {
+        onSuccess: async (res) => {
+          if (await shouldForcePasswordChange(res)) {
+            toast.warning("Password change required", {
+              description:
+                "Your account is using a temporary password. Please set a new one to continue.",
+            });
+            router.push(ROUTES.changePassword);
+            return;
+          }
           toast.success("Logged in Successfully", {
             description: "Welcome back",
           });

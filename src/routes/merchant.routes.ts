@@ -1,10 +1,11 @@
 import {
-  HandCoins,
-  LayoutDashboard,
-  Package,
-  Plus,
-  UserRound,
-  Wallet,
+    HandCoins,
+    LayoutDashboard,
+    Package,
+    Plus,
+    UserKey,
+    UserRound,
+    Wallet,
 } from "lucide-react";
 import type { SidebarItem, SidebarItems } from "@/types";
 
@@ -12,28 +13,35 @@ const prefix = "/dashboard";
 
 /** The orange button at the top of the merchant sidebar. */
 export const merchantQuickAction: SidebarItem = {
-  title: "New parcel",
-  url: `${prefix}/parcels/new`,
-  icon: Plus,
+    title: "New parcel",
+    url: `${prefix}/parcels/new`,
+    icon: Plus,
 };
 
 export const merchantRoutes: SidebarItems = [
-  {
-    items: [{ title: "Dashboard", url: prefix, icon: LayoutDashboard }],
-  },
-  {
-    title: "Shipping",
-    items: [{ title: "Parcels", url: `${prefix}/parcels`, icon: Package }],
-  },
-  {
-    title: "Money",
-    items: [
-      { title: "Payments", url: `${prefix}/payments`, icon: Wallet },
-      { title: "COD collections", url: `${prefix}/cod`, icon: HandCoins },
-    ],
-  },
-  {
-    title: "Account",
-    items: [{ title: "Profile", url: `${prefix}/profile`, icon: UserRound }],
-  },
+    {
+        items: [{ title: "Dashboard", url: prefix, icon: LayoutDashboard }],
+    },
+    {
+        title: "Shipping",
+        items: [{ title: "Parcels", url: `${prefix}/parcels`, icon: Package }],
+    },
+    {
+        title: "Money",
+        items: [
+            { title: "Payments", url: `${prefix}/payments`, icon: Wallet },
+            { title: "COD collections", url: `${prefix}/cod`, icon: HandCoins },
+        ],
+    },
+    {
+        title: "Account",
+        items: [
+            { title: "Profile", url: `${prefix}/profile`, icon: UserRound },
+            {
+                title: "Change password",
+                url: `${prefix}/change-password`,
+                icon: UserKey,
+            },
+        ],
+    },
 ];

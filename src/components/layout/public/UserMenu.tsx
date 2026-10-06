@@ -60,10 +60,10 @@ export default function UserMenu({ user }: { user: User }) {
         </Avatar>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="w-60">
+      <DropdownMenuContent align="end" className="w-60 p-3 bg-brand-cream">
         <DropdownMenuLabel className="flex flex-col gap-0.5">
-          <span className="truncate font-medium">{user?.name}</span>
-          <span className="truncate text-xs font-normal text-muted-foreground">
+          <span className="truncate font-medium font-heading text-secondary">{user?.name}</span>
+          <span className="truncate text-xs font-heading text-secondary">
             {user?.email}
           </span>
           <span className="mt-1 w-fit rounded-full bg-primary/10 px-2 py-0.5 text-[0.65rem] font-medium tracking-wide text-primary capitalize">
@@ -77,6 +77,7 @@ export default function UserMenu({ user }: { user: User }) {
           {userMenuItems.map((item) => (
             <DropdownMenuItem
               key={item.href}
+              className="cursor-pointer font-heading text-secondary"
               onClick={async () => {
                 await handleUserMenuAction(item.href);
               }}
@@ -91,6 +92,7 @@ export default function UserMenu({ user }: { user: User }) {
 
         <DropdownMenuItem
           variant="destructive"
+          className="cursor-pointer"
           onClick={async () => {
             await handleUserMenuAction("/logout");
           }}

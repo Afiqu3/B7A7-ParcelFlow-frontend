@@ -1,4 +1,5 @@
 import {
+    changePassword,
     forgotPassword,
     getMe,
     googleOAuth,
@@ -94,14 +95,28 @@ export const useVerifyAccount = () => {
 };
 
 export const useResendMerchantVerifyCode = () => {
+    const refreshMe = useRefreshMe();
     return useMutation({
         mutationFn: resendMerchantVerifyCode,
+        onSuccess: () => refreshMe(),
     });
 };
 
 export const useForgotPassword = () => {
     return useMutation({
         mutationFn: forgotPassword,
+    });
+};
+
+export const useChangePassword = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: changePassword,
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: meQueryOptions.queryKey,
+            });
+        },
     });
 };
 

@@ -12,9 +12,11 @@ export const ROUTES = {
   pricing: "/pricing",
   rideWithUs: "/ride-with-us",
   riderApply: "/apply-rider",
+  riderEmailVerify: "/apply-rider/verify",
   about: "/about",
   contact: "/contact",
   dashboard: "/dashboard",
+  changePassword: "/dashboard/change-password",
   terms: "/",
   privacy: "/",
 } as const;
