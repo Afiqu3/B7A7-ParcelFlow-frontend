@@ -91,7 +91,7 @@ export default function VerifyRiderAccountForm() {
                         return;
                     }
                     toast.success("Verifying Successfully", {
-                        description: "Welcome to ParcelFlow",
+                        description: "Please wait for the approval from the admin",
                     });
                     router.push("/");
                 },
@@ -136,7 +136,7 @@ export default function VerifyRiderAccountForm() {
                         </h1>
 
                         <p className="text-balance text-sm text-secondary/80">
-                            We sent a 6-digit code and a temporary password to{" "}
+                            We sent a 6-digit code to{" "}
                             <span className="font-extrabold">{email}</span>.
                         </p>
                     </motion.div>

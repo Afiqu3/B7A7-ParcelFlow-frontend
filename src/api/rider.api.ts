@@ -5,7 +5,7 @@ export const applyAsRider = (payload: ApplyAsRiderPayload) => {
     const formData = new FormData();
 
     formData.append("data", JSON.stringify(payload.data));
-    formData.append("resume", payload.vehiclePaper);
+    formData.append("vehiclePaper", payload.vehiclePaper);
 
     return apiClient("/rider/apply", {
         method: "POST",

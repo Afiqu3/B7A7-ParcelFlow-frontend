@@ -119,9 +119,7 @@ export default function ApplyRiderForm() {
                         const params = new URLSearchParams({
                             email: riderData.user.email,
                         });
-                        router.push(
-                            `/apply-rider/verify?${params.toString()}`,
-                        );
+                        router.push(`/apply-rider/verify?${params.toString()}`);
                     },
                     onError: (err: FetchError) => {
                         shakeForm();
@@ -586,8 +584,19 @@ export default function ApplyRiderForm() {
                                             return (
                                                 <Field data-invalid={isInvalid}>
                                                     <RadioGroup
-                                                        defaultValue="BIKE"
+                                                        value={
+                                                            field.state.value
+                                                        }
+                                                        onValueChange={(v) =>
+                                                            field.handleChange(
+                                                                v,
+                                                            )
+                                                        }
+                                                        onBlur={
+                                                            field.handleBlur
+                                                        }
                                                         className="grid grid-cols-3 gap-3"
+                                                        aria-invalid={isInvalid}
                                                     >
                                                         {vehicles.map(
                                                             (vehicle) => {
