@@ -17,6 +17,8 @@ export const ROUTES = {
   contact: "/contact",
   dashboard: "/dashboard",
   changePassword: "/dashboard/change-password",
+  profile: "/dashboard/profile",
+  updateProfile: "/dashboard/update-profile",
   terms: "/",
   privacy: "/",
 } as const;

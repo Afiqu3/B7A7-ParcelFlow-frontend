@@ -29,3 +29,9 @@ export interface Merchant {
         userId: string;
     };
 }
+
+export interface MerchantUpdatePayload {
+    name?: string;
+    phone?: string;
+    businessName?: string;
+}

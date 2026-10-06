@@ -5,6 +5,7 @@ import {
     Plus,
     UserKey,
     UserRound,
+    UserRoundPen,
     Wallet,
 } from "lucide-react";
 import type { SidebarItem, SidebarItems } from "@/types";
@@ -41,6 +42,11 @@ export const merchantRoutes: SidebarItems = [
                 title: "Change password",
                 url: `${prefix}/change-password`,
                 icon: UserKey,
+            },
+            {
+                title: "Update profile",
+                url: `${prefix}/update-profile`,
+                icon: UserRoundPen,
             },
         ],
     },
