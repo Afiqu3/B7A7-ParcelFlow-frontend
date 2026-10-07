@@ -1,12 +1,6 @@
 import UpdateMerchantProfileForm from "@/components/form/update-merchant-profile-from";
 import { ROUTES } from "@/constants";
-import {
-    BadgeCheck,
-    Building2,
-    Phone,
-    UserRound,
-    UserRoundPen,
-} from "lucide-react";
+import { Building2, Phone, UserRound, UserRoundPen } from "lucide-react";
 import Link from "next/link";
 
 const tips = [
@@ -52,7 +46,10 @@ export default function UpdateProfilePage() {
                     href={ROUTES.profile}
                     className="flex w-fit shrink-0 items-center gap-2 rounded-xl bg-card px-3.5 py-2.5 text-xs font-bold text-secondary ring-1 ring-secondary/10 transition-colors outline-none hover:bg-secondary/5 focus-visible:ring-2 focus-visible:ring-brand-orange/50"
                 >
-                    <UserRound className="size-4 text-brand" strokeWidth={2.25} />
+                    <UserRound
+                        className="size-4 text-brand"
+                        strokeWidth={2.25}
+                    />
                     View profile
                 </Link>
             </div>

@@ -16,6 +16,8 @@ export const ROUTES = {
   about: "/about",
   contact: "/contact",
   dashboard: "/dashboard",
+  parcels: "/dashboard/parcels",
+  newParcel: "/dashboard/parcels/new",
   changePassword: "/dashboard/change-password",
   profile: "/dashboard/profile",
   updateProfile: "/dashboard/update-profile",
