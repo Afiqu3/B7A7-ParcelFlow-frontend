@@ -337,7 +337,7 @@ function TrackResult({
             {...fadeSwap}
             className="overflow-hidden rounded-2xl bg-card ring-1 ring-secondary/10 shadow-[0_24px_48px_-32px_rgba(15,32,86,0.35)]"
         >
-            <div className="flex items-center gap-3.5 border-b border-secondary/8 bg-gradient-to-r from-brand-cream via-brand-cream/40 to-transparent px-5 py-5 sm:px-6">
+            <div className="flex items-center gap-3.5 border-b border-secondary/8 bg-linear-to-r from-brand-cream via-brand-cream/40 to-transparent px-5 py-5 sm:px-6">
                 <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-brand text-white shadow-[0_12px_24px_-12px_rgba(15,32,86,0.7)]">
                     {status === "DELIVERED" ? (
                         <PackageCheck

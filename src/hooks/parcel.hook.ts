@@ -26,6 +26,7 @@ export const useCreateParcel = () => {
         mutationFn: createParcel,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["my-parcels"] });
+            queryClient.invalidateQueries({ queryKey: ["stats"] });
         },
     });
 };
@@ -62,6 +63,7 @@ export const useCancelParcelByMerchant = (
         mutationFn: () => cancelParcelByMerchant(parcelId, payload),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["my-parcels"] });
+            queryClient.invalidateQueries({ queryKey: ["stats"] });
             queryClient.invalidateQueries({
                 queryKey: ["my-parcel", "merchant", parcelId],
             });
@@ -76,6 +78,7 @@ export const useDeleteParcelByMerchant = (parcelId: string) => {
         mutationFn: () => deleteParcelByMerchant(parcelId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["my-parcels"] });
+            queryClient.invalidateQueries({ queryKey: ["stats"] });
             queryClient.invalidateQueries({
                 queryKey: ["my-parcel", "merchant", parcelId],
             });
@@ -90,6 +93,7 @@ export const usePaymentParcel = (parcelId: string) => {
         mutationFn: () => paymentParcel(parcelId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["my-parcels"] });
+            queryClient.invalidateQueries({ queryKey: ["stats"] });
             queryClient.invalidateQueries({
                 queryKey: ["my-parcel", "merchant", parcelId],
             });

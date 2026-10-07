@@ -6,4 +6,5 @@ export * from "./parcel.type";
 export * from "./pricing.type";
 export * from "./rider.type";
 export * from "./sidebar.type";
+export * from "./stats.type";
 export * from "./user.type";
