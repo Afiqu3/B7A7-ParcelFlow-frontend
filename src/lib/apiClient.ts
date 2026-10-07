@@ -1,4 +1,4 @@
-import { FetchError, type FetchOptions, ofetch } from "ofetch";
+import { FetchError, type FetchOptions, ofetch, type ResponseType } from "ofetch";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -33,12 +33,14 @@ function refreshToken() {
 }
 
 // biome-ignore lint/suspicious/noExplicitAny: same default as ofetch's own client
-export default async function apiClient<T = any>(
+export default async function apiClient<T = any, R extends ResponseType = "json">(
   url: string,
-  options?: FetchOptions<"json">,
+  options?: FetchOptions<R>,
 ): Promise<T> {
   try {
-    return await baseClient<T>(url, options);
+    // ofetch types the result as MappedResponseType<R, T>; the caller
+    // picks T to match R (e.g. Blob with "blob"), so assert it through.
+    return (await baseClient(url, options)) as unknown as T;
   } catch (error) {
     // Only an expired access token should trigger a refresh.
     const isExpired =
@@ -55,6 +57,6 @@ export default async function apiClient<T = any>(
     }
 
     // Retry once with the new access token. A second 401 is thrown as-is.
-    return baseClient<T>(url, options);
+    return baseClient(url, options) as unknown as Promise<T>;
   }
 }

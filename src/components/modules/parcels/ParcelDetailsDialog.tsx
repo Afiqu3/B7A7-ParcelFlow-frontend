@@ -31,6 +31,7 @@ import {
     statusDot,
     statusPill,
 } from "./parcel-status";
+import ParcelInvoiceButton from "./ParcelInvoiceButton";
 import ParcelPayNowButton from "./ParcelPayNowButton";
 
 const transactionTone: Record<TransactionStatus, string> = {
@@ -111,16 +112,27 @@ export default function ParcelDetailsDialog({
         >
             <DialogContent className="max-h-[85svh] overflow-y-auto p-5 sm:max-w-2xl sm:p-6">
                 {isPending || isError || !data?.data ? (
-                    <DialogState
-                        isError={isError}
-                        message={(error as Error)?.message}
-                        retrying={isFetching}
-                        onRetry={() => refetch()}
-                    />
+                    <>
+                        <DialogState
+                            isError={isError}
+                            message={(error as Error)?.message}
+                            retrying={isFetching}
+                            onRetry={() => refetch()}
+                        />
+                        <DialogFooter showCloseButton />
+                    </>
                 ) : (
-                    <ParcelDetailsBody parcel={data.data} />
+                    <>
+                        <ParcelDetailsBody parcel={data.data} />
+                        <DialogFooter showCloseButton>
+                            <ParcelInvoiceButton
+                                variant="full"
+                                parcelId={data.data.id}
+                                trackingId={data.data.trackingId}
+                            />
+                        </DialogFooter>
+                    </>
                 )}
-                <DialogFooter showCloseButton />
             </DialogContent>
         </Dialog>
     );

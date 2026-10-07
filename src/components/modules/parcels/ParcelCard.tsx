@@ -15,6 +15,7 @@ import {
     statusPill,
 } from "./parcel-status";
 import ParcelCardDangerActions from "./ParcelCardDangerActions";
+import ParcelInvoiceButton from "./ParcelInvoiceButton";
 import ParcelPayNowButton from "./ParcelPayNowButton";
 
 function useCopyTracking() {
@@ -132,6 +133,10 @@ export default function ParcelCard({
                 </div>
                 <span className="flex shrink-0 items-center gap-1.5">
                     <ParcelCardDangerActions parcel={parcel} />
+                    <ParcelInvoiceButton
+                        parcelId={parcel.id}
+                        trackingId={parcel.trackingId}
+                    />
                     <Button
                         type="button"
                         variant="outline"

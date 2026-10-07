@@ -57,3 +57,9 @@ export const paymentParcel = (parcelId: string) => {
         method: "POST",
     });
 };
+
+export const downloadInvoice = (parcelId: string) => {
+    return apiClient<Blob, "blob">(`parcel/${parcelId}/invoice`, {
+        responseType: "blob",
+    });
+};

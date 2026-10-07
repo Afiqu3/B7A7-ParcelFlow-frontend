@@ -2,17 +2,21 @@ import {
     cancelParcelByMerchant,
     createParcel,
     deleteParcelByMerchant,
+    downloadInvoice,
     getAllMyParcels,
     getSingleParcelAsMerchant,
     paymentParcel,
 } from "@/api";
 import type { cancelParcelPayload, MyParcelsParams } from "@/types";
+import { saveBlobAsFile } from "@/utils";
 import {
     useMutation,
     useQuery,
     useQueryClient,
     useSuspenseQuery,
 } from "@tanstack/react-query";
+import type { FetchError } from "ofetch";
+import { toast } from "sonner";
 
 export const useCreateParcel = () => {
     const queryClient = useQueryClient();
@@ -92,3 +96,22 @@ export const usePaymentParcel = (parcelId: string) => {
     });
 };
 
+export const useDownloadInvoice = () => {
+    return useMutation({
+        mutationFn: downloadInvoice,
+        onSuccess: (blob, parcelId) => {
+            saveBlobAsFile(blob, `invoice-${parcelId}.pdf`);
+            toast.success("Invoice downloaded", {
+                description: `invoice-${parcelId}.pdf`,
+            });
+        },
+        onError: (err: FetchError) => {
+            toast.error("Could not download invoice", {
+                description:
+                    err.data?.message ||
+                    err.message ||
+                    "Something went wrong. Please try again.",
+            });
+        },
+    });
+};
