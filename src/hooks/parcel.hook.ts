@@ -6,6 +6,7 @@ import {
     getAllMyParcels,
     getSingleParcelAsMerchant,
     paymentParcel,
+    trackParcel,
 } from "@/api";
 import type { cancelParcelPayload, MyParcelsParams } from "@/types";
 import { saveBlobAsFile } from "@/utils";
@@ -113,5 +114,15 @@ export const useDownloadInvoice = () => {
                     "Something went wrong. Please try again.",
             });
         },
+    });
+};
+
+export const useTrackParcel = (trackingId: string) => {
+    return useQuery({
+        queryKey: ["track", trackingId],
+        queryFn: () => trackParcel(trackingId),
+        enabled: trackingId.trim() !== "",
+        // A typo'd ID 404s — don't waste retries on it.
+        retry: false,
     });
 };

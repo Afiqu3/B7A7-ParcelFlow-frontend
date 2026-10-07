@@ -147,3 +147,8 @@ export interface PaymentResponse {
     paymentUrl: string;
     paymentID: string;
 }
+
+export interface ParcelTrackResponse {
+    status: string;
+    trackingId: string;
+}

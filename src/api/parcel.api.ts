@@ -6,6 +6,7 @@ import type {
     CreateParcelPayload,
     MyParcelsParams,
     Parcel,
+    ParcelTrackResponse,
     PaymentResponse,
 } from "@/types";
 
@@ -62,4 +63,10 @@ export const downloadInvoice = (parcelId: string) => {
     return apiClient<Blob, "blob">(`parcel/${parcelId}/invoice`, {
         responseType: "blob",
     });
+};
+
+export const trackParcel = (trackingId: string) => {
+    return apiClient<ApiResponse<ParcelTrackResponse>>(
+        `parcel/${trackingId}/track`,
+    );
 };

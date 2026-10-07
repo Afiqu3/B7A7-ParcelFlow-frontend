@@ -2,6 +2,7 @@ import {
     HandCoins,
     LayoutDashboard,
     Package,
+    PackageSearch,
     Plus,
     UserKey,
     UserRound,
@@ -25,7 +26,14 @@ export const merchantRoutes: SidebarItems = [
     },
     {
         title: "Shipping",
-        items: [{ title: "Parcels", url: `${prefix}/parcels`, icon: Package }],
+        items: [
+            { title: "Parcels", url: `${prefix}/parcels`, icon: Package },
+            {
+                title: "Track parcel",
+                url: `${prefix}/track`,
+                icon: PackageSearch,
+            },
+        ],
     },
     {
         title: "Money",
