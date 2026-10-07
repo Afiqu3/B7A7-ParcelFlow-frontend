@@ -1,4 +1,4 @@
-import type { ParcelStatus } from "@/types";
+import type { Parcel, ParcelStatus } from "@/types";
 
 export const PARCEL_STATUS_ORDER: ParcelStatus[] = [
     "CREATED",
@@ -71,6 +71,17 @@ export function statusPill(status: ParcelStatus) {
 /** Dot classes for a parcel status badge. */
 export function statusDot(status: ParcelStatus) {
     return `size-1.5 rounded-full ${toneDot[PARCEL_STATUS_META[status].tone]}`;
+}
+
+/** Whether a parcel still needs online payment: it has a transaction
+ *  whose status is PENDING or FAILED. PAID, REFUNDED and CANCELLED need
+ *  no further payment. Narrows `transaction` to defined for the pay
+ *  button amount. */
+export function needsPayment(
+    parcel: Parcel,
+): parcel is Parcel & { transaction: NonNullable<Parcel["transaction"]> } {
+    const status = parcel.transaction?.status;
+    return status === "PENDING" || status === "FAILED";
 }
 
 export function formatParcelDate(iso: string | undefined) {

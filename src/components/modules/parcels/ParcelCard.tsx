@@ -9,10 +9,13 @@ import { formatTaka } from "@/lib/pricing";
 import type { Parcel } from "@/types";
 import {
     formatParcelDate,
+    needsPayment,
     PARCEL_STATUS_META,
     statusDot,
     statusPill,
 } from "./parcel-status";
+import ParcelCardDangerActions from "./ParcelCardDangerActions";
+import ParcelPayNowButton from "./ParcelPayNowButton";
 
 function useCopyTracking() {
     const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -114,12 +117,12 @@ export default function ParcelCard({
             </p>
 
             {/* Charge + date */}
-            <div className="mt-3 flex items-end justify-between gap-3 border-t border-secondary/8 pt-3">
-                <div>
+            <div className="mt-3 flex items-end justify-between gap-2 border-t border-secondary/8 pt-3">
+                <div className="min-w-0 flex-1">
                     <p className="font-heading text-lg leading-none font-extrabold tracking-tight text-secondary">
                         {formatTaka(parcel.totalCharge)}
                     </p>
-                    <p className="mt-1 text-xs text-secondary/55">
+                    <p className="mt-1 truncate text-xs text-secondary/55">
                         {parcel.paymentType === "COD" &&
                         parcel.codAmount !== undefined
                             ? `COD ${formatTaka(parcel.codAmount)} · `
@@ -127,16 +130,31 @@ export default function ParcelCard({
                         {formatParcelDate(parcel.createdAt)}
                     </p>
                 </div>
-                <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => onView(parcel.id)}
-                    className="h-9 shrink-0 rounded-xl border-secondary/15 font-heading text-xs font-bold text-secondary hover:bg-brand hover:text-white hover:ring-brand"
-                >
-                    <Eye className="size-4" />
-                    View details
-                </Button>
+                <span className="flex shrink-0 items-center gap-1.5">
+                    <ParcelCardDangerActions parcel={parcel} />
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => onView(parcel.id)}
+                        className="h-9 shrink-0 rounded-xl border-secondary/15 px-3 font-heading text-xs font-bold text-secondary hover:bg-brand hover:text-white hover:ring-brand"
+                    >
+                        <Eye className="size-4" />
+                        <span className="hidden min-[380px]:inline">
+                            View details
+                        </span>
+                        <span className="sr-only min-[380px]:hidden">
+                            View details
+                        </span>
+                    </Button>
+                </span>
             </div>
+            {needsPayment(parcel) ? (
+                <ParcelPayNowButton
+                    parcelId={parcel.id}
+                    trackingId={parcel.trackingId}
+                    amount={parcel.transaction.amount}
+                />
+            ) : null}
         </article>
     );
 }

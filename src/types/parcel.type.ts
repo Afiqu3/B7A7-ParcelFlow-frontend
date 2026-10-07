@@ -135,3 +135,15 @@ export interface MyParcelsParams {
     searchTerm?: string;
     sortOrder?: "desc" | "asc";
 }
+
+export interface cancelParcelPayload {
+    cancelReason?: string;
+}
+
+export interface PaymentResponse {
+    parcelId: string;
+    trackingId: string;
+    amount: number;
+    paymentUrl: string;
+    paymentID: string;
+}

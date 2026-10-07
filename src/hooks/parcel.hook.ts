@@ -1,10 +1,18 @@
 import {
+    cancelParcelByMerchant,
     createParcel,
+    deleteParcelByMerchant,
     getAllMyParcels,
     getSingleParcelAsMerchant,
+    paymentParcel,
 } from "@/api";
-import type { MyParcelsParams } from "@/types";
-import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import type { cancelParcelPayload, MyParcelsParams } from "@/types";
+import {
+    useMutation,
+    useQuery,
+    useQueryClient,
+    useSuspenseQuery,
+} from "@tanstack/react-query";
 
 export const useCreateParcel = () => {
     const queryClient = useQueryClient();
@@ -38,3 +46,49 @@ export const useGetSingleParcelAsMerchant = (parcelId: string) => {
         enabled: !!parcelId,
     });
 };
+
+export const useCancelParcelByMerchant = (
+    parcelId: string,
+    payload: cancelParcelPayload,
+) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: () => cancelParcelByMerchant(parcelId, payload),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["my-parcels"] });
+            queryClient.invalidateQueries({
+                queryKey: ["my-parcel", "merchant", parcelId],
+            });
+        },
+    });
+};
+
+export const useDeleteParcelByMerchant = (parcelId: string) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: () => deleteParcelByMerchant(parcelId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["my-parcels"] });
+            queryClient.invalidateQueries({
+                queryKey: ["my-parcel", "merchant", parcelId],
+            });
+        },
+    });
+};
+
+export const usePaymentParcel = (parcelId: string) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: () => paymentParcel(parcelId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["my-parcels"] });
+            queryClient.invalidateQueries({
+                queryKey: ["my-parcel", "merchant", parcelId],
+            });
+        },
+    });
+};
+

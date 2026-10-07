@@ -1,7 +1,9 @@
 import Parcels from "@/components/modules/parcels/Parcels";
+import PaymentReturnHandler from "@/components/modules/parcels/PaymentReturnHandler";
 import { ROUTES } from "@/constants";
 import { PackagePlus, PackageSearch } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export default function ParcelsPage() {
     return (
@@ -32,6 +34,12 @@ export default function ParcelsPage() {
                     New parcel
                 </Link>
             </div>
+
+            {/* Gateway return (?status=success|failure) toasts. Suspended:
+                useSearchParams needs a boundary for static prerendering. */}
+            <Suspense fallback={null}>
+                <PaymentReturnHandler />
+            </Suspense>
 
             <Parcels />
         </div>

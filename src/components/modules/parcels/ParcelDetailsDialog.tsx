@@ -26,10 +26,12 @@ import { formatKg, formatTaka } from "@/lib/pricing";
 import type { Parcel, TransactionStatus } from "@/types";
 import {
     formatParcelDate,
+    needsPayment,
     PARCEL_STATUS_META,
     statusDot,
     statusPill,
 } from "./parcel-status";
+import ParcelPayNowButton from "./ParcelPayNowButton";
 
 const transactionTone: Record<TransactionStatus, string> = {
     PAID: "bg-emerald-600/10 text-emerald-700 ring-emerald-600/20",
@@ -395,6 +397,20 @@ function ParcelDetailsBody({ parcel }: { parcel: Parcel }) {
                                 />
                             ) : null}
                         </dl>
+                        {needsPayment(parcel) ? (
+                            <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
+                                <ParcelPayNowButton
+                                    variant="dialog"
+                                    parcelId={parcel.id}
+                                    trackingId={parcel.trackingId}
+                                    amount={parcel.transaction.amount}
+                                />
+                                <p className="text-xs text-secondary/55">
+                                    Complete the bKash checkout to confirm this
+                                    booking.
+                                </p>
+                            </div>
+                        ) : null}
                     </Block>
                 </div>
 

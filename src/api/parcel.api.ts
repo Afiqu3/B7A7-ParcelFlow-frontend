@@ -2,9 +2,11 @@ import apiClient from "@/lib/apiClient";
 import { toParcel } from "@/lib/parcel";
 import type {
     ApiResponse,
+    cancelParcelPayload,
     CreateParcelPayload,
     MyParcelsParams,
     Parcel,
+    PaymentResponse,
 } from "@/types";
 
 export const createParcel = (payload: CreateParcelPayload) => {
@@ -32,4 +34,26 @@ export const getSingleParcelAsMerchant = async (parcelId: string) => {
         ...res,
         data: res.data ? toParcel(res.data) : res.data,
     };
+};
+
+export const cancelParcelByMerchant = (
+    parcelId: string,
+    payload: cancelParcelPayload,
+) => {
+    return apiClient(`parcel/${parcelId}/cancel`, {
+        method: "POST",
+        body: payload,
+    });
+};
+
+export const deleteParcelByMerchant = (parcelId: string) => {
+    return apiClient(`parcel/${parcelId}`, {
+        method: "DELETE",
+    });
+};
+
+export const paymentParcel = (parcelId: string) => {
+    return apiClient<ApiResponse<PaymentResponse>>(`parcel/${parcelId}/pay`, {
+        method: "POST",
+    });
 };
