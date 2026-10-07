@@ -133,9 +133,14 @@ export function formatPercent(
   value: number,
   decimals = Number.isInteger(value) ? 0 : 1,
 ) {
-  return `${value.toFixed(decimals)}%`;
+  const num = Number(value);
+  const safe = Number.isFinite(num) ? num : 0;
+  const resolved = Number.isInteger(safe) ? 0 : decimals;
+  return `${safe.toFixed(resolved)}%`;
 }
 
 export function formatKg(value: number) {
-  return `${Number.isInteger(value) ? value : value.toFixed(1)} kg`;
+  const num = Number(value);
+  const safe = Number.isFinite(num) ? num : 0;
+  return `${Number.isInteger(safe) ? safe : safe.toFixed(1)} kg`;
 }
