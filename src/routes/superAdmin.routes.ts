@@ -1,3 +1,4 @@
+import type { SidebarItems } from "@/types";
 import {
     Bike,
     LayoutDashboard,
@@ -10,7 +11,6 @@ import {
     UserRoundPlus,
     Users,
 } from "lucide-react";
-import type { SidebarItems } from "@/types";
 
 const prefix = "/super-dashboard";
 
@@ -31,7 +31,11 @@ export const superAdmin: SidebarItems = [
         items: [
             { title: "Pricing rules", url: `${prefix}/pricing`, icon: Receipt },
             { title: "Users", url: `${prefix}/users`, icon: Users },
-            { title: "Create admin", url: `${prefix}/create-admin`, icon: UserRoundPlus },
+            {
+                title: "Create admin",
+                url: `${prefix}/create-admin`,
+                icon: UserRoundPlus,
+            },
         ],
     },
     {

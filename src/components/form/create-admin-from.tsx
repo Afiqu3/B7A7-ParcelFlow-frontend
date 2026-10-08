@@ -115,7 +115,7 @@ export default function CreateAdminForm() {
                 {/* Card header */}
                 <motion.div
                     variants={itemVariants}
-                    className="flex flex-col gap-4 border-b border-secondary/8 bg-gradient-to-r from-brand-cream via-brand-cream/40 to-transparent px-5 py-5 sm:flex-row sm:items-center sm:px-6"
+                    className="flex flex-col gap-4 border-b border-secondary/8 bg-linear-to-r from-brand-cream via-brand-cream/40 to-transparent px-5 py-5 sm:flex-row sm:items-center sm:px-6"
                 >
                     <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-brand text-white shadow-[0_12px_24px_-12px_rgba(15,32,86,0.7)]">
                         <UserRoundPlus className="size-5" strokeWidth={2.25} />
