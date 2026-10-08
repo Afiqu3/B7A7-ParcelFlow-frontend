@@ -13,7 +13,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import type { FetchError } from "ofetch";
 import { useUploadProfileImage } from "@/hooks";
-import type { Merchant } from "@/types";
 import { formatFileSize } from "@/utils";
 import { MAX_FILE_SIZE, profileImageSchema } from "@/validation";
 import { initials } from "@/components/dashboard/nav";
@@ -29,8 +28,19 @@ const uploadSchema = profileImageSchema.refine(
     { message: "Please choose a photo first", path: ["profileImage"] },
 );
 
-/** Avatar + photo update card for the merchant profile page. */
-export default function ProfileImageCard({ merchant }: { merchant: Merchant }) {
+/** Everything the photo card reads. Satisfied by `User`, `Merchant`,
+ *  and any other profile carrying a name and image. */
+export type ProfilePhotoSubject = {
+    name: string;
+    imageUrl: string | null;
+};
+
+/** Avatar + photo update card shared by the merchant and admin profiles. */
+export default function ProfilePhotoCard({
+    subject,
+}: {
+    subject: ProfilePhotoSubject;
+}) {
     const [formScope, shakeForm] = useShake<HTMLDivElement>();
     const [preview, setPreview] = useState<string | null>(null);
     const [justUploaded, setJustUploaded] = useState(false);
@@ -53,13 +63,13 @@ export default function ProfileImageCard({ merchant }: { merchant: Merchant }) {
         if (
             preview &&
             justUploaded &&
-            merchant.imageUrl &&
-            merchant.imageUrl !== uploadedFromRef.current
+            subject.imageUrl &&
+            subject.imageUrl !== uploadedFromRef.current
         ) {
             clearPreview();
             setJustUploaded(false);
         }
-    }, [merchant.imageUrl, preview, justUploaded, clearPreview]);
+    }, [subject.imageUrl, preview, justUploaded, clearPreview]);
 
     // Revoke the object URL if the card unmounts mid-preview.
     useEffect(() => {
@@ -81,7 +91,7 @@ export default function ProfileImageCard({ merchant }: { merchant: Merchant }) {
         onSubmit: ({ value }) => {
             const file = value.profileImage;
             if (!(file instanceof File)) return;
-            uploadedFromRef.current = merchant.imageUrl;
+            uploadedFromRef.current = subject.imageUrl;
             setJustUploaded(false);
             upload(
                 { profileImage: file },
@@ -120,7 +130,7 @@ export default function ProfileImageCard({ merchant }: { merchant: Merchant }) {
         },
     });
 
-    const currentSrc = preview ?? merchant.imageUrl;
+    const currentSrc = preview ?? subject.imageUrl;
 
     return (
         <div
@@ -148,16 +158,16 @@ export default function ProfileImageCard({ merchant }: { merchant: Merchant }) {
                             {currentSrc ? (
                                 <img
                                     src={currentSrc}
-                                    alt={`${merchant.name}'s profile photo`}
+                                    alt={`${subject.name}'s profile photo`}
                                     className="size-28 rounded-3xl object-cover ring-1 ring-secondary/15 sm:size-32"
                                 />
                             ) : (
                                 <span
                                     role="img"
-                                    aria-label={`${merchant.name}'s profile photo placeholder`}
+                                    aria-label={`${subject.name}'s profile photo placeholder`}
                                     className="grid size-28 place-items-center rounded-3xl bg-brand font-heading text-3xl font-extrabold text-white sm:size-32"
                                 >
-                                    {initials(merchant.name)}
+                                    {initials(subject.name)}
                                 </span>
                             )}
                         </motion.div>

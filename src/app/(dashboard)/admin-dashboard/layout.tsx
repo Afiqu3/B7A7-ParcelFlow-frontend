@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 export default function layout({ children }: { children: ReactNode }) {
     return (
-        <DashboardShell role={"MERCHANT" as UserRole}>
+        <DashboardShell role={"ADMIN" as UserRole}>
             {children}
         </DashboardShell>
     );

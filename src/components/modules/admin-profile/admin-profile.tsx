@@ -1,38 +1,27 @@
 "use client";
 
+import { useGetMe } from "@/hooks";
+import ProfileSkeleton from "../profile/ProfileSkeleton";
+import { BadgeCheck, CalendarDays, CircleAlert, Fingerprint, LayoutDashboard, Mail, RefreshCw, ShieldCheck, TriangleAlert, UserKey, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ROUTES } from "@/constants";
-import { useGetMerchantProfile } from "@/hooks";
+import type { User } from "@/types";
 import { ROLE_LABEL } from "@/routes";
-import type { Merchant } from "@/types";
-import {
-    BadgeCheck,
-    Building2,
-    CalendarDays,
-    CircleAlert,
-    Fingerprint,
-    LayoutDashboard,
-    Mail,
-    Phone,
-    RefreshCw,
-    ShieldCheck,
-    TriangleAlert,
-    UserKey,
-    UserRound,
-} from "lucide-react";
-import Link from "next/link";
-import ProfilePhotoCard from "@/components/shared/ProfilePhotoCard";
-import ProfileSkeleton from "./ProfileSkeleton";
 import { formatJoinedOn, formatMemberSince } from "@/utils";
+import ProfilePhotoCard from "@/components/shared/ProfilePhotoCard";
+import Link from "next/link";
 
-/** Page content for `/dashboard/profile`. Handles loading, error and data. */
-export default function Profile() {
-    const { data, isPending, isError, error, refetch, isFetching } =
-        useGetMerchantProfile();
+export default function AdminProfile() {
+    const {
+        data: user,
+        isPending,
+        isError,
+        error,
+        refetch,
+        isFetching,
+    } = useGetMe();
 
     if (isPending) return <ProfileSkeleton />;
-
-    if (isError || !data?.data) {
+    if (isError || !user) {
         return (
             <div className="flex flex-col items-center gap-3 rounded-2xl bg-card px-6 py-12 text-center ring-1 ring-secondary/10 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-300">
                 <span className="grid size-12 place-items-center rounded-2xl bg-destructive/10 text-destructive">
@@ -61,27 +50,25 @@ export default function Profile() {
             </div>
         );
     }
-
-    return <ProfileContent merchant={data.data} />;
+    return <ProfileContent user={user} />;
 }
 
-function ProfileContent({ merchant }: { merchant: Merchant }) {
-    const profile = merchant.merchantProfile;
-    const verified = merchant.emailVerified;
-    const active = merchant.status === "ACTIVE";
+function ProfileContent({ user }: { user: User }) {
+    const verified = user.emailVerified;
+    const active = user.status === "ACTIVE";
 
     const stats = [
         {
             icon: CalendarDays,
             label: "Member since",
-            value: formatMemberSince(merchant.createdAt),
+            value: formatMemberSince(user.createdAt),
         },
         {
             icon: Fingerprint,
             label: "Auth provider",
             value:
-                merchant.authProvider.charAt(0).toUpperCase() +
-                merchant.authProvider.slice(1).toLowerCase(),
+                user.authProvider.charAt(0).toUpperCase() +
+                user.authProvider.slice(1).toLowerCase(),
         },
         {
             icon: ShieldCheck,
@@ -94,24 +81,13 @@ function ProfileContent({ merchant }: { merchant: Merchant }) {
         {
             icon: UserRound,
             label: "Full name",
-            value: merchant.name,
+            value: user.name,
         },
         {
             icon: Mail,
             label: "Email",
-            value: merchant.email,
-            href: `mailto:${merchant.email}`,
-        },
-        {
-            icon: Phone,
-            label: "Phone",
-            value: profile.phone,
-            href: `tel:${profile.phone.replace(/\s/g, "")}`,
-        },
-        {
-            icon: Building2,
-            label: "Business name",
-            value: profile.businessName || "Not set",
+            value: user.email,
+            href: `mailto:${user.email}`,
         },
     ];
 
@@ -128,7 +104,7 @@ function ProfileContent({ merchant }: { merchant: Merchant }) {
                     <div className="border-b border-secondary/8 bg-linear-to-r from-brand-cream via-brand-cream/40 to-transparent px-5 py-5 sm:px-6">
                         <div className="flex flex-wrap items-center gap-2">
                             <span className="inline-flex items-center gap-1.5 rounded-full bg-brand px-3 py-1 font-heading text-[11px] font-bold tracking-wide text-white uppercase">
-                                {ROLE_LABEL[merchant.role] ?? "Merchant"}
+                                {ROLE_LABEL[user.role]}
                             </span>
                             <span
                                 className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-heading text-[11px] font-bold tracking-wide uppercase ${
@@ -168,10 +144,10 @@ function ProfileContent({ merchant }: { merchant: Merchant }) {
                             id="profile-identity-title"
                             className="mt-3 font-heading text-xl font-extrabold tracking-tight text-balance text-secondary sm:text-2xl"
                         >
-                            {merchant.name}
+                            {user.name}
                         </h2>
                         <p className="mt-1 truncate text-sm text-secondary/65">
-                            {merchant.email}
+                            {user.email}
                         </p>
                     </div>
                     <dl className="grid grid-cols-1 gap-3 px-5 py-5 sm:grid-cols-3 sm:px-6">
@@ -243,7 +219,7 @@ function ProfileContent({ merchant }: { merchant: Merchant }) {
                         ))}
                     </dl>
                     <p className="mt-4 border-t border-secondary/8 pt-3.5 text-xs text-secondary/55">
-                        Joined on {formatJoinedOn(merchant.createdAt)} · To
+                        Joined on {formatJoinedOn(user.createdAt)} · To
                         update these details, please contact ParcelFlow support.
                     </p>
                 </section>
@@ -251,7 +227,7 @@ function ProfileContent({ merchant }: { merchant: Merchant }) {
 
             {/* Side column */}
             <aside className="flex min-w-0 flex-col gap-5">
-                <ProfilePhotoCard subject={merchant} />
+                <ProfilePhotoCard subject={user} />
 
                 {/* Navy quick links */}
                 <nav
@@ -277,7 +253,7 @@ function ProfileContent({ merchant }: { merchant: Merchant }) {
                         <ul className="mt-4 flex flex-col gap-2.5">
                             <li>
                                 <Link
-                                    href={ROUTES.changePassword}
+                                    href={"/admin-dashboard/change-password"}
                                     className="flex items-center gap-3 rounded-xl bg-white/6 px-3.5 py-3 ring-1 ring-white/10 ring-inset transition-all outline-none hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-brand-orange/60 active:scale-[0.99]"
                                 >
                                     <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-brand-orange/15 text-brand-orange ring-1 ring-brand-orange/25 ring-inset">
@@ -298,7 +274,7 @@ function ProfileContent({ merchant }: { merchant: Merchant }) {
                             </li>
                             <li>
                                 <Link
-                                    href={ROUTES.dashboard}
+                                    href={"/admin-dashboard"}
                                     className="flex items-center gap-3 rounded-xl bg-white/6 px-3.5 py-3 ring-1 ring-white/10 ring-inset transition-all outline-none hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-brand-orange/60 active:scale-[0.99]"
                                 >
                                     <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-white/10 text-white ring-1 ring-white/15 ring-inset">

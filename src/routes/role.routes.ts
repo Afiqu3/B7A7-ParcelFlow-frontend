@@ -6,7 +6,7 @@ import { riderRoutes } from "./rider.routes";
 /** Where each role's dashboard lives. */
 export const ROLE_HOME: Record<UserRole, string> = {
   SUPER_ADMIN: "/admin",
-  ADMIN: "/admin",
+  ADMIN: "/admin-dashboard",
   MERCHANT: "/dashboard",
   RIDER: "/rider",
 };

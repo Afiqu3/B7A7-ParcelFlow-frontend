@@ -1,7 +1,7 @@
 import z from "zod";
 import { BD_PHONE_REGEX } from "./auth.validation";
 
-export const MAX_FILE_SIZE = 5;
+export const MAX_FILE_SIZE = 4.5;
 
 export const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE * 1024 * 1024;
 
