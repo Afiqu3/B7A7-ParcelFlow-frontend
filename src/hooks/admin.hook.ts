@@ -1,4 +1,9 @@
-import { createAdmin, getAllAdmin, updateAdminProfile } from "@/api";
+import {
+    createAdmin,
+    getAllAdmin,
+    toggleAdminUserStatus,
+    updateAdminProfile,
+} from "@/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { meQueryOptions } from "./auth.hook";
 import type { AdminParams } from "@/types";
@@ -36,5 +41,18 @@ export const useGetAllAdmin = (params: AdminParams) => {
     return useQuery({
         queryKey: ["admins", params],
         queryFn: () => getAllAdmin(params),
+    });
+};
+
+export const useToggleAdminUserStatus = (userId: string) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: () => toggleAdminUserStatus(userId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["admins"],
+            });
+        },
     });
 };

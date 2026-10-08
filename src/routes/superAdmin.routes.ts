@@ -10,11 +10,12 @@ import {
     UserRoundPen,
     UserRoundPlus,
     Users,
+    UserStar,
 } from "lucide-react";
 
 const prefix = "/super-dashboard";
 
-export const superAdmin: SidebarItems = [
+export const superAdminRoutes: SidebarItems = [
     {
         items: [{ title: "Dashboard", url: prefix, icon: LayoutDashboard }],
     },
@@ -36,6 +37,7 @@ export const superAdmin: SidebarItems = [
                 url: `${prefix}/create-admin`,
                 icon: UserRoundPlus,
             },
+            { title: "Admins", url: `${prefix}/admins`, icon: UserStar },
         ],
     },
     {

@@ -2,6 +2,7 @@ import type { SidebarItem, SidebarItems, UserRole } from "@/types";
 import { adminRoutes } from "./admin.routes";
 import { merchantQuickAction, merchantRoutes } from "./merchant.routes";
 import { riderRoutes } from "./rider.routes";
+import { superAdminRoutes } from "./superAdmin.routes";
 
 /** Where each role's dashboard lives. */
 export const ROLE_HOME: Record<UserRole, string> = {
@@ -19,7 +20,7 @@ export const ROLE_LABEL: Record<UserRole, string> = {
 };
 
 export const SIDEBAR_ROUTES: Record<UserRole, SidebarItems> = {
-  SUPER_ADMIN: adminRoutes,
+  SUPER_ADMIN: superAdminRoutes,
   ADMIN: adminRoutes,
   MERCHANT: merchantRoutes,
   RIDER: riderRoutes,
