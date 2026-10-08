@@ -18,7 +18,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import type { FetchError } from "ofetch";
 import PasswordStrength from "@/components/modules/authentication/PasswordStrength";
-import { useCreateAdmin } from "@/hooks";
+import { useCreateAdmin, useCreateSuperAdmin } from "@/hooks";
 import type { AdminCreatePayload } from "@/types";
 import { createAdminSchema } from "@/validation";
 import {
@@ -38,12 +38,43 @@ const inputClass =
 
 const inputLeadingIconClass = `${inputClass} pl-10`;
 
-/** Create-admin form: name, login + personal emails, strong password. */
-export default function CreateAdminForm() {
+/** Copy that differs between the admin and super-admin variants. */
+const VARIANT_COPY = {
+    admin: {
+        badge: "Admin only",
+        title: "New admin account",
+        created: "Admin created",
+        createFailed: "Could not create admin",
+        bannerDone: "Admin account created.",
+        submit: "Create admin",
+    },
+    "super-admin": {
+        badge: "Super admin",
+        title: "New super admin account",
+        created: "Super admin created",
+        createFailed: "Could not create super admin",
+        bannerDone: "Super admin account created.",
+        submit: "Create super admin",
+    },
+} as const;
+
+export type AdminCreateVariant = keyof typeof VARIANT_COPY;
+
+/** Create-admin form: name, login + personal emails, strong password.
+ *  `variant` switches copy and the backing mutation for super admins. */
+export default function CreateAdminForm({
+    variant = "admin",
+}: {
+    variant?: AdminCreateVariant;
+}) {
+    const copy = VARIANT_COPY[variant];
     const [showPassword, setShowPassword] = useState(false);
     const [formScope, shakeForm] = useShake<HTMLFormElement>();
     const [createdEmail, setCreatedEmail] = useState<string | null>(null);
-    const { mutate: create, isPending } = useCreateAdmin();
+    const adminMutation = useCreateAdmin();
+    const superAdminMutation = useCreateSuperAdmin();
+    const { mutate: create, isPending } =
+        variant === "super-admin" ? superAdminMutation : adminMutation;
 
     const form = useForm({
         defaultValues: {
@@ -77,13 +108,13 @@ export default function CreateAdminForm() {
                         !res.success
                     ) {
                         shakeForm();
-                        toast.error("Could not create admin", {
+                        toast.error(copy.createFailed, {
                             description:
                                 "Something went wrong. Please try again.",
                         });
                         return;
                     }
-                    toast.success("Admin created", {
+                    toast.success(copy.created, {
                         description: `${payload.email} can now sign in.`,
                     });
                     setCreatedEmail(payload.email);
@@ -92,7 +123,7 @@ export default function CreateAdminForm() {
                 },
                 onError: (err: FetchError) => {
                     shakeForm();
-                    toast.error("Could not create admin", {
+                    toast.error(copy.createFailed, {
                         description:
                             err.data?.message ||
                             err.message ||
@@ -125,14 +156,14 @@ export default function CreateAdminForm() {
                             id="create-admin-title"
                             className="font-heading text-lg font-extrabold tracking-tight text-secondary"
                         >
-                            New admin account
+                            {copy.title}
                         </h2>
                         <p className="mt-0.5 text-sm text-secondary/70">
                             They&apos;ll sign in with this email and password.
                         </p>
                     </div>
                     <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-brand-orange/12 px-3 py-1 font-heading text-[11px] font-bold tracking-wide text-brand-orange-ink uppercase sm:ml-auto">
-                        Admin only
+                        {copy.badge}
                     </span>
                 </motion.div>
 
@@ -170,7 +201,7 @@ export default function CreateAdminForm() {
                                             strokeWidth={2.25}
                                         />
                                         <span className="min-w-0">
-                                            Admin account created.
+                                            {copy.bannerDone}
                                             <span className="block truncate font-mono text-[13px]">
                                                 {createdEmail}
                                             </span>
@@ -544,7 +575,7 @@ export default function CreateAdminForm() {
                                                 className="inline-flex items-center gap-2"
                                             >
                                                 <UserRoundPlus className="size-4" />
-                                                Create admin
+                                                {copy.submit}
                                             </motion.span>
                                         )}
                                     </AnimatePresence>

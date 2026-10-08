@@ -1,6 +1,8 @@
 import {
     createAdmin,
+    createSuperAdmin,
     getAllAdmin,
+    getAllSuperAdmin,
     toggleAdminUserStatus,
     updateAdminProfile,
 } from "@/api";
@@ -37,10 +39,30 @@ export const useCreateAdmin = () => {
     });
 };
 
+export const useCreateSuperAdmin = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: createSuperAdmin,
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["super-admins"],
+            });
+        },
+    });
+};
+
 export const useGetAllAdmin = (params: AdminParams) => {
     return useQuery({
         queryKey: ["admins", params],
         queryFn: () => getAllAdmin(params),
+    });
+};
+
+export const useGetAllSuperAdmin = (params: AdminParams) => {
+    return useQuery({
+        queryKey: ["super-admins", params],
+        queryFn: () => getAllSuperAdmin(params),
     });
 };
 
@@ -52,6 +74,9 @@ export const useToggleAdminUserStatus = (userId: string) => {
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["admins"],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["super-admins"],
             });
         },
     });

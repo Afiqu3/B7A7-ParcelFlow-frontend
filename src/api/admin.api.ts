@@ -19,8 +19,21 @@ export const createAdmin = (payload: AdminCreatePayload) => {
     });
 };
 
+export const createSuperAdmin = (payload: AdminCreatePayload) => {
+    return apiClient("/admin/super-admin", {
+        method: "POST",
+        body: payload,
+    });
+};
+
 export const getAllAdmin = (params: AdminParams) => {
     return apiClient("/admin", {
+        params,
+    });
+};
+
+export const getAllSuperAdmin = (params: AdminParams) => {
+    return apiClient("/admin/super-admin", {
         params,
     });
 };

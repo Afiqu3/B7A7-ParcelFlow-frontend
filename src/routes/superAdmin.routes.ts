@@ -37,7 +37,13 @@ export const superAdminRoutes: SidebarItems = [
                 url: `${prefix}/create-admin`,
                 icon: UserRoundPlus,
             },
+            {
+                title: "Create super admin",
+                url: `${prefix}/create-super-admin`,
+                icon: UserRoundPlus,
+            },
             { title: "Admins", url: `${prefix}/admins`, icon: UserStar },
+            { title: "Super admins", url: `${prefix}/super-admins`, icon: UserStar },
         ],
     },
     {
