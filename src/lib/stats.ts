@@ -1,4 +1,10 @@
-import type { MerchantStats } from "@/types";
+import type {
+    AdminStats,
+    ByApplicationStatus,
+    ByStatus,
+    ByStatus2,
+    MerchantStats,
+} from "@/types";
 
 function num(value: unknown, fallback = 0): number {
     const parsed = typeof value === "number" ? value : Number(value);
@@ -64,6 +70,109 @@ export function toMerchantStats(stats: MerchantStats): MerchantStats {
                     count: num(point.count),
                 }),
             ),
+        },
+    };
+}
+
+const section = <T extends object>(value: T | undefined | null): T =>
+    (value ?? {}) as T;
+
+/**
+ * Normalizes admin stats the same way: every numeric field is coerced
+ * (Prisma `Decimal` strings), missing sections default to zeros.
+ */
+export function toAdminStats(stats: AdminStats): AdminStats {
+    const overview = section(stats.overview);
+    const riders = section(stats.riders);
+    const riderStatus = section(riders.byApplicationStatus) as Partial<
+        Record<keyof ByApplicationStatus, unknown>
+    >;
+    const parcels = section(stats.parcels);
+    const parcelStatus = section(parcels.byStatus) as Partial<
+        Record<keyof ByStatus, unknown>
+    >;
+    const delivery = section(stats.delivery);
+    const revenue = section(stats.revenue);
+    const bkash = section(revenue.bkash);
+    const cod = section(revenue.cod);
+    const assignments = section(stats.assignments);
+    const assignmentStatus = section(assignments.byStatus) as Partial<
+        Record<keyof ByStatus2, unknown>
+    >;
+    const trends = section(stats.trends);
+
+    return {
+        overview: {
+            totalMerchants: num(overview.totalMerchants),
+            blockedMerchants: num(overview.blockedMerchants),
+            totalRiders: num(overview.totalRiders),
+            totalAdmins: num(overview.totalAdmins),
+            totalParcels: num(overview.totalParcels),
+            pendingRiderApprovals: num(overview.pendingRiderApprovals),
+            activeAssignments: num(overview.activeAssignments),
+        },
+        riders: {
+            total: num(riders.total),
+            byApplicationStatus: {
+                PENDING: num(riderStatus.PENDING),
+                APPROVED: num(riderStatus.APPROVED),
+                REJECTED: num(riderStatus.REJECTED),
+            },
+        },
+        parcels: {
+            total: num(parcels.total),
+            byStatus: {
+                CREATED: num(parcelStatus.CREATED),
+                PICKUP_ASSIGNED: num(parcelStatus.PICKUP_ASSIGNED),
+                PICKED_UP: num(parcelStatus.PICKED_UP),
+                AT_HUB: num(parcelStatus.AT_HUB),
+                IN_TRANSIT: num(parcelStatus.IN_TRANSIT),
+                OUT_FOR_DELIVERY: num(parcelStatus.OUT_FOR_DELIVERY),
+                DELIVERED: num(parcelStatus.DELIVERED),
+                DELIVERY_FAILED: num(parcelStatus.DELIVERY_FAILED),
+                RETURNED_TO_MERCHANT: num(parcelStatus.RETURNED_TO_MERCHANT),
+                CANCELLED: num(parcelStatus.CANCELLED),
+            },
+        },
+        delivery: {
+            delivered: num(delivery.delivered),
+            failed: num(delivery.failed),
+            returned: num(delivery.returned),
+            successRate: num(delivery.successRate),
+        },
+        revenue: {
+            bkash: {
+                paid: num(bkash.paid),
+                pending: num(bkash.pending),
+                refunded: num(bkash.refunded),
+            },
+            realizedDeliveryCharge: num(revenue.realizedDeliveryCharge),
+            cod: {
+                collected: num(cod.collected),
+                outstanding: num(cod.outstanding),
+            },
+        },
+        assignments: {
+            active: num(assignments.active),
+            byStatus: {
+                ASSIGNED: num(assignmentStatus.ASSIGNED),
+                ACCEPTED: num(assignmentStatus.ACCEPTED),
+                IN_PROGRESS: num(assignmentStatus.IN_PROGRESS),
+                COMPLETED: num(assignmentStatus.COMPLETED),
+                FAILED: num(assignmentStatus.FAILED),
+                CANCELLED: num(assignmentStatus.CANCELLED),
+                REJECTED: num(assignmentStatus.REJECTED),
+            },
+        },
+        trends: {
+            parcelsCreated: (trends.parcelsCreated ?? []).map((point) => ({
+                date: point.date,
+                count: num(point.count),
+            })),
+            deliveries: (trends.deliveries ?? []).map((point) => ({
+                date: point.date,
+                count: num(point.count),
+            })),
         },
     };
 }

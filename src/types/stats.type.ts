@@ -63,3 +63,81 @@ export interface ParcelsCreated {
     date: string;
     count: number;
 }
+
+export interface AdminStats {
+    overview: MerchantOverview;
+    riders: Riders;
+    parcels: AdminParcels;
+    delivery: Delivery;
+    revenue: Revenue;
+    assignments: Assignments;
+    trends: AdminTrends;
+}
+
+export interface MerchantOverview {
+    totalMerchants: number;
+    blockedMerchants: number;
+    totalRiders: number;
+    totalAdmins: number;
+    totalParcels: number;
+    pendingRiderApprovals: number;
+    activeAssignments: number;
+}
+
+export interface Riders {
+    total: number;
+    byApplicationStatus: ByApplicationStatus;
+}
+
+export interface ByApplicationStatus {
+    PENDING: number;
+    APPROVED: number;
+    REJECTED: number;
+}
+
+export interface AdminParcels {
+    total: number;
+    byStatus: ByStatus;
+}
+
+export interface Revenue {
+    bkash: Bkash;
+    realizedDeliveryCharge: number;
+    cod: AdminCod;
+}
+
+export interface AdminCod {
+    collected: number;
+    outstanding: number;
+}
+
+export interface Bkash {
+    paid: number;
+    pending: number;
+    refunded: number;
+}
+
+export interface Assignments {
+    active: number;
+    byStatus: ByStatus2;
+}
+
+export interface ByStatus2 {
+    ASSIGNED: number;
+    ACCEPTED: number;
+    IN_PROGRESS: number;
+    COMPLETED: number;
+    FAILED: number;
+    CANCELLED: number;
+    REJECTED: number;
+}
+
+export interface AdminTrends {
+    parcelsCreated: ParcelsCreated[];
+    deliveries: Delivery2[];
+}
+
+export interface Delivery2 {
+    date: string;
+    count: number;
+}
