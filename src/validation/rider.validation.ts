@@ -60,3 +60,12 @@ export const riderApplicationSchema = z.object({
         message: "VehiclePaper is required",
     }),
 });
+
+export const approveRiderValidationSchema = z.object({
+	riderId: z.string().trim(),
+	applicationStatus: z.enum(
+		["APPROVED", "REJECTED"],
+		"Application status must be APPROVED or REJECTED",
+	),
+	rejectionReason: z.string().optional(),
+});

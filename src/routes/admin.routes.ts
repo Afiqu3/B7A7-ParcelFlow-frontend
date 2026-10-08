@@ -24,7 +24,6 @@ export const adminRoutes: SidebarItems = [
         title: "Operations",
         items: [
             { title: "Parcels", url: `${prefix}/parcels`, icon: Package },
-            { title: "Riders", url: `${prefix}/riders`, icon: Bike },
             { title: "Merchants", url: `${prefix}/merchants`, icon: Store },
         ],
     },
@@ -32,10 +31,19 @@ export const adminRoutes: SidebarItems = [
         title: "Configuration",
         items: [
             { title: "Pricing rules", url: `${prefix}/pricing`, icon: Receipt },
+            { title: "Riders", url: `${prefix}/riders`, icon: Bike },
             { title: "Users", url: `${prefix}/users`, icon: Users },
-            { title: "Create admin", url: `${prefix}/create-admin`, icon: UserRoundPlus },
+            {
+                title: "Create admin",
+                url: `${prefix}/create-admin`,
+                icon: UserRoundPlus,
+            },
             { title: "Admins", url: `${prefix}/admins`, icon: UserStar },
-            { title: "Transactions", url: `${prefix}/transactions`, icon: Wallet },
+            {
+                title: "Transactions",
+                url: `${prefix}/transactions`,
+                icon: Wallet,
+            },
         ],
     },
     {
