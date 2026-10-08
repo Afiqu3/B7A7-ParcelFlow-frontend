@@ -6,6 +6,7 @@ import {
     Receipt,
     Store,
     UserKey,
+    UserPlus,
     UserRound,
     UserRoundPen,
     UserRoundPlus,
@@ -40,7 +41,7 @@ export const superAdminRoutes: SidebarItems = [
             {
                 title: "Create super admin",
                 url: `${prefix}/create-super-admin`,
-                icon: UserRoundPlus,
+                icon: UserPlus,
             },
             { title: "Admins", url: `${prefix}/admins`, icon: UserStar },
             { title: "Super admins", url: `${prefix}/super-admins`, icon: UserStar },

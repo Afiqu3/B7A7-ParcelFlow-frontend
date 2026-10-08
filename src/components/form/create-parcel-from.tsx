@@ -52,7 +52,12 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 
-type ParcelFormValues = z.input<typeof CreateParcelZodValidationSchema>;
+type ParcelFormValues = Omit<
+    z.input<typeof CreateParcelZodValidationSchema>,
+    "weightKg"
+> & {
+    weightKg: number | undefined;
+};
 
 const COD_PRESETS = [500, 1000, 2500, 5000];
 
@@ -62,23 +67,26 @@ const inputClass =
 const textAreaClass =
     "min-h-20 rounded-xl border-secondary/15 bg-background text-secondary shadow-none placeholder:text-secondary/40 focus-visible:border-brand-orange focus-visible:ring-3 focus-visible:ring-brand-orange/30 aria-invalid:border-destructive/60";
 
-/** Empty or invalid decimal text → NaN (the schema reports it as required). */
-function parseDecimal(raw: string): number {
+/** Empty or invalid decimal text → undefined (never NaN: NaN breaks
+ *  referential equality in store selectors, and the schema reports
+ *  `undefined` as required). */
+function parseDecimal(raw: string): number | undefined {
     const cleaned = raw.replace(/[^\d.]/g, "");
-    if (!cleaned) return Number.NaN;
+    if (!cleaned) return undefined;
     const [whole = "", ...rest] = cleaned.split(".");
     const out = rest.length
         ? `${whole}.${rest.join("").slice(0, 2)}`
         : whole;
+    if (out === "" || out === ".") return undefined;
     const value = Number(out);
-    return out === "" || out === "." || Number.isNaN(value)
-        ? Number.NaN
-        : value;
+    return Number.isFinite(value) ? value : undefined;
 }
 
-function parseIntAmount(raw: string): number {
+function parseIntAmount(raw: string): number | undefined {
     const cleaned = raw.replace(/\D/g, "").slice(0, 5);
-    return cleaned === "" ? Number.NaN : Number(cleaned);
+    if (cleaned === "") return undefined;
+    const value = Number(cleaned);
+    return Number.isFinite(value) ? value : undefined;
 }
 
 const displayNumber = (value: number | undefined) =>
@@ -224,6 +232,12 @@ export default function CreateParcelForm() {
         },
         onSubmit: ({ value }) => {
             setBookingRef(null);
+            // Unreachable: the schema rejects a missing weight before
+            // submitting, but this narrows the type honestly.
+            if (value.weightKg === undefined) {
+                shakeForm();
+                return;
+            }
             const payload: CreateParcelPayload = {
                 pickupContactName: value.pickupContactName.trim(),
                 pickupContactPhone: value.pickupContactPhone.trim(),
