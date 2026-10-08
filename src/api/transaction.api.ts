@@ -6,3 +6,9 @@ export const getAllMyTransactions = async (params: TransactionParams) => {
         params,
     });
 };
+
+export const getAllTransactions = async (params: TransactionParams) => {
+    return apiClient<ApiResponse<Transaction[]>>("/transaction/all-transactions", {
+        params,
+    });
+};

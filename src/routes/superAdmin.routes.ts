@@ -12,6 +12,7 @@ import {
     UserRoundPlus,
     Users,
     UserStar,
+    Wallet,
 } from "lucide-react";
 
 const prefix = "/super-dashboard";
@@ -44,7 +45,16 @@ export const superAdminRoutes: SidebarItems = [
                 icon: UserPlus,
             },
             { title: "Admins", url: `${prefix}/admins`, icon: UserStar },
-            { title: "Super admins", url: `${prefix}/super-admins`, icon: UserStar },
+            {
+                title: "Super admins",
+                url: `${prefix}/super-admins`,
+                icon: UserStar,
+            },
+            {
+                title: "Transactions",
+                url: `${prefix}/transactions`,
+                icon: Wallet,
+            },
         ],
     },
     {

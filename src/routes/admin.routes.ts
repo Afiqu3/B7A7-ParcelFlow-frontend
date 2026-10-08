@@ -10,6 +10,7 @@ import {
     UserRoundPlus,
     Users,
     UserStar,
+    Wallet,
 } from "lucide-react";
 import type { SidebarItems } from "@/types";
 
@@ -34,6 +35,7 @@ export const adminRoutes: SidebarItems = [
             { title: "Users", url: `${prefix}/users`, icon: Users },
             { title: "Create admin", url: `${prefix}/create-admin`, icon: UserRoundPlus },
             { title: "Admins", url: `${prefix}/admins`, icon: UserStar },
+            { title: "Transactions", url: `${prefix}/transactions`, icon: Wallet },
         ],
     },
     {

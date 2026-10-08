@@ -27,6 +27,7 @@ export const useCreateParcel = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["my-parcels"] });
             queryClient.invalidateQueries({ queryKey: ["my-transactions"] });
+            queryClient.invalidateQueries({ queryKey: ["transactions"] });
             queryClient.invalidateQueries({ queryKey: ["stats"] });
         },
     });
@@ -66,6 +67,7 @@ export const useCancelParcelByMerchant = (
             queryClient.invalidateQueries({ queryKey: ["my-parcels"] });
             queryClient.invalidateQueries({ queryKey: ["stats"] });
             queryClient.invalidateQueries({ queryKey: ["my-transactions"] });
+            queryClient.invalidateQueries({ queryKey: ["transactions"] });
             queryClient.invalidateQueries({
                 queryKey: ["my-parcel", "merchant", parcelId],
             });
@@ -82,6 +84,7 @@ export const useDeleteParcelByMerchant = (parcelId: string) => {
             queryClient.invalidateQueries({ queryKey: ["my-parcels"] });
             queryClient.invalidateQueries({ queryKey: ["stats"] });
             queryClient.invalidateQueries({ queryKey: ["my-transactions"] });
+            queryClient.invalidateQueries({ queryKey: ["transactions"] });
             queryClient.invalidateQueries({
                 queryKey: ["my-parcel", "merchant", parcelId],
             });
@@ -98,6 +101,7 @@ export const usePaymentParcel = (parcelId: string) => {
             queryClient.invalidateQueries({ queryKey: ["my-parcels"] });
             queryClient.invalidateQueries({ queryKey: ["stats"] });
             queryClient.invalidateQueries({ queryKey: ["my-transactions"] });
+            queryClient.invalidateQueries({ queryKey: ["transactions"] });
             queryClient.invalidateQueries({
                 queryKey: ["my-parcel", "merchant", parcelId],
             });
