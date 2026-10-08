@@ -4,4 +4,5 @@ export * from "./parcel.api";
 export * from "./pricing.api";
 export * from "./rider.api";
 export * from "./stats.api";
+export * from "./transaction.api";
 export * from "./user.api";

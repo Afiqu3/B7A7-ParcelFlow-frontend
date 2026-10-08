@@ -1,4 +1,5 @@
 import type { Parcel, ParcelStatus } from "@/types";
+import { formatBackendDate } from "@/utils";
 
 export const PARCEL_STATUS_ORDER: ParcelStatus[] = [
     "CREATED",
@@ -85,12 +86,5 @@ export function needsPayment(
 }
 
 export function formatParcelDate(iso: string | undefined) {
-    if (!iso) return "—";
-    const date = new Date(iso);
-    if (Number.isNaN(date.getTime())) return "—";
-    return date.toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-    });
+    return formatBackendDate(iso);
 }

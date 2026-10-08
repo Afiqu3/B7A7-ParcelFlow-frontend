@@ -7,4 +7,5 @@ export * from "./pricing.type";
 export * from "./rider.type";
 export * from "./sidebar.type";
 export * from "./stats.type";
+export * from "./transaction.type";
 export * from "./user.type";

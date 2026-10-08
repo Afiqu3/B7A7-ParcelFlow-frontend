@@ -1,5 +1,4 @@
 import {
-    HandCoins,
     LayoutDashboard,
     Package,
     PackageSearch,
@@ -38,8 +37,7 @@ export const merchantRoutes: SidebarItems = [
     {
         title: "Money",
         items: [
-            { title: "Payments", url: `${prefix}/payments`, icon: Wallet },
-            { title: "COD collections", url: `${prefix}/cod`, icon: HandCoins },
+            { title: "Transaction history", url: `${prefix}/transactions`, icon: Wallet },
         ],
     },
     {

@@ -6,4 +6,5 @@ export * from "./parcel.hook";
 export * from "./pricing.hook";
 export * from "./rider.hook";
 export * from "./stats.hook";
+export * from "./transaction.hook";
 export * from "./user.hook";
