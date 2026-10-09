@@ -21,9 +21,10 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { UseQueryResult } from "@tanstack/react-query";
 import { useGetSingleParcelAsMerchant } from "@/hooks";
 import { formatKg, formatTaka } from "@/lib/pricing";
-import type { Parcel, TransactionStatus } from "@/types";
+import type { ApiResponse, Parcel, TransactionStatus } from "@/types";
 import {
     formatParcelDate,
     needsPayment,
@@ -92,16 +93,25 @@ function Block({
     );
 }
 
-/** Full parcel information in a dialog, fetched fresh on open. */
+type ParcelQueryResult = Pick<
+    UseQueryResult<ApiResponse<Parcel> | undefined, Error>,
+    "data" | "isPending" | "isError" | "error" | "refetch" | "isFetching"
+>;
+
+/** Full parcel information in a dialog, fetched fresh on open.
+ *  `fetchHook` defaults to the merchant endpoint; pass the admin hook
+ *  when the viewer is an admin (different role-gated endpoint). */
 export default function ParcelDetailsDialog({
     parcelId,
     onClose,
+    fetchHook = useGetSingleParcelAsMerchant,
 }: {
     parcelId: string;
     onClose: () => void;
+    fetchHook?: (parcelId: string) => ParcelQueryResult;
 }) {
     const { data, isPending, isError, error, refetch, isFetching } =
-        useGetSingleParcelAsMerchant(parcelId);
+        fetchHook(parcelId);
 
     return (
         <Dialog

@@ -141,3 +141,9 @@ export const cancelParcelSchema = z.object({
             ]),
         ),
 });
+
+export const parcelStatusUpdateByAdminSchema = z.object({
+	status: z.enum(["AT_HUB", "IN_TRANSIT"], {
+		error: "Status is required",
+	}),
+});

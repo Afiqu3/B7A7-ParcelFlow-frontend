@@ -152,3 +152,7 @@ export interface ParcelTrackResponse {
     status: string;
     trackingId: string;
 }
+
+export interface ParcelStatusUpdateByAdminPayload {
+	status: "AT_HUB" | "IN_TRANSIT";
+}

@@ -6,6 +6,7 @@ import type {
     CreateParcelPayload,
     MyParcelsParams,
     Parcel,
+    ParcelStatusUpdateByAdminPayload,
     ParcelTrackResponse,
     PaymentResponse,
 } from "@/types";
@@ -69,4 +70,34 @@ export const trackParcel = (trackingId: string) => {
     return apiClient<ApiResponse<ParcelTrackResponse>>(
         `parcel/${trackingId}/track`,
     );
+};
+
+export const getAllParcels = async (params: MyParcelsParams) => {
+    return apiClient<ApiResponse<Parcel[]>>("/parcel", {
+        params,
+    });
+};
+
+export const getSingleParcelAsAdmin = async (parcelId: string) => {
+    return apiClient<ApiResponse<Parcel>>(`parcel/${parcelId}`);
+};
+
+export const parcelStatusUpdateAdmin = async (
+    parcelId: string,
+    payload: ParcelStatusUpdateByAdminPayload,
+) => {
+    return apiClient<ApiResponse<Parcel>>(`parcel/${parcelId}/status`, {
+        method: "PATCH",
+        body: payload,
+    });
+};
+
+export const cancelParcelByAdmin = (
+    parcelId: string,
+    payload: cancelParcelPayload,
+) => {
+    return apiClient(`parcel/${parcelId}/admin-cancel`, {
+        method: "POST",
+        body: payload,
+    });
 };

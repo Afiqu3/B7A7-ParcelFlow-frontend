@@ -1,14 +1,22 @@
 import {
+    cancelParcelByAdmin,
     cancelParcelByMerchant,
     createParcel,
     deleteParcelByMerchant,
     downloadInvoice,
     getAllMyParcels,
+    getAllParcels,
+    getSingleParcelAsAdmin,
     getSingleParcelAsMerchant,
+    parcelStatusUpdateAdmin,
     paymentParcel,
     trackParcel,
 } from "@/api";
-import type { cancelParcelPayload, MyParcelsParams } from "@/types";
+import type {
+    cancelParcelPayload,
+    MyParcelsParams,
+    ParcelStatusUpdateByAdminPayload,
+} from "@/types";
 import { saveBlobAsFile } from "@/utils";
 import {
     useMutation,
@@ -26,6 +34,7 @@ export const useCreateParcel = () => {
         mutationFn: createParcel,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["my-parcels"] });
+            queryClient.invalidateQueries({ queryKey: ["parcels"] });
             queryClient.invalidateQueries({ queryKey: ["my-transactions"] });
             queryClient.invalidateQueries({ queryKey: ["transactions"] });
             queryClient.invalidateQueries({ queryKey: ["stats"] });
@@ -65,11 +74,15 @@ export const useCancelParcelByMerchant = (
         mutationFn: () => cancelParcelByMerchant(parcelId, payload),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["my-parcels"] });
+            queryClient.invalidateQueries({ queryKey: ["parcels"] });
             queryClient.invalidateQueries({ queryKey: ["stats"] });
             queryClient.invalidateQueries({ queryKey: ["my-transactions"] });
             queryClient.invalidateQueries({ queryKey: ["transactions"] });
             queryClient.invalidateQueries({
                 queryKey: ["my-parcel", "merchant", parcelId],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["parcel", "admin", parcelId],
             });
         },
     });
@@ -82,11 +95,15 @@ export const useDeleteParcelByMerchant = (parcelId: string) => {
         mutationFn: () => deleteParcelByMerchant(parcelId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["my-parcels"] });
+            queryClient.invalidateQueries({ queryKey: ["parcels"] });
             queryClient.invalidateQueries({ queryKey: ["stats"] });
             queryClient.invalidateQueries({ queryKey: ["my-transactions"] });
             queryClient.invalidateQueries({ queryKey: ["transactions"] });
             queryClient.invalidateQueries({
                 queryKey: ["my-parcel", "merchant", parcelId],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["parcel", "admin", parcelId],
             });
         },
     });
@@ -99,11 +116,15 @@ export const usePaymentParcel = (parcelId: string) => {
         mutationFn: () => paymentParcel(parcelId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["my-parcels"] });
+            queryClient.invalidateQueries({ queryKey: ["parcels"] });
             queryClient.invalidateQueries({ queryKey: ["stats"] });
             queryClient.invalidateQueries({ queryKey: ["my-transactions"] });
             queryClient.invalidateQueries({ queryKey: ["transactions"] });
             queryClient.invalidateQueries({
                 queryKey: ["my-parcel", "merchant", parcelId],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["parcel", "admin", parcelId],
             });
         },
     });
@@ -136,5 +157,68 @@ export const useTrackParcel = (trackingId: string) => {
         enabled: trackingId.trim() !== "",
         // A typo'd ID 404s — don't waste retries on it.
         retry: false,
+    });
+};
+
+export const useGetAllParcels = (params: MyParcelsParams) => {
+    return useQuery({
+        queryKey: ["parcels", params],
+        queryFn: () => getAllParcels(params),
+    });
+};
+
+export const useGetSingleParcelAsAdmin = (parcelId: string) => {
+    return useQuery({
+        queryKey: ["parcel", "admin", parcelId],
+        queryFn: () => getSingleParcelAsAdmin(parcelId),
+        enabled: !!parcelId,
+    });
+};
+
+export const useParcelStatusUpdateAdmin = (
+    parcelId: string,
+    payload: ParcelStatusUpdateByAdminPayload,
+) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: () => parcelStatusUpdateAdmin(parcelId, payload),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["my-parcels"] });
+            queryClient.invalidateQueries({ queryKey: ["parcels"] });
+            queryClient.invalidateQueries({ queryKey: ["stats"] });
+            queryClient.invalidateQueries({ queryKey: ["my-transactions"] });
+            queryClient.invalidateQueries({ queryKey: ["transactions"] });
+            queryClient.invalidateQueries({
+                queryKey: ["my-parcel", "merchant", parcelId],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["parcel", "admin", parcelId],
+            });
+        },
+    });
+};
+
+export const useCancelParcelByAdmin = (
+    parcelId: string,
+    payload: cancelParcelPayload,
+) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: () => cancelParcelByAdmin(parcelId, payload),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["my-parcels"] });
+            queryClient.invalidateQueries({ queryKey: ["parcels"] });
+            queryClient.invalidateQueries({ queryKey: ["stats"] });
+            queryClient.invalidateQueries({ queryKey: ["my-transactions"] });
+            queryClient.invalidateQueries({ queryKey: ["transactions"] });
+            queryClient.invalidateQueries({
+                queryKey: ["my-parcel", "merchant", parcelId],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["parcel", "admin", parcelId],
+            });
+        },
     });
 };
