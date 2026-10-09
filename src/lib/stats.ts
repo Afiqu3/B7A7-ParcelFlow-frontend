@@ -4,6 +4,7 @@ import type {
     ByStatus,
     ByStatus2,
     MerchantStats,
+    RiderStats,
 } from "@/types";
 
 function num(value: unknown, fallback = 0): number {
@@ -173,6 +174,55 @@ export function toAdminStats(stats: AdminStats): AdminStats {
                 date: point.date,
                 count: num(point.count),
             })),
+        },
+    };
+}
+
+/**
+ * Normalizes rider stats the same way: every numeric field is coerced
+ * (Prisma `Decimal` strings), missing sections default to zeros.
+ */
+export function toRiderStats(stats: RiderStats): RiderStats {
+    const overview = section(stats.overview);
+    const assignments = section(stats.assignments);
+    const assignmentStatus = section(assignments.byStatus) as Partial<
+        Record<keyof ByStatus2, unknown>
+    >;
+    const performance = section(stats.performance);
+    const trends = section(stats.trends);
+
+    return {
+        overview: {
+            totalAssignments: num(overview.totalAssignments),
+            activePickups: num(overview.activePickups),
+            activeDeliveries: num(overview.activeDeliveries),
+            completedPickups: num(overview.completedPickups),
+            completedDeliveries: num(overview.completedDeliveries),
+        },
+        assignments: {
+            active: num(assignments.active),
+            byStatus: {
+                ASSIGNED: num(assignmentStatus.ASSIGNED),
+                ACCEPTED: num(assignmentStatus.ACCEPTED),
+                IN_PROGRESS: num(assignmentStatus.IN_PROGRESS),
+                COMPLETED: num(assignmentStatus.COMPLETED),
+                FAILED: num(assignmentStatus.FAILED),
+                CANCELLED: num(assignmentStatus.CANCELLED),
+                REJECTED: num(assignmentStatus.REJECTED),
+            },
+        },
+        performance: {
+            completedDeliveries: num(performance.completedDeliveries),
+            failedDeliveries: num(performance.failedDeliveries),
+            deliverySuccessRate: num(performance.deliverySuccessRate),
+        },
+        trends: {
+            completedAssignments: (trends.completedAssignments ?? []).map(
+                (point) => ({
+                    date: point.date,
+                    count: num(point.count),
+                }),
+            ),
         },
     };
 }

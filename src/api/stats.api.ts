@@ -1,6 +1,6 @@
 import apiClient from "@/lib/apiClient";
-import { toAdminStats, toMerchantStats } from "@/lib/stats";
-import type { AdminStats, ApiResponse, MerchantStats } from "@/types";
+import { toAdminStats, toMerchantStats, toRiderStats } from "@/lib/stats";
+import type { AdminStats, ApiResponse, MerchantStats, RiderStats } from "@/types";
 
 export const merchantStats = async () => {
     const res = await apiClient<ApiResponse<MerchantStats>>("/stats/merchant");
@@ -15,5 +15,13 @@ export const adminStats = async () => {
     return {
         ...res,
         data: res.data ? toAdminStats(res.data) : res.data,
+    };
+};
+
+export const riderStats = async () => {
+    const res = await apiClient<ApiResponse<RiderStats>>("/stats/rider");
+    return {
+        ...res,
+        data: res.data ? toRiderStats(res.data) : res.data,
     };
 };

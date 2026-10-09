@@ -1,4 +1,4 @@
-import { adminStats, merchantStats } from "@/api";
+import { adminStats, merchantStats, riderStats } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 
 export const useMerchantStats = () => {
@@ -13,6 +13,14 @@ export const useAdminStats = () => {
     return useQuery({
         queryKey: ["admin-stats"],
         queryFn: adminStats,
+        retry: false,
+    });
+};
+
+export const useRiderStats = () => {
+    return useQuery({
+        queryKey: ["rider-stats"],
+        queryFn: riderStats,
         retry: false,
     });
 };

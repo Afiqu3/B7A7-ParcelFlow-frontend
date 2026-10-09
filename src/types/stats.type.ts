@@ -141,3 +141,33 @@ export interface Delivery2 {
     date: string;
     count: number;
 }
+
+export interface RiderStats {
+    overview: RiderOverview;
+    assignments: Assignments;
+    performance: RiderPerformance;
+    trends: RiderTrends;
+}
+
+export interface RiderOverview {
+    totalAssignments: number;
+    activePickups: number;
+    activeDeliveries: number;
+    completedPickups: number;
+    completedDeliveries: number;
+}
+
+export interface RiderPerformance {
+    completedDeliveries: number;
+    failedDeliveries: number;
+    deliverySuccessRate: number;
+}
+
+export interface RiderTrends {
+    completedAssignments: CompletedAssignment[];
+}
+
+export interface CompletedAssignment {
+    date: string;
+    count: number;
+}
