@@ -7,6 +7,7 @@ import type {
     Rider,
     RiderParams,
     RiderProfileData,
+    RiderUpdatePayload,
     VerifyEmailPayload,
 } from "@/types";
 
@@ -61,3 +62,10 @@ export const approveOrRejectRider = (payload: ApproveRiderPayload) => {
 export const getRiderProfile = () => {
     return apiClient<ApiResponse<RiderProfileData>>("/rider/profile");
 };
+
+export const updateRiderProfile = (payload: RiderUpdatePayload) => {
+    return apiClient("/rider/update-profile", {
+        method: "PATCH",
+        body: payload,
+    });
+}

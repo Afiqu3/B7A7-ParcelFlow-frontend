@@ -6,10 +6,12 @@ import {
     getRiderProfile,
     getSingleRider,
     toggleRiderUserStatus,
+    updateRiderProfile,
     verifyRiderAccount,
 } from "@/api";
 import type { AvailableRiderParams, RiderParams } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { meQueryOptions } from "./auth.hook";
 
 export const useApplyAsRider = () => {
     const queryClient = useQueryClient();
@@ -105,5 +107,19 @@ export const useGetRiderProfile = () => {
         queryKey: ["rider"],
         queryFn: getRiderProfile,
         retry: false,
+    });
+};
+
+export const useUpdateRiderProfile = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: updateRiderProfile,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["rider"] });
+            queryClient.invalidateQueries({
+                queryKey: meQueryOptions.queryKey,
+            });
+        },
     });
 };

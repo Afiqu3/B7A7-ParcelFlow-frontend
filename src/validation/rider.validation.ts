@@ -45,7 +45,10 @@ export const riderApplicationSchema = z.object({
         .min(1, { error: "Phone number is required", abort: true })
         .regex(BD_PHONE_REGEX, "Please provide a valid Bangladeshi number"),
     address: z.string().trim(),
-    nid: z.string().trim().regex(/^(\d{10}|\d{13}|\d{17})$/, "Enter a valid NID number"),
+    nid: z
+        .string()
+        .trim()
+        .regex(/^(\d{10}|\d{13}|\d{17})$/, "Enter a valid NID number"),
     licenseNumber: z
         .string("Provide your driving license number")
         .trim()
@@ -62,10 +65,37 @@ export const riderApplicationSchema = z.object({
 });
 
 export const approveRiderValidationSchema = z.object({
-	riderId: z.string().trim(),
-	applicationStatus: z.enum(
-		["APPROVED", "REJECTED"],
-		"Application status must be APPROVED or REJECTED",
-	),
-	rejectionReason: z.string().optional(),
+    riderId: z.string().trim(),
+    applicationStatus: z.enum(
+        ["APPROVED", "REJECTED"],
+        "Application status must be APPROVED or REJECTED",
+    ),
+    rejectionReason: z.string().optional(),
+});
+
+export const updateRiderValidationSchema = z.object({
+    name: z
+        .string()
+        .trim()
+        .pipe(
+            z.union([
+                z.literal(""),
+                z.string().min(2, "Name must be at least 2 characters"),
+            ]),
+        ),
+    phone: z
+        .string()
+        .trim()
+        .min(1)
+        .regex(BD_PHONE_REGEX, "Please provide a valid Bangladeshi number")
+        .optional(),
+    address: z
+        .string()
+        .trim()
+        .pipe(
+            z.union([
+                z.literal(""),
+                z.string().min(5, "Address must be at least 5 characters"),
+            ]),
+        ),
 });

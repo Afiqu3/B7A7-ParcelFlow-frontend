@@ -5,6 +5,7 @@ import {
     LayoutDashboard,
     UserKey,
     UserRound,
+    UserRoundPen,
 } from "lucide-react";
 import type { SidebarItems } from "@/types";
 
@@ -35,6 +36,11 @@ export const riderRoutes: SidebarItems = [
                 title: "Change password",
                 url: `${prefix}/change-password`,
                 icon: UserKey,
+            },
+            {
+                title: "Update profile",
+                url: `${prefix}/update-profile`,
+                icon: UserRoundPen,
             },
         ],
     },

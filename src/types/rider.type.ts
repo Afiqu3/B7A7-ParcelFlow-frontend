@@ -103,3 +103,9 @@ export interface RiderProfileData {
         userId: string;
     };
 }
+
+export interface RiderUpdatePayload {
+	name?: string;
+	phone?: string;
+	address?: string;
+}

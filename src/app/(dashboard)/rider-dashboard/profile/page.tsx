@@ -1,4 +1,4 @@
-import Profile from "@/components/modules/rider-dashboard/Profile";
+import Profile from "@/components/modules/rider-dashboard/profile/Profile";
 import { UserRound } from "lucide-react";
 
 export default function RiderProfilePage() {
