@@ -1,6 +1,8 @@
+import type { SidebarItems } from "@/types";
 import {
     Bike,
     LayoutDashboard,
+    NotebookPen,
     Package,
     Receipt,
     Store,
@@ -9,11 +11,9 @@ import {
     UserRound,
     UserRoundPen,
     UserRoundPlus,
-    Users,
     UserStar,
     Wallet,
 } from "lucide-react";
-import type { SidebarItems } from "@/types";
 
 const prefix = "/admin-dashboard";
 
@@ -25,7 +25,16 @@ export const adminRoutes: SidebarItems = [
         title: "Operations",
         items: [
             { title: "Parcels", url: `${prefix}/parcels`, icon: Package },
-            { title: "Available riders", url: `${prefix}/available-riders`, icon: UserCheck },
+            {
+                title: "Available riders",
+                url: `${prefix}/available-riders`,
+                icon: UserCheck,
+            },
+            {
+                title: "Assignments",
+                url: `${prefix}/assignments`,
+                icon: NotebookPen,
+            },
         ],
     },
     {

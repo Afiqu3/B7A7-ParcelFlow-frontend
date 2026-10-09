@@ -13,3 +13,18 @@ export const createAssignmentSchema = z.object({
         error: "Leg must be PICKUP or DELIVERY",
     }),
 });
+
+export const cancelAssignmentSchema = z.object({
+    reason: z
+        .string()
+        .trim()
+        .pipe(
+            z.union([
+                z.literal(""),
+                z
+                    .string()
+                    .min(5, "Reason must be at least 5 characters")
+                    .max(250, "Reason must be at most 250 characters"),
+            ]),
+        ),
+});

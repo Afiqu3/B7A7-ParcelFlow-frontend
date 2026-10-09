@@ -5,6 +5,7 @@ import {
     Package,
     Receipt,
     Store,
+    UserCheck,
     UserKey,
     UserPlus,
     UserRound,
@@ -25,6 +26,11 @@ export const superAdminRoutes: SidebarItems = [
         title: "Operations",
         items: [
             { title: "Parcels", url: `${prefix}/parcels`, icon: Package },
+            {
+                title: "Available riders",
+                url: `${prefix}/available-riders`,
+                icon: UserCheck,
+            },
         ],
     },
     {
