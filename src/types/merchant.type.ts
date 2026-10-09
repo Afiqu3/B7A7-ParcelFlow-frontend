@@ -35,3 +35,11 @@ export interface MerchantUpdatePayload {
     phone?: string;
     businessName?: string;
 }
+
+export interface MerchantParams {
+    status?: UserStatus;
+    page?: number; // defaults to 1
+    limit?: number; // defaults to 10
+    searchTerm?: string;
+    sortOrder?: "desc" | "asc";
+}

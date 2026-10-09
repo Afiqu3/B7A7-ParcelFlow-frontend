@@ -22,15 +22,13 @@ export const adminRoutes: SidebarItems = [
     },
     {
         title: "Operations",
-        items: [
-            { title: "Parcels", url: `${prefix}/parcels`, icon: Package },
-            { title: "Merchants", url: `${prefix}/merchants`, icon: Store },
-        ],
+        items: [{ title: "Parcels", url: `${prefix}/parcels`, icon: Package }],
     },
     {
         title: "Configuration",
         items: [
             { title: "Pricing rules", url: `${prefix}/pricing`, icon: Receipt },
+            { title: "Merchants", url: `${prefix}/merchants`, icon: Store },
             { title: "Riders", url: `${prefix}/riders`, icon: Bike },
             { title: "Users", url: `${prefix}/users`, icon: Users },
             {
