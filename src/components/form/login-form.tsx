@@ -16,7 +16,7 @@ import { loginSchema } from "@/validation";
 import { extractRole, shouldForcePasswordChange } from "@/utils";
 import { Marker, MarkerContent } from "../ui/marker";
 import GoogleLoginComponent from "../modules/authentication/GoogleLogin";
-import { FetchError } from "ofetch";
+import type { FetchError } from "ofetch";
 import {
     containerVariants,
     EASE_OUT,

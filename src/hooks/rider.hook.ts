@@ -3,6 +3,7 @@ import {
     approveOrRejectRider,
     getAllAvailableRider,
     getAllRider,
+    getRiderProfile,
     getSingleRider,
     toggleRiderUserStatus,
     verifyRiderAccount,
@@ -96,5 +97,13 @@ export const useApproveOrRejectRider = () => {
                 queryKey: ["available-riders"],
             });
         },
+    });
+};
+
+export const useGetRiderProfile = () => {
+    return useQuery({
+        queryKey: ["rider"],
+        queryFn: getRiderProfile,
+        retry: false,
     });
 };

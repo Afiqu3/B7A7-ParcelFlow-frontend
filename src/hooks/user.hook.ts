@@ -9,6 +9,7 @@ export const useUploadProfileImage = () => {
         mutationFn: uploadProfileImage,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["merchant"] });
+            queryClient.invalidateQueries({ queryKey: ["rider"] });
             queryClient.invalidateQueries({ queryKey: meQueryOptions.queryKey });
         },
     });
