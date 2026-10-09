@@ -1,12 +1,13 @@
 import {
     applyAsRider,
     approveOrRejectRider,
+    getAllAvailableRider,
     getAllRider,
     getSingleRider,
     toggleRiderUserStatus,
     verifyRiderAccount,
 } from "@/api";
-import type { RiderParams } from "@/types";
+import type { AvailableRiderParams, RiderParams } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useApplyAsRider = () => {
@@ -31,6 +32,9 @@ export const useVerifyRiderAccount = () => {
             queryClient.invalidateQueries({
                 queryKey: ["riders"],
             });
+            queryClient.invalidateQueries({
+                queryKey: ["available-riders"],
+            });
         },
     });
 };
@@ -39,6 +43,13 @@ export const useGetAllRider = (params: RiderParams) => {
     return useQuery({
         queryKey: ["riders", params],
         queryFn: () => getAllRider(params),
+    });
+};
+
+export const useGetAllAvailableRider = (params: AvailableRiderParams) => {
+    return useQuery({
+        queryKey: ["available-riders", params],
+        queryFn: () => getAllAvailableRider(params),
     });
 };
 
@@ -62,6 +73,9 @@ export const useToggleRiderUserStatus = (userId: string) => {
             queryClient.invalidateQueries({
                 queryKey: ["rider"],
             });
+            queryClient.invalidateQueries({
+                queryKey: ["available-riders"],
+            });
         },
     });
 };
@@ -77,6 +91,9 @@ export const useApproveOrRejectRider = () => {
             });
             queryClient.invalidateQueries({
                 queryKey: ["rider"],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["available-riders"],
             });
         },
     });

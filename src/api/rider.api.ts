@@ -3,6 +3,7 @@ import type {
     ApiResponse,
     ApplyAsRiderPayload,
     ApproveRiderPayload,
+    AvailableRiderParams,
     Rider,
     RiderParams,
     VerifyEmailPayload,
@@ -29,6 +30,12 @@ export const verifyRiderAccount = (payload: VerifyEmailPayload) => {
 
 export const getAllRider = (params: RiderParams) => {
     return apiClient<ApiResponse<Rider[]>>("/rider", {
+        params,
+    });
+};
+
+export const getAllAvailableRider = (params: AvailableRiderParams) => {
+    return apiClient<ApiResponse<Rider[]>>("/rider/available", {
         params,
     });
 };

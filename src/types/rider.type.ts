@@ -53,6 +53,13 @@ export interface RiderParams {
     sortOrder?: "desc" | "asc";
 }
 
+export interface AvailableRiderParams {
+    page?: number; // defaults to 1
+    limit?: number; // defaults to 10
+    searchTerm?: string;
+    sortOrder?: "desc" | "asc";
+}
+
 export interface ApproveRiderPayload {
     riderId: string;
     applicationStatus: RiderApplicationStatus;

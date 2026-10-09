@@ -4,6 +4,7 @@ import {
     Package,
     Receipt,
     Store,
+    UserCheck,
     UserKey,
     UserRound,
     UserRoundPen,
@@ -22,7 +23,10 @@ export const adminRoutes: SidebarItems = [
     },
     {
         title: "Operations",
-        items: [{ title: "Parcels", url: `${prefix}/parcels`, icon: Package }],
+        items: [
+            { title: "Parcels", url: `${prefix}/parcels`, icon: Package },
+            { title: "Available riders", url: `${prefix}/available-riders`, icon: UserCheck },
+        ],
     },
     {
         title: "Configuration",
@@ -30,7 +34,6 @@ export const adminRoutes: SidebarItems = [
             { title: "Pricing rules", url: `${prefix}/pricing`, icon: Receipt },
             { title: "Merchants", url: `${prefix}/merchants`, icon: Store },
             { title: "Riders", url: `${prefix}/riders`, icon: Bike },
-            { title: "Users", url: `${prefix}/users`, icon: Users },
             {
                 title: "Create admin",
                 url: `${prefix}/create-admin`,
