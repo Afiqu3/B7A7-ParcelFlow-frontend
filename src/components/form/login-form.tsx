@@ -13,7 +13,7 @@ import { Input } from "../ui/input";
 import { Spinner } from "../ui/spinner";
 import Link from "next/link";
 import { loginSchema } from "@/validation";
-import { shouldForcePasswordChange } from "@/utils";
+import { extractRole, shouldForcePasswordChange } from "@/utils";
 import { Marker, MarkerContent } from "../ui/marker";
 import GoogleLoginComponent from "../modules/authentication/GoogleLogin";
 import { FetchError } from "ofetch";
@@ -53,11 +53,27 @@ export default function LoginForm() {
             login(loginData, {
                 onSuccess: async (res) => {
                     if (await shouldForcePasswordChange(res)) {
+                        const role = await extractRole(res);
                         toast.warning("Password change required", {
                             description:
                                 "Your account is using a temporary password. Please set a new one to continue.",
                         });
-                        router.push(ROUTES.changePassword);
+                        if (role === "RIDER") {
+                            router.push(
+                                `/rider-dashboard${ROUTES.changePassword}`,
+                            );
+                            return;
+                        } else if (role === "MERCHANT") {
+                            router.push(`/dashboard${ROUTES.changePassword}`);
+                        } else if (role === "ADMIN") {
+                            router.push(
+                                `/admin-dashboard${ROUTES.changePassword}`,
+                            );
+                        } else if (role === "SUPER_ADMIN") {
+                            router.push(
+                                `/super-dashboard${ROUTES.changePassword}`,
+                            );
+                        }
                         return;
                     }
                     toast.success("Login Success", {

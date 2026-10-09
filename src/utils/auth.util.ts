@@ -39,3 +39,16 @@ export async function shouldForcePasswordChange(
         return false;
     }
 }
+
+export async function extractRole(
+    res: unknown,
+): Promise<string | boolean> {
+    const direct = extractMustChangePassword(res);
+    if (direct !== undefined) return direct;
+    try {
+        const me = await getMe();
+        return me?.data?.role;
+    } catch {
+        return false;
+    }
+}

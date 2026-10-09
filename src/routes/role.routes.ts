@@ -9,7 +9,7 @@ export const ROLE_HOME: Record<UserRole, string> = {
   SUPER_ADMIN: "/super-dashboard",
   ADMIN: "/admin-dashboard",
   MERCHANT: "/dashboard",
-  RIDER: "/rider",
+  RIDER: "/rider-dashboard",
 };
 
 export const ROLE_LABEL: Record<UserRole, string> = {

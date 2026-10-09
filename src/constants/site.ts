@@ -18,7 +18,7 @@ export const ROUTES = {
   dashboard: "/dashboard",
   parcels: "/dashboard/parcels",
   newParcel: "/dashboard/parcels/new",
-  changePassword: "/dashboard/change-password",
+  changePassword: "/change-password",
   profile: "/dashboard/profile",
   updateProfile: "/dashboard/update-profile",
   terms: "/",
