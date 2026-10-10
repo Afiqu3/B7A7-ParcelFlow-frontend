@@ -4,6 +4,7 @@ import { ROUTES } from "@/constants";
 import { useGetMe } from "@/hooks";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, type ReactNode } from "react";
+import { ROLE_HOME } from "@/routes";
 import AuthLoading from "./AuthLoading";
 
 const AUTH_ROUTES: string[] = [
@@ -24,6 +25,15 @@ export default function PublicGuard({ children }: { children: ReactNode }) {
         if (isPending) return;
 
         if (data && AUTH_ROUTES.includes(pathname)) {
+            // Blocked users stay put: AuthGuard bounces them here, and the
+            // next login attempt surfaces the real reason. Redirecting them
+            // to a dashboard would ping-pong /login ↔ dashboard forever.
+            if (data.status === "BLOCKED") return;
+            // Temp-password users belong on change-password, not a dashboard.
+            if (data.mustChangePassword) {
+                router.push(`${ROLE_HOME[data.role]}/change-password`);
+                return;
+            }
             if (data.role === "MERCHANT") {
                 router.push(ROUTES.merchantDashboard);
             } else if (data.role === "RIDER") {

@@ -3,17 +3,26 @@
 import { useGetMe } from "@/hooks";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
-import AuthLoading from "./AuthLoading";
 import { ROUTES } from "@/constants";
 import { ROLE_HOME } from "@/routes";
+import type { UserRole } from "@/types";
+import AccessDenied from "./AccessDenied";
+import AuthLoading from "./AuthLoading";
 
-export default function AuthGuard({ children }: { children: ReactNode }) {
+interface IProps {
+    children: ReactNode;
+    roles: UserRole[];
+}
+
+export default function RoleGuard({ children, roles }: IProps) {
     const router = useRouter();
     const pathname = usePathname();
 
     const { data: user, isPending, isError, refetch, isFetching } = useGetMe();
     // Network blips get exactly one silent retry before we give up.
     const [retried, setRetried] = useState(false);
+
+    const isAuthorized = !!user && roles.includes(user.role);
 
     useEffect(() => {
         if (isPending || isFetching) {
@@ -30,20 +39,6 @@ export default function AuthGuard({ children }: { children: ReactNode }) {
             router.replace(
                 `${ROUTES.login}?next=${encodeURIComponent(pathname)}`,
             );
-            return;
-        }
-
-        if (user.status === "BLOCKED") {
-            // No ?next=: they can't reach any dashboard until unblocked.
-            // PublicGuard deliberately leaves blocked users on /login so
-            // the next attempt surfaces the real reason.
-            router.replace(ROUTES.login);
-            return;
-        }
-
-        if (user.mustChangePassword) {
-            router.replace(`${ROLE_HOME[user.role]}/change-password`);
-            return;
         }
     }, [
         isPending,
@@ -60,10 +55,16 @@ export default function AuthGuard({ children }: { children: ReactNode }) {
         return <AuthLoading />;
     }
 
-    if (!user || user.status === "BLOCKED" || user.mustChangePassword) {
+    if (!user) {
         // Redirecting away — hold the loader instead of flashing guarded UI.
         return <AuthLoading />;
     }
 
-    return <>{children}</>;
+    if (isAuthorized) {
+        return <>{children}</>;
+    }
+
+    return (
+        <AccessDenied requiredRoles={roles} actualRole={user.role} homeHref={ROLE_HOME[user.role] ?? ROUTES.home} />
+    );
 }
