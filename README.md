@@ -8,6 +8,7 @@ rider, admin, super admin).
 > **Backend required.** This app is UI-only and talks to the ParcelFlow API
 > over `NEXT_PUBLIC_API_BASE_URL` (cookie sessions, `/api/v1` convention).
 > Run the backend first; without it, pages render but all data calls fail.
+> Full endpoint reference: [`API_INTEGRATION.md`](./API_INTEGRATION.md).
 
 ## Tech stack
 
@@ -23,6 +24,48 @@ rider, admin, super admin).
 | Auth extras | Google OAuth (`@react-oauth/google`), OTP inputs (`input-otp`) |
 | Feedback | Sonner toasts |
 | Quality | TypeScript (strict), Biome (lint + format) |
+
+## Roles & dashboards
+
+| Role | Home | What they can do |
+| --- | --- | --- |
+| **Merchant** | `/dashboard` | Book parcels (pickup/delivery details, prepaid-vs-COD), live price estimates, tracking page, pay pending bKash transactions, invoice PDFs, parcel history with cancel/delete, transaction history, profile + photo, stats & revenue dashboard |
+| **Rider** | `/rider-dashboard` | Apply with vehicle papers + OTP verification, profile + photo, own assignment queue (accept → start → complete/fail with inline confirms), personal stats & success rate |
+| **Admin** | `/admin-dashboard` | Review rider applications (approve, reject with reason), block/unblock riders & merchants, all parcels (hub moves AT_HUB/IN_TRANSIT, cancel, details), assign parcels to free riders, manage assignments, all transactions, pricing rules CRUD, admin directory, platform stats |
+| **Super admin** | `/super-dashboard` | Everything admins do, plus admin/super-admin directories with status toggles and create-admin / create-super-admin flows |
+
+Every dashboard shares one shell (navy sidebar + cream panel, collapsible
+with cookie-persisted state) and one visual language (cards, pills,
+orange primary actions, `font-heading` titles).
+
+## Key user journeys
+
+- **Book a parcel (merchant):** 4-step form (pickup → recipient → parcel →
+  payment) with business-rule interlocks (e.g. DOCUMENT forces prepaid),
+  then a success banner with the tracking reference.
+- **Pay online:** pending transactions expose Pay now → bKash checkout
+  URL (same-tab redirect) → gateway returns to
+  `/dashboard/parcels?status=success|failure` with matching toasts.
+- **Rider onboarding:** application + vehicle-paper upload → email OTP →
+  admin approval → assignments flow.
+- **Dispatch loop (admin):** available riders → create assignment
+  (parcel + pickup/delivery leg) → rider accepts → starts → completes or
+  fails; cancellable while in motion.
+- **Sign-in:** email/password, Google OAuth (merchants), or one-tap demo
+  logins per role (appear only when demo env vars are set). Temp-password
+  accounts are forced through change-password; deep links survive login
+  via `?next=` return URLs.
+
+## Auth & access
+
+- `PublicGuard` (auth pages): signed-in visitors bounce to their role
+  home; blocked users stay on login so the next attempt surfaces the
+  reason; temp-password users route to change-password.
+- `AuthGuard` (all dashboards): requires a session (preserving `?next=`),
+  retries once on network blips, enforces BLOCKED and
+  forced-password redirects.
+- `RoleGuard` (per dashboard): role allow-list with a dedicated 403 page
+  naming the required vs. actual role.
 
 ## Prerequisites
 
@@ -63,6 +106,9 @@ npm run dev
 | `npm run lint` | `biome check` |
 | `npm run format` | `biome format --write` |
 
+Verify with `npx tsc --noEmit` (fast) and `npm run build` (full static
+export of all routes) before pushing.
+
 ## Project structure
 
 ```
@@ -92,26 +138,29 @@ src/
 
 Conventions worth knowing:
 
-- **Guards:** public auth routes render behind `PublicGuard` (signed-in users
-  bounce to their dashboard, temp-password users to change-password);
-  every dashboard sits behind `AuthGuard` (session, blocked and
-  forced-password enforcement, `?next=` return URLs) plus a per-role
-  `RoleGuard` rendering a 403 page on mismatch.
+- **Guards:** public auth routes render behind `PublicGuard` (signed-in
+  users bounce to their dashboard, temp-password users to
+  change-password); every dashboard sits behind `AuthGuard` (session,
+  blocked and forced-password enforcement, `?next=` return URLs) plus a
+  per-role `RoleGuard` rendering a 403 page on mismatch.
 - **API numbers:** the backend serializes Prisma Decimals as strings —
-  `lib/*` normalizers (`toParcel`, `toPricingRule`, `to*Stats`) coerce them
+  `lib/*` normalizers (`toPricingRule`, `toParcel`, `to*Stats`) coerce them
   at the boundary; never parse inline in components.
 - **Cache keys:** list queries invalidate on every related mutation
   (`["parcels"]`, `["my-parcels"]`, `["riders"]`, `["admins"]`, …).
 - **Styling:** dashboard theme tokens (`brand`, `brand-orange`, …) live in
   `globals.css`; page entrances use `motion-safe:animate-in` so reduced
-  motion is respected.
+  motion is respected. Forms share stagger/error/label-swap presets from
+  `components/form/form-motion.ts`.
+- **Lists:** search (500 ms debounce) resets to page 1; filters live in
+  tab rails; pagers collapse on mobile; empty/error/skeleton states are
+  mandatory per list.
 
 ## Deployment
 
 `next.config.ts` sets `output: "export"`, so `npm run build` produces a
-fully static `out/` directory — host it on any static host (or IPFS-style
-hosting). Constraints this imposes (enforced by convention, checked by the
-build):
+fully static `out/` directory — host it on any static host. Constraints
+this imposes (enforced by convention, checked by the build):
 
 - No server-only APIs in components (`cookies()`, `headers()`); browser
   state reads happen client-side after mount.
