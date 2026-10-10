@@ -5,6 +5,7 @@ import type {
     AssignmentParams,
     CancelAssignmentPayload,
     CreateAssignmentPayload,
+    MyAssignment,
 } from "@/types";
 
 export const createAssignment = (payload: CreateAssignmentPayload) => {
@@ -27,5 +28,44 @@ export const cancelAssignment = (
     return apiClient(`/assignment/${assignmentId}/cancel`, {
         method: "PATCH",
         body: payload,
+    });
+};
+
+export const getAllMyAssignment = (params: AssignmentParams) => {
+    return apiClient<ApiResponse<MyAssignment[]>>(
+        "/assignment/my-assignments",
+        {
+            params,
+        },
+    );
+};
+
+export const acceptAssignment = (assignmentId: string) => {
+    return apiClient(`/assignment/${assignmentId}/accept`, {
+        method: "PATCH",
+    });
+};
+
+export const rejectAssignment = (assignmentId: string) => {
+    return apiClient(`/assignment/${assignmentId}/reject`, {
+        method: "PATCH",
+    });
+};
+
+export const startAssignment = (assignmentId: string) => {
+    return apiClient(`/assignment/${assignmentId}/start`, {
+        method: "PATCH",
+    });
+};
+
+export const completeAssignment = (assignmentId: string) => {
+    return apiClient(`/assignment/${assignmentId}/complete`, {
+        method: "PATCH",
+    });
+};
+
+export const failAssignment = (assignmentId: string) => {
+    return apiClient(`/assignment/${assignmentId}/fail`, {
+        method: "PATCH",
     });
 };

@@ -59,3 +59,48 @@ export interface AssignmentParams {
 export interface CancelAssignmentPayload {
     reason?: string;
 }
+
+export interface MyAssignment {
+    id: string;
+    leg: AssignmentLeg;
+    status: AssignmentStatus;
+    attemptNumber: number;
+    assignedAt: string;
+    acceptedAt?: string;
+    startedAt?: string;
+    completedAt?: string;
+    failedAt?: string;
+    rejectedAt?: string;
+    cancelledAt?: string;
+    failureReason?: string;
+    createdAt: string;
+    updatedAt: string;
+    parcelId: string;
+    riderId: string;
+    assignedById: string;
+    parcel: {
+        id: string;
+        trackingId: string;
+        status: string;
+        pickupContactName: string;
+        pickupContactPhone: string;
+        pickupAddressLine: string;
+        pickupDistrict: string;
+        pickupCity: string;
+        recipientName: string;
+        recipientPhone: string;
+        deliveryAddressLine: string;
+        deliveryDistrict: string;
+        deliveryCity: string;
+        paymentType: string;
+        codAmount?: number;
+    };
+}
+
+export interface MyAssignmentParams {
+    status?: AssignmentStatus;
+    page?: number; // defaults to 1
+    limit?: number; // defaults to 10F
+    sortOrder?: "desc" | "asc";
+}
+

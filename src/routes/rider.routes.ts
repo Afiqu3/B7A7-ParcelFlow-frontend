@@ -1,13 +1,11 @@
+import type { SidebarItems } from "@/types";
 import {
     ClipboardList,
-    HandCoins,
-    History,
     LayoutDashboard,
     UserKey,
     UserRound,
     UserRoundPen,
 } from "lucide-react";
-import type { SidebarItems } from "@/types";
 
 const prefix = "/rider-dashboard";
 
@@ -18,14 +16,11 @@ export const riderRoutes: SidebarItems = [
     {
         title: "Deliveries",
         items: [
-            { title: "My tasks", url: `${prefix}/tasks`, icon: ClipboardList },
-            { title: "History", url: `${prefix}/history`, icon: History },
-        ],
-    },
-    {
-        title: "Money",
-        items: [
-            { title: "COD collected", url: `${prefix}/cod`, icon: HandCoins },
+            {
+                title: "My assignments",
+                url: `${prefix}/assignments`,
+                icon: ClipboardList,
+            },
         ],
     },
     {
