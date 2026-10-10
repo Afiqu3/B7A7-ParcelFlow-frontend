@@ -1,4 +1,5 @@
 import UpdateRiderProfileForm from "@/components/form/update-rider-profile-form";
+import { ROUTES } from "@/constants";
 import { UserRound, UserRoundPen } from "lucide-react";
 import Link from "next/link";
 
@@ -24,7 +25,7 @@ export default function RiderUpdateProfile() {
                     </p>
                 </div>
                 <Link
-                    href="/rider-dashboard/profile"
+                    href={`${ROUTES.riderDashboard}/profile`}
                     className="flex w-fit shrink-0 items-center gap-2 rounded-xl bg-card px-3.5 py-2.5 text-xs font-bold text-secondary ring-1 ring-secondary/10 transition-colors outline-none hover:bg-secondary/5 focus-visible:ring-2 focus-visible:ring-brand-orange/50"
                 >
                     <UserRound className="size-4 text-brand" strokeWidth={2.25} />

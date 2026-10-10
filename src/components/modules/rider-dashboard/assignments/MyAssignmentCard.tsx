@@ -1,20 +1,5 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
-import {
-    Check,
-    CircleCheck,
-    Flag,
-    Loader2,
-    MapPin,
-    Phone,
-    Play,
-    Truck,
-    X,
-} from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
-import type { FetchError } from "ofetch";
 import {
     ASSIGNMENT_STATUS_META,
     assignmentPill,
@@ -28,9 +13,23 @@ import {
     useStartAssignment,
 } from "@/hooks";
 import { formatTaka } from "@/lib/pricing";
-import { cn } from "@/lib/utils";
-import { formatBackendDate } from "@/utils";
 import type { MyAssignment } from "@/types";
+import { formatBackendDate } from "@/utils";
+import {
+    Check,
+    CircleCheck,
+    Flag,
+    Loader2,
+    MapPin,
+    Phone,
+    Play,
+    Truck,
+    X,
+} from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import type { FetchError } from "ofetch";
+import { useState } from "react";
+import { toast } from "sonner";
 
 function actionError(action: string) {
     return (err: FetchError) => {
@@ -70,8 +69,7 @@ export default function MyAssignmentCard({
     const { mutate: fail, isPending: failing } = useFailAssignment(
         assignment.id,
     );
-    const busy =
-        accepting || rejecting || starting || completing || failing;
+    const busy = accepting || rejecting || starting || completing || failing;
 
     const run = (
         action: "accept" | "reject" | "start" | "complete" | "fail",
@@ -94,8 +92,7 @@ export default function MyAssignmentCard({
                     !res.success
                 ) {
                     toast.error(`Could not ${verb} assignment`, {
-                        description:
-                            "Something went wrong. Please try again.",
+                        description: "Something went wrong. Please try again.",
                     });
                     return;
                 }
@@ -304,7 +301,7 @@ export default function MyAssignmentCard({
                         <motion.p
                             key="terminal"
                             {...swap}
-                            className="rounded-xl bg-secondary/[0.04] px-3.5 py-2.5 text-center text-[13px] font-medium text-secondary/60 ring-1 ring-secondary/8 ring-inset"
+                            className="rounded-xl bg-secondary/4 px-3.5 py-2.5 text-center text-[13px] font-medium text-secondary/60 ring-1 ring-secondary/8 ring-inset"
                         >
                             {assignment.status === "COMPLETED"
                                 ? "Completed — nice work."
@@ -347,7 +344,7 @@ function ConfirmStrip({
         <motion.div
             key="confirm"
             {...swap}
-            className="flex items-center gap-2 rounded-xl bg-destructive/[0.06] p-2 ring-1 ring-destructive/15 ring-inset"
+            className="flex items-center gap-2 rounded-xl bg-destructive/6 p-2 ring-1 ring-destructive/15 ring-inset"
         >
             <p className="min-w-0 flex-1 pl-1.5 font-heading text-[13px] font-bold text-destructive">
                 {label}
@@ -367,9 +364,7 @@ function ConfirmStrip({
                 onClick={onConfirm}
                 className="h-9 shrink-0 rounded-lg bg-destructive px-3 font-heading text-xs font-bold text-white transition hover:brightness-110 active:scale-[0.99] disabled:opacity-70"
             >
-                {pending ? (
-                    <Loader2 className="size-3.5 animate-spin" />
-                ) : null}
+                {pending ? <Loader2 className="size-3.5 animate-spin" /> : null}
                 {confirmLabel}
             </Button>
         </motion.div>

@@ -1,4 +1,5 @@
 import SuperAdmins from "@/components/modules/super-admin/super-admins/SuperAdmins";
+import { ROUTES } from "@/constants";
 import { UserRoundPlus, Users } from "lucide-react";
 import Link from "next/link";
 
@@ -24,7 +25,7 @@ export default function SuperAdminsPage() {
                     </p>
                 </div>
                 <Link
-                    href="/super-dashboard/create-admin"
+                    href={`${ROUTES.superAdminDashboard}/create-admin`}
                     className="inline-flex h-10 w-fit shrink-0 items-center gap-2 rounded-xl bg-brand-orange px-4 font-heading text-sm font-bold text-brand-ink shadow-[0_12px_28px_-12px_var(--color-brand-orange)] transition outline-none hover:brightness-110 focus-visible:ring-3 focus-visible:ring-brand-orange/40 active:scale-[0.99]"
                 >
                     <UserRoundPlus className="size-4" />

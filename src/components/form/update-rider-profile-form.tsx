@@ -32,6 +32,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Skeleton } from "../ui/skeleton";
 import { Textarea } from "../ui/textarea";
+import { ROUTES } from "@/constants";
 
 const inputClass =
     "h-11 rounded-xl border-secondary/15 bg-background text-secondary shadow-none placeholder:text-secondary/40 focus-visible:border-brand-orange focus-visible:ring-3 focus-visible:ring-brand-orange/30 aria-invalid:border-destructive/60";
@@ -148,7 +149,7 @@ function RiderEditCard({ profile }: { profile: RiderProfileData }) {
                     toast.success("Profile updated", {
                         description: "Your changes are now live.",
                     });
-                    router.push("/rider-dashboard/profile");
+                    router.push(`${ROUTES.riderDashboard}/profile`);
                 },
                 onError: (err: FetchError) => {
                     shakeForm();
@@ -175,7 +176,7 @@ function RiderEditCard({ profile }: { profile: RiderProfileData }) {
                 {/* Card header */}
                 <motion.div
                     variants={itemVariants}
-                    className="flex flex-col gap-4 border-b border-secondary/8 bg-gradient-to-r from-brand-cream via-brand-cream/40 to-transparent px-5 py-5 sm:flex-row sm:items-center sm:px-6"
+                    className="flex flex-col gap-4 border-b border-secondary/8 bg-linear-to-r from-brand-cream via-brand-cream/40 to-transparent px-5 py-5 sm:flex-row sm:items-center sm:px-6"
                 >
                     <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-brand text-white shadow-[0_12px_24px_-12px_rgba(15,32,86,0.7)]">
                         <UserRoundPen className="size-5" strokeWidth={2.25} />

@@ -9,6 +9,7 @@ import { ROLE_LABEL } from "@/routes";
 import { formatJoinedOn, formatMemberSince } from "@/utils";
 import ProfilePhotoCard from "@/components/shared/ProfilePhotoCard";
 import Link from "next/link";
+import { ROUTES } from "@/constants";
 
 export default function AdminProfile() {
     const {
@@ -253,7 +254,7 @@ function ProfileContent({ user }: { user: User }) {
                         <ul className="mt-4 flex flex-col gap-2.5">
                             <li>
                                 <Link
-                                    href={"/admin-dashboard/change-password"}
+                                    href={`${ROUTES.adminDashboard}${ROUTES.changePassword}`}
                                     className="flex items-center gap-3 rounded-xl bg-white/6 px-3.5 py-3 ring-1 ring-white/10 ring-inset transition-all outline-none hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-brand-orange/60 active:scale-[0.99]"
                                 >
                                     <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-brand-orange/15 text-brand-orange ring-1 ring-brand-orange/25 ring-inset">
@@ -274,7 +275,7 @@ function ProfileContent({ user }: { user: User }) {
                             </li>
                             <li>
                                 <Link
-                                    href={"/admin-dashboard"}
+                                    href={`${ROUTES.adminDashboard}`}
                                     className="flex items-center gap-3 rounded-xl bg-white/6 px-3.5 py-3 ring-1 ring-white/10 ring-inset transition-all outline-none hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-brand-orange/60 active:scale-[0.99]"
                                 >
                                     <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-white/10 text-white ring-1 ring-white/15 ring-inset">

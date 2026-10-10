@@ -29,6 +29,7 @@ import { Button } from "../ui/button";
 import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Skeleton } from "../ui/skeleton";
+import { ROUTES } from "@/constants";
 
 const inputClass =
     "h-11 rounded-xl border-secondary/15 bg-background text-secondary shadow-none placeholder:text-secondary/40 focus-visible:border-brand-orange focus-visible:ring-3 focus-visible:ring-brand-orange/30 aria-invalid:border-destructive/60";
@@ -127,7 +128,7 @@ function AdminEditCard({ user }: { user: User }) {
                     toast.success("Profile updated", {
                         description: "Your changes are now live.",
                     });
-                    router.push("/admin-dashboard/profile");
+                    router.push(`${ROUTES.adminDashboard}/profile`);
                 },
                 onError: (err: FetchError) => {
                     shakeForm();

@@ -298,7 +298,7 @@ function ProfileContent({ merchant }: { merchant: Merchant }) {
                             </li>
                             <li>
                                 <Link
-                                    href={ROUTES.dashboard}
+                                    href={ROUTES.merchantDashboard}
                                     className="flex items-center gap-3 rounded-xl bg-white/6 px-3.5 py-3 ring-1 ring-white/10 ring-inset transition-all outline-none hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-brand-orange/60 active:scale-[0.99]"
                                 >
                                     <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-white/10 text-white ring-1 ring-white/15 ring-inset">

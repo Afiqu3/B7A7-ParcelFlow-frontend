@@ -60,20 +60,21 @@ export default function LoginForm() {
                         });
                         if (role === "RIDER") {
                             router.push(
-                                `/rider-dashboard${ROUTES.changePassword}`,
+                                `${ROUTES.riderDashboard}${ROUTES.changePassword}`,
                             );
                             return;
                         } else if (role === "MERCHANT") {
-                            router.push(`/dashboard${ROUTES.changePassword}`);
+                            router.push(`${ROUTES.merchantDashboard}${ROUTES.changePassword}`);
                         } else if (role === "ADMIN") {
                             router.push(
-                                `/admin-dashboard${ROUTES.changePassword}`,
+                                `${ROUTES.adminDashboard}${ROUTES.changePassword}`,
                             );
                         } else if (role === "SUPER_ADMIN") {
                             router.push(
-                                `/super-dashboard${ROUTES.changePassword}`,
+                                `${ROUTES.superAdminDashboard}${ROUTES.changePassword}`,
                             );
                         }
+                        router.push(ROUTES.home);
                         return;
                     }
                     toast.success("Login Success", {

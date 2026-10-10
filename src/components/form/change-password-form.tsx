@@ -122,7 +122,7 @@ export default function ChangePasswordForm() {
                             router.push(
                                 me?.role
                                     ? ROLE_HOME[me.role]
-                                    : ROUTES.dashboard,
+                                    : ROUTES.merchantDashboard,
                             );
                         }
                     },

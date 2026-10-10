@@ -5,6 +5,7 @@ import DataPager from "@/components/shared/DataPager";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ROUTES } from "@/constants";
 import { useDebounce, useGetAllAdmin } from "@/hooks";
 import { cn } from "@/lib/utils";
 import type { Admin, AdminParams, ApiResponse } from "@/types";
@@ -175,7 +176,7 @@ export default function Admins() {
                                 asChild
                                 className="h-11 rounded-xl bg-brand-orange px-6 font-heading text-sm font-bold text-brand-ink shadow-[0_12px_28px_-12px_var(--color-brand-orange)] transition hover:brightness-110 active:scale-[0.99]"
                             >
-                                <Link href="/admin-dashboard/create-admin">
+                                <Link href={`${ROUTES.adminDashboard}/create-admin`}>
                                     Create the first admin
                                     <ArrowRight className="size-4" />
                                 </Link>

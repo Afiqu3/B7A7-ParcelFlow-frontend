@@ -2,6 +2,7 @@
 
 import { useGetAllSuperAdmin } from "@/hooks";
 import AdminDirectory from "../Admins/AdminDirectory";
+import { ROUTES } from "@/constants";
 
 /** Super-admin directory: same table, toggle, search and pagination. */
 export default function SuperAdmins() {
@@ -11,7 +12,7 @@ export default function SuperAdmins() {
             title="Super admin"
             singular="super admin"
             plural="super admins"
-            createHref="/super-dashboard/create-admin"
+            createHref={`${ROUTES.superAdminDashboard}/create-admin`}
         />
     );
 }

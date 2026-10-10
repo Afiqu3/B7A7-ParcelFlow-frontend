@@ -6,6 +6,7 @@ import CtaLink from "@/components/modules/landing/CtaLink";
 import { EASE_OUT } from "@/components/modules/landing/motion";
 import { ROUTES } from "@/constants";
 import { useGetMe } from "@/hooks";
+import { ROLE_HOME } from "@/routes";
 import {
   type Estimate,
   type EstimateInput,
@@ -224,7 +225,11 @@ export default function EstimateReceipt({
         )}
 
         <CtaLink
-          href={user ? ROUTES.dashboard : ROUTES.register}
+          href={
+            user
+              ? (user.role ? ROLE_HOME[user.role] : ROUTES.merchantDashboard)
+              : ROUTES.register
+          }
           variant="ink"
           arrow
           className="mt-6 w-full"
