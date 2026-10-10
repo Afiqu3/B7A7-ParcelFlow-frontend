@@ -25,13 +25,13 @@ export default function PublicGuard({ children }: { children: ReactNode }) {
 
         if (data && AUTH_ROUTES.includes(pathname)) {
             if (data.role === "MERCHANT") {
-                router.replace(ROUTES.merchantDashboard);
+                router.push(ROUTES.merchantDashboard);
             } else if (data.role === "RIDER") {
-                router.replace(ROUTES.riderDashboard);
+                router.push(ROUTES.riderDashboard);
             } else if (data.role === "ADMIN") {
-                router.replace(ROUTES.adminDashboard);
+                router.push(ROUTES.adminDashboard);
             } else if (data.role === "SUPER_ADMIN") {
-                router.replace(ROUTES.superAdminDashboard);
+                router.push(ROUTES.superAdminDashboard);
             }
         }
     }, [data, isPending, pathname, router]);

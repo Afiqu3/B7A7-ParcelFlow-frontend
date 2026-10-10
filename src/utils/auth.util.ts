@@ -40,6 +40,26 @@ export async function shouldForcePasswordChange(
     }
 }
 
+/**
+ * Safe post-login destination from `?next=`. Same-origin paths only —
+ * rejects absolute URLs, protocol-relative URLs and backslashes, so a
+ * crafted login link can never bounce users off-site (open-redirect guard).
+ */
+export function resolveNextPath(
+    next: string | null,
+    fallback = "/",
+): string {
+    if (
+        !next ||
+        !next.startsWith("/") ||
+        next.startsWith("//") ||
+        next.includes("\\")
+    ) {
+        return fallback;
+    }
+    return next;
+}
+
 export async function extractRole(
     res: unknown,
 ): Promise<string | boolean> {

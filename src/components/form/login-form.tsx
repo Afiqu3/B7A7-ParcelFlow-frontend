@@ -4,7 +4,7 @@ import { useLogin } from "@/hooks";
 import { useForm } from "@tanstack/react-form";
 import { ArrowRight, Eye, EyeClosed } from "lucide-react";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
@@ -13,7 +13,11 @@ import { Input } from "../ui/input";
 import { Spinner } from "../ui/spinner";
 import Link from "next/link";
 import { loginSchema } from "@/validation";
-import { extractRole, shouldForcePasswordChange } from "@/utils";
+import {
+    extractRole,
+    resolveNextPath,
+    shouldForcePasswordChange,
+} from "@/utils";
 import { Marker, MarkerContent } from "../ui/marker";
 import GoogleLoginComponent from "../modules/authentication/GoogleLogin";
 import type { FetchError } from "ofetch";
@@ -29,6 +33,9 @@ import { ROUTES } from "@/constants";
 export default function LoginForm() {
     const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
+    const searchParams = useSearchParams();
+    // Deep link the guard saved (?next=); validated same-origin on use.
+    const next = resolveNextPath(searchParams.get("next"));
     const [formScope, shakeForm] = useShake<HTMLFormElement>();
 
     const { mutate: login, isPending: loginPending } = useLogin();
@@ -80,7 +87,7 @@ export default function LoginForm() {
                     toast.success("Login Success", {
                         description: "Welcome back",
                     });
-                    router.push("/");
+                    router.push(next);
                 },
                 onError: (err: FetchError) => {
                     shakeForm();
@@ -371,7 +378,10 @@ export default function LoginForm() {
                     </motion.div>
 
                     <motion.div variants={itemVariants}>
-                        <GoogleLoginComponent text="continue_with" />
+                        <GoogleLoginComponent
+                            text="continue_with"
+                            next={next}
+                        />
                     </motion.div>
                 </div>
 

@@ -1,8 +1,10 @@
 import Logo from "@/assets/svg/Logo";
 import LoginForm from "@/components/form/login-form";
 import LeftSide from "@/components/modules/authentication/LeftSide";
+import LoginFallback from "@/components/modules/authentication/LoginFallback";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Login-ParcelFlow",
@@ -35,7 +37,9 @@ export default function LoginPage() {
         </div>
 
         <div className="w-full lg:max-w-sm max-w-2xs">
-          <LoginForm />
+          <Suspense fallback={<LoginFallback />}>
+            <LoginForm />
+          </Suspense>
         </div>
       </div>
     </div>

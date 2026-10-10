@@ -11,9 +11,11 @@ import { toast } from "sonner";
 
 type googleLoginComponentProps = {
   text: "continue_with" | "signin_with" | "signup_with" | "signin";
+  /** Post-login destination (already validated); defaults to home. */
+  next?: string;
 }
 
-export default function GoogleLoginComponent({ text }: googleLoginComponentProps) {
+export default function GoogleLoginComponent({ text, next = "/" }: googleLoginComponentProps) {
   const router = useRouter();
   const { mutate: googleLogin } = useGoogleOAuth();
 
@@ -42,7 +44,7 @@ export default function GoogleLoginComponent({ text }: googleLoginComponentProps
           toast.success("Logged in Successfully", {
             description: "Welcome back",
           });
-          router.push("/");
+          router.push(next);
         },
         onError: (err: FetchError) => {
           toast.error("Authorization failure", {

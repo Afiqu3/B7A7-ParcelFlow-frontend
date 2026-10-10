@@ -10,8 +10,7 @@ import { Spinner } from "@/components/ui/spinner";
  */
 export default function AuthLoading() {
     return (
-        <div
-            role="status"
+        <output
             aria-live="polite"
             className="grid min-h-svh place-items-center bg-accent px-6 motion-safe:animate-in motion-safe:fade-in motion-safe:duration-300"
         >
@@ -28,6 +27,6 @@ export default function AuthLoading() {
                     Checking your session…
                 </span>
             </div>
-        </div>
+        </output>
     );
 }
