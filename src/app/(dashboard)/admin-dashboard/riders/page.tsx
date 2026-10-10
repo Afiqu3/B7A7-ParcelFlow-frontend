@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Riders from "@/components/modules/admin-dashboard/riders/Riders";
 import { Bike } from "lucide-react";
+
+export const metadata: Metadata = {
+    title: "Riders · ParcelFlow",
+    description: "Review applications and manage rider access.",
+};
 
 export default function RidersPage() {
     return (

@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import UpdateRiderProfileForm from "@/components/form/update-rider-profile-form";
 import { ROUTES } from "@/constants";
 import { UserRound, UserRoundPen } from "lucide-react";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+    title: "Update profile · ParcelFlow",
+    description: "Keep your name, phone and address current.",
+};
 
 export default function RiderUpdateProfile() {
     return (

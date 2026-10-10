@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Merchants from "@/components/modules/admin-dashboard/merchants/Merchants";
 import { Store } from "lucide-react";
+
+export const metadata: Metadata = {
+    title: "Merchants · ParcelFlow",
+    description: "Every registered merchant — search by name or email.",
+};
 
 export default function MerchantsPage() {
     return (

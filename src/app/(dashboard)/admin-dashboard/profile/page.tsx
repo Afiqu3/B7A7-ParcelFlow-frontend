@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import AdminProfile from "@/components/modules/admin-profile/admin-profile";
 import { UserRound } from "lucide-react";
+
+export const metadata: Metadata = {
+    title: "Profile · ParcelFlow",
+    description: "Your admin identity — photo and contact details.",
+};
 
 export default function page() {
     return (

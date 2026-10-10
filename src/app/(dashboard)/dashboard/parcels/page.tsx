@@ -2,8 +2,15 @@ import Parcels from "@/components/modules/parcels/Parcels";
 import PaymentReturnHandler from "@/components/modules/parcels/PaymentReturnHandler";
 import { ROUTES } from "@/constants";
 import { PackagePlus, PackageSearch } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
+
+export const metadata: Metadata = {
+    title: "Parcels · ParcelFlow",
+    description:
+        "Track every booking — search by tracking ID or filter by delivery status.",
+};
 
 export default function ParcelsPage() {
     return (

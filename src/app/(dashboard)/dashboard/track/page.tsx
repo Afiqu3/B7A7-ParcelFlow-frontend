@@ -1,5 +1,11 @@
 import Track from "@/components/modules/track/Track";
 import { PackageSearch } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Track parcel · ParcelFlow",
+    description: "Enter any tracking ID for an instant status check.",
+};
 
 export default function ParcelTrackPage() {
     return (

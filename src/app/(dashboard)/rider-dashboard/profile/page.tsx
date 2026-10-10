@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Profile from "@/components/modules/rider-dashboard/profile/Profile";
 import { UserRound } from "lucide-react";
+
+export const metadata: Metadata = {
+    title: "Profile · ParcelFlow",
+    description: "Your rider identity — photo, contact and vehicle details.",
+};
 
 export default function RiderProfilePage() {
     return (

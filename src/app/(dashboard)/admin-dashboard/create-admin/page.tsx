@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import CreateAdminForm from "@/components/form/create-admin-from";
 import { KeyRound, MailCheck, UserRoundPlus } from "lucide-react";
+
+export const metadata: Metadata = {
+    title: "Create admin · ParcelFlow",
+    description: "Grant dashboard access to a teammate.",
+};
 
 const tips = [
     {

@@ -13,13 +13,10 @@ import { Input } from "../ui/input";
 import { Spinner } from "../ui/spinner";
 import Link from "next/link";
 import { loginSchema } from "@/validation";
-import {
-    extractRole,
-    resolveNextPath,
-    shouldForcePasswordChange,
-} from "@/utils";
+import { completePasswordLogin, resolveNextPath } from "@/utils";
 import { Marker, MarkerContent } from "../ui/marker";
 import GoogleLoginComponent from "../modules/authentication/GoogleLogin";
+import DemoLogins from "../modules/authentication/DemoLogins";
 import type { FetchError } from "ofetch";
 import {
     containerVariants,
@@ -58,36 +55,11 @@ export default function LoginForm() {
             };
 
             login(loginData, {
-                onSuccess: async (res) => {
-                    if (await shouldForcePasswordChange(res)) {
-                        const role = await extractRole(res);
-                        toast.warning("Password change required", {
-                            description:
-                                "Your account is using a temporary password. Please set a new one to continue.",
-                        });
-                        if (role === "RIDER") {
-                            router.push(
-                                `${ROUTES.riderDashboard}${ROUTES.changePassword}`,
-                            );
-                            return;
-                        } else if (role === "MERCHANT") {
-                            router.push(`${ROUTES.merchantDashboard}${ROUTES.changePassword}`);
-                        } else if (role === "ADMIN") {
-                            router.push(
-                                `${ROUTES.adminDashboard}${ROUTES.changePassword}`,
-                            );
-                        } else if (role === "SUPER_ADMIN") {
-                            router.push(
-                                `${ROUTES.superAdminDashboard}${ROUTES.changePassword}`,
-                            );
-                        }
-                        router.push(ROUTES.home);
-                        return;
-                    }
-                    toast.success("Login Success", {
-                        description: "Welcome back",
+                onSuccess: (res) => {
+                    completePasswordLogin(res, {
+                        push: (url) => router.push(url),
+                        next,
                     });
-                    router.push(next);
                 },
                 onError: (err: FetchError) => {
                     shakeForm();
@@ -382,6 +354,10 @@ export default function LoginForm() {
                             text="continue_with"
                             next={next}
                         />
+                    </motion.div>
+
+                    <motion.div variants={itemVariants}>
+                        <DemoLogins next={next} />
                     </motion.div>
                 </div>
 

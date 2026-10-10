@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import AdminStats from "@/components/modules/admin-dashboard/stats/AdminStats";
 import { LayoutDashboard } from "lucide-react";
+
+export const metadata: Metadata = {
+    title: "Admin dashboard · ParcelFlow",
+    description: "The whole platform at a glance — parcels, people and money.",
+};
 
 export default function page() {
     return (

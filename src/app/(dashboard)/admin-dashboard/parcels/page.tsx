@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Parcels from "@/components/modules/admin-dashboard/parcels/Parcels";
 import { Package } from "lucide-react";
+
+export const metadata: Metadata = {
+    title: "Parcels · ParcelFlow",
+    description: "Every merchant booking — search, filter and move through the hub.",
+};
 
 export default function ParcelsPage() {
     return (

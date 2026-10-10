@@ -1,7 +1,14 @@
 import Stats from "@/components/modules/dashboard/Stats";
 import { ROUTES } from "@/constants";
 import { LayoutDashboard, PackagePlus } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+    title: "Dashboard · ParcelFlow",
+    description:
+        "Your shipping at a glance — bookings, deliveries and collections.",
+};
 
 export default function page() {
     return (

@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import AvailableRiders from "@/components/modules/admin-dashboard/available-riders/AvailableRiders";
 import { UserCheck } from "lucide-react";
+
+export const metadata: Metadata = {
+    title: "Available riders · ParcelFlow",
+    description: "Riders free right now — search and assign parcels.",
+};
 
 export default function AvailableRidersPage() {
     return (

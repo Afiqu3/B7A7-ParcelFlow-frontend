@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import ChangePasswordForm from "@/components/form/change-password-form";
 import MustChangePasswordAlert from "@/components/modules/authentication/MustChangePasswordAlert";
 import {
@@ -7,6 +8,11 @@ import {
     MonitorSmartphone,
     ShieldCheck,
 } from "lucide-react";
+
+export const metadata: Metadata = {
+    title: "Change password · ParcelFlow",
+    description: "Update your sign-in password.",
+};
 
 const tips = [
     {

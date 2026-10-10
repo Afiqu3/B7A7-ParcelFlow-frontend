@@ -7,6 +7,12 @@ import {
     MonitorSmartphone,
     ShieldCheck,
 } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Change password · ParcelFlow",
+    description: "Update your sign-in password.",
+};
 
 const tips = [
     {

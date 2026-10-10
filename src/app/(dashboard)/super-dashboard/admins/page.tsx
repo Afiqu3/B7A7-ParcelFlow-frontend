@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import Admins from "@/components/modules/super-admin/Admins/Admins";
 import { ROUTES } from "@/constants";
 import { UserRoundPlus, Users } from "lucide-react";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+    title: "Admins · ParcelFlow",
+    description: "Everyone with dashboard access — search by name or email.",
+};
 
 export default function AdminsPage() {
     return (

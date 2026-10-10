@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import UpdateAdminProfileFrom from "@/components/form/update-admin-profile-from";
 import { ROUTES } from "@/constants";
 import { UserRound, UserRoundPen } from "lucide-react";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+    title: "Update profile · ParcelFlow",
+    description: "Keep your display name current.",
+};
 
 export default function UpdateAdminProfilePage() {
     return (

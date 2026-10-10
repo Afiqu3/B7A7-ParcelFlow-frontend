@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import CreateSuperAdminFrom from "@/components/form/create-super-admin-form";
 import { KeyRound, MailCheck, UserStar } from "lucide-react";
+
+export const metadata: Metadata = {
+    title: "Create super admin · ParcelFlow",
+    description: "Grant top-level dashboard access.",
+};
 
 const tips = [
     {

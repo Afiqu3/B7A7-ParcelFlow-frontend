@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Assignments from "@/components/modules/admin-dashboard/assignments/Assignments";
 import { NotebookPen } from "lucide-react";
+
+export const metadata: Metadata = {
+    title: "Assignments · ParcelFlow",
+    description: "Rider jobs across every parcel — filter by status.",
+};
 
 export default function AssignmentsPage() {
     return (

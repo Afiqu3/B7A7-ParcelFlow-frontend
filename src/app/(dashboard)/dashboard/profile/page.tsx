@@ -1,5 +1,12 @@
 import Profile from "@/components/modules/profile/Profile";
 import { UserRound } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Profile · ParcelFlow",
+    description:
+        "Your merchant identity — photo, contact and business details.",
+};
 
 export default function ProfilePage() {
     return (

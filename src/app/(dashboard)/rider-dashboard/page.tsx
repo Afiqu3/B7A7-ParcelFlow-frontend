@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import RiderStat from "@/components/modules/rider-dashboard/stats/RiderStats";
 import { LayoutDashboard } from "lucide-react";
+
+export const metadata: Metadata = {
+    title: "Rider dashboard · ParcelFlow",
+    description: "Your work at a glance — assignments and success rate.",
+};
 
 export default function page() {
     return (

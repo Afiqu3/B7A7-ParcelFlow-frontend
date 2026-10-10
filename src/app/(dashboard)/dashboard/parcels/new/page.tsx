@@ -1,7 +1,13 @@
 import CreateParcelForm from "@/components/form/create-parcel-from";
 import { ROUTES } from "@/constants";
 import { PackagePlus } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+    title: "Create parcel · ParcelFlow",
+    description: "Book a pickup in under a minute.",
+};
 
 export default function ParcelCreatePage() {
     return (

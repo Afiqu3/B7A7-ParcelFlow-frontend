@@ -1,5 +1,11 @@
 import Transactions from "@/components/modules/transactions/Transactions";
 import { HandCoins } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Transactions · ParcelFlow",
+    description: "Every payment and refund on your parcels, newest first.",
+};
 
 export default function TransactionsHistoryPage() {
     return (

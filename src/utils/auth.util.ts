@@ -1,4 +1,6 @@
 import { getMe } from "@/api";
+import { ROUTES } from "@/constants";
+import { toast } from "sonner";
 
 /**
  * Read `mustChangePassword` from a login / OAuth response, tolerating
@@ -71,4 +73,44 @@ export async function extractRole(
     } catch {
         return false;
     }
+}
+
+/**
+ * Shared post-password-login flow (form + demo buttons): forced-password
+ * accounts go to their change-password route, everyone else to `next`.
+ * Never throws — failures surface as toasts.
+ */
+export async function completePasswordLogin(
+    res: unknown,
+    opts: { push: (url: string) => void; next: string },
+): Promise<void> {
+    if (await shouldForcePasswordChange(res)) {
+        const role = await extractRole(res);
+        toast.warning("Password change required", {
+            description:
+                "Your account is using a temporary password. Please set a new one to continue.",
+        });
+        if (role === "RIDER") {
+            opts.push(`${ROUTES.riderDashboard}${ROUTES.changePassword}`);
+            return;
+        }
+        if (role === "MERCHANT") {
+            opts.push(`${ROUTES.merchantDashboard}${ROUTES.changePassword}`);
+            return;
+        }
+        if (role === "ADMIN") {
+            opts.push(`${ROUTES.adminDashboard}${ROUTES.changePassword}`);
+            return;
+        }
+        if (role === "SUPER_ADMIN") {
+            opts.push(`${ROUTES.superAdminDashboard}${ROUTES.changePassword}`);
+            return;
+        }
+        opts.push(ROUTES.home);
+        return;
+    }
+    toast.success("Login Success", {
+        description: "Welcome back",
+    });
+    opts.push(opts.next);
 }

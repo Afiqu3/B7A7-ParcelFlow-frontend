@@ -22,6 +22,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
     title: "ParcelFlow",
+    description:
+        "Courier and payments for Bangladeshi merchants — book pickups, pay with bKash or cash on delivery, and track every parcel.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

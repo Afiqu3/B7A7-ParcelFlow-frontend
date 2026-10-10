@@ -1,7 +1,13 @@
 import UpdateMerchantProfileForm from "@/components/form/update-merchant-profile-from";
 import { ROUTES } from "@/constants";
 import { Building2, Phone, UserRound, UserRoundPen } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+    title: "Update profile · ParcelFlow",
+    description: "Keep your name, phone and business details current.",
+};
 
 const tips = [
     {

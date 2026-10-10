@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import Pricing from "@/components/modules/admin-dashboard/pricing/Pricing";
 import { ROUTES } from "@/constants";
 import { Receipt } from "lucide-react";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+    title: "Pricing rules · ParcelFlow",
+    description: "One rate per zone and parcel category.",
+};
 
 export default function PricingRulePage() {
     return (

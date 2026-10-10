@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Assignments from "@/components/modules/rider-dashboard/assignments/Assignments";
 import { ClipboardList } from "lucide-react";
+
+export const metadata: Metadata = {
+    title: "My assignments · ParcelFlow",
+    description: "Accept jobs, start them, and mark each leg complete.",
+};
 
 export default function AssignmentsPage() {
     return (
