@@ -82,9 +82,6 @@ export default function DemoLogins({ next }: { next: string }) {
                                 <span className="block truncate font-heading text-[13px] font-bold text-secondary">
                                     {account.label}
                                 </span>
-                                <span className="block truncate text-[11px] text-secondary/55">
-                                    {account.email}
-                                </span>
                             </span>
                         </button>
                     );
