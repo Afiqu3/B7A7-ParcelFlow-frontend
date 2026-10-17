@@ -30,14 +30,15 @@ export const ROUTES = {
 
 // Anchor ids for the landing page sections.
 export const SECTION_IDS = {
+  about: "about",
   howItWorks: "how-it-works",
   features: "features",
   riders: "riders",
+  whyChooseUs: "why-choose-us",
   // Pricing page
   rates: "rates",
   estimator: "estimator",
 } as const;
-
 
 export const SUPPORT = {
   email: "suuport.parcelflow@gmail.com",
