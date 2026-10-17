@@ -21,7 +21,7 @@ export default function LoginPage() {
         />
       </div>
 
-      <div className="flex flex-1 flex-col items-center justify-center gap-6 bg-accent col-span-3">
+      <div className="flex flex-1 flex-col items-center justify-center gap-6 bg-accent col-span-3 px-0 py-10 sm:py-12">
         <div className="flex justify-start w-full ml-8">
           <Link
             href="/"
@@ -36,7 +36,7 @@ export default function LoginPage() {
           </Link>
         </div>
 
-        <div className="w-full lg:max-w-sm max-w-2xs">
+        <div className="w-full max-w-sm px-5 sm:px-0 lg:max-w-sm">
           <Suspense fallback={<LoginFallback />}>
             <LoginForm />
           </Suspense>

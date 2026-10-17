@@ -79,7 +79,7 @@ export default function TrackingCard() {
           repeat: Number.POSITIVE_INFINITY,
           delay: 1.6,
         }}
-        className="relative rounded-[1.75rem] bg-white p-5 text-secondary shadow-[0_30px_60px_-20px_rgba(2,6,23,0.55)] sm:p-6"
+        className="relative rounded-[1.75rem] bg-white p-5 text-secondary shadow-[0_30px_60px_-20px_rgba(2,6,23,0.55)] ring-1 ring-secondary/10 sm:p-6 dark:bg-card dark:text-card-foreground dark:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.7)] dark:ring-white/10"
       >
         <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-2">
           <div>
@@ -95,7 +95,7 @@ export default function TrackingCard() {
           </span>
         </div>
 
-        <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl bg-accent px-4 py-3">
+        <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl bg-accent px-4 py-3 dark:bg-white/6 dark:ring-1 dark:ring-white/10 dark:ring-inset">
           <div className="min-w-0">
             <p className="text-[11px] font-medium text-secondary/60">From</p>
             <p className="font-heading text-[13px] font-bold sm:text-sm">
@@ -126,7 +126,7 @@ export default function TrackingCard() {
           {TAGS.map((tag) => (
             <li
               key={tag}
-              className="rounded-lg bg-brand/[0.07] px-2.5 py-1 font-heading text-xs font-semibold text-secondary"
+              className="rounded-lg bg-brand/[0.07] px-2.5 py-1 font-heading text-xs font-semibold text-secondary dark:bg-white/8 dark:text-card-foreground dark:ring-1 dark:ring-white/10 dark:ring-inset"
             >
               {tag}
             </li>
@@ -177,17 +177,19 @@ export default function TrackingCard() {
                     </>
                   )}
                   {step.state === "pending" && (
-                    <span className="size-full rounded-full border-2 border-secondary/15 bg-white" />
+                    <span className="size-full rounded-full border-2 border-secondary/15 bg-white dark:border-white/25 dark:bg-transparent" />
                   )}
                 </motion.span>
 
                 <span
                   className={cn(
                     "font-heading text-sm",
-                    step.state === "done" && "font-semibold text-secondary",
+                    step.state === "done" &&
+                      "font-semibold text-secondary dark:text-card-foreground",
                     step.state === "current" &&
                       "font-bold text-brand-orange-ink",
-                    step.state === "pending" && "font-medium text-secondary/55",
+                    step.state === "pending" &&
+                      "font-medium text-secondary/55 dark:text-card-foreground/60",
                   )}
                 >
                   {step.label}

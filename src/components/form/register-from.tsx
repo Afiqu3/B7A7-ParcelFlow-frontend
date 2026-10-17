@@ -163,7 +163,7 @@ export default function RegisterForm() {
                           value={field.state.value}
                           aria-invalid={isInvalid}
                           placeholder="Your name"
-                          className="border-2 border-gray-400"
+                          className="border-2 border-secondary/20"
                         />
                         <AnimatePresence>
                           {isInvalid && (
@@ -203,7 +203,7 @@ export default function RegisterForm() {
                           value={field.state.value}
                           aria-invalid={isInvalid}
                           placeholder="Your shop or brand"
-                          className="border-2 border-gray-400"
+                          className="border-2 border-secondary/20"
                         />
                         <AnimatePresence>
                           {isInvalid && (
@@ -247,7 +247,7 @@ export default function RegisterForm() {
                           value={field.state.value}
                           aria-invalid={isInvalid}
                           placeholder="you@mail.com"
-                          className="border-2 border-gray-400"
+                          className="border-2 border-secondary/20"
                         />
                         <AnimatePresence>
                           {isInvalid && (
@@ -286,7 +286,7 @@ export default function RegisterForm() {
                           value={field.state.value}
                           aria-invalid={isInvalid}
                           placeholder="01XXXXXXXXX"
-                          className="border-2 border-gray-400"
+                          className="border-2 border-secondary/20"
                         />
                         <AnimatePresence>
                           {isInvalid && (
@@ -329,7 +329,7 @@ export default function RegisterForm() {
                             onBlur={field.handleBlur}
                             value={field.state.value}
                             placeholder="Create a strong password"
-                            className="border-2 border-gray-400 pr-10"
+                            className="border-2 border-secondary/20 pr-10"
                             aria-invalid={isInvalid}
                             aria-describedby="password-requirements"
                           />

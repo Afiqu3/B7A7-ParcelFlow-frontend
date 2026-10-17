@@ -242,7 +242,7 @@ export default function ResetPasswordForm() {
                                                             field.state.value
                                                         }
                                                         placeholder="Create a strong password"
-                                                        className="border-2 border-gray-400 pr-10"
+                                                        className="border-2 border-secondary/20 pr-10"
                                                         aria-invalid={isInvalid}
                                                         aria-describedby="password-requirements"
                                                     />
@@ -351,7 +351,7 @@ export default function ResetPasswordForm() {
                                                             field.state.value
                                                         }
                                                         placeholder="Create a strong password"
-                                                        className="border-2 border-gray-400 pr-10"
+                                                        className="border-2 border-secondary/20 pr-10"
                                                         aria-invalid={isInvalid}
                                                         aria-describedby="password-requirements"
                                                     />

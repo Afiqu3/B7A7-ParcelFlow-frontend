@@ -58,15 +58,16 @@
 }
 
 :root {
-  --brand: #0F2056;
-  --brand-deep: #0A1640;
-  --brand-card: #162A67;
-  --brand-ink: #0B1435;
-  --brand-line: #3A4D9E;
-  --brand-muted: #B9C5EB;
-  --brand-orange: #FF6B2D;
-  --brand-orange-ink: #A9461D;
-  --brand-cream: #FEF4EB;
+  color-scheme: light;
+  --brand: #0f2056;
+  --brand-deep: #0a1640;
+  --brand-card: #162a67;
+  --brand-ink: #0b1435;
+  --brand-line: #3a4d9e;
+  --brand-muted: #b9c5eb;
+  --brand-orange: #ff6b2d;
+  --brand-orange-ink: #a9461d;
+  --brand-cream: #fef4eb;
   --background: oklch(1 0 0);
   --foreground: oklch(0.141 0.005 285.823);
   --card: oklch(1 0 0);
@@ -76,10 +77,10 @@
   --primary: oklch(0.553 0.195 38.402);
   --primary-foreground: oklch(0.98 0.016 73.684);
   --secondary: #091433;
-  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --secondary-foreground: #ffffff;
   --muted: oklch(0.967 0.001 286.375);
   --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: #F7F2EC;
+  --accent: #f7f2ec;
   --accent-foreground: oklch(0.21 0.006 285.885);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.92 0.004 286.32);
@@ -103,52 +104,187 @@
 }
 
 .dark {
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.21 0.006 285.885);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.21 0.006 285.885);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.47 0.157 37.304);
-  --primary-foreground: oklch(0.98 0.016 73.684);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.552 0.016 285.938);
-  --chart-1: oklch(0.837 0.128 66.29);
-  --chart-2: oklch(0.705 0.213 47.604);
-  --chart-3: oklch(0.646 0.222 41.116);
-  --chart-4: oklch(0.553 0.195 38.402);
-  --chart-5: oklch(0.47 0.157 37.304);
-  --sidebar: oklch(0.21 0.006 285.885);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.705 0.213 47.604);
-  --sidebar-primary-foreground: oklch(0.98 0.016 73.684);
-  --sidebar-accent: oklch(0.274 0.006 286.033);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.552 0.016 285.938);
+  color-scheme: dark;
+  /* Brand stays recognizable; ink text on orange keeps 7:1. */
+  --brand: #16295f;
+  --brand-deep: #060b24;
+  --brand-card: #1a2c6e;
+  --brand-ink: #0b1435;
+  --brand-line: #4c63c2;
+  --brand-muted: #c4cff5;
+  --brand-orange: #ff6b2d;
+  /* Lightened for text on dark navy: ~8:1 on #0e1740. */
+  --brand-orange-ink: #ffab7e;
+  --brand-cream: #fef4eb;
+
+  --background: #060b24;
+  --foreground: #edf1ff;
+  --card: #0e1740;
+  --card-foreground: #edf1ff;
+  --popover: #0e1740;
+  --popover-foreground: #edf1ff;
+  --primary: #ff6b2d;
+  --primary-foreground: #0b1435;
+  /* Light ink so `text-secondary` stays ~13:1 on dark bg. */
+  --secondary: #dce4ff;
+  --secondary-foreground: #060b24;
+  --muted: #141d4d;
+  --muted-foreground: #a9b6e3;
+  --accent: #141d4d;
+  --accent-foreground: #edf1ff;
+  --destructive: #ff8585;
+  --border: rgb(255 255 255 / 0.12);
+  --input: rgb(255 255 255 / 0.16);
+  --ring: rgb(255 107 45 / 0.6);
+  /* Brightened orange ramp so charts stay visible on navy. */
+  --chart-1: #ffd08a;
+  --chart-2: #ff9e5e;
+  --chart-3: #ff7a45;
+  --chart-4: #ff6b2d;
+  --chart-5: #e85a1f;
+  /* Keep the navy frame in dark mode instead of flipping to gray. */
+  --sidebar: #0a1640;
+  --sidebar-foreground: #c4cff5;
+  --sidebar-primary: #ff6b2d;
+  --sidebar-primary-foreground: #0b1435;
+  --sidebar-accent: #1a2c6e;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgb(255 255 255 / 0.1);
+  --sidebar-ring: rgb(255 107 45 / 0.55);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
-  button:not(:disabled), [role="button"]:not(:disabled) {
-    cursor: pointer;
-  }
   html {
     @apply font-mono;
+    scroll-behavior: smooth;
   }
+  html,
+  body {
+    overflow-x: clip;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-background text-foreground;
+    min-height: 100svh;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  ::selection {
+    background: var(--brand-orange);
+    color: var(--brand-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+  /* Tables scroll inside their card on phones instead of breaking layout. */
+  :where(.overflow-x-auto) {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--ring) transparent;
+  }
+}
+
+/*
+ * Cross-cutting dark-mode contrast fixes — UNLAYERED so they beat
+ * Tailwind utilities (components layer loses to utilities).
+ * `text-secondary`, `bg-accent`, `bg-card` etc. adapt via the vars above.
+ * These rules cover hardcoded Tailwind palettes that can't flip via vars:
+ * emerald/amber status text, white cards, cream gradients.
+ */
+.dark :is(.text-emerald-700, .text-emerald-800) {
+  color: var(--color-emerald-300);
+}
+.dark :is(.text-emerald-600) {
+  color: var(--color-emerald-400);
+}
+.dark :is(.text-amber-700, .text-amber-800, .text-amber-900, .text-amber-950) {
+  color: var(--color-amber-300);
+}
+/* Navy `text-brand` on a navy card is ~1.5:1 in dark; use periwinkle. */
+.dark :is(.text-brand) {
+  color: #aebdf5;
+}
+.dark :is(.ring-brand\/10, .ring-brand\/15) {
+  --tw-ring-color: rgb(255 255 255 / 0.14);
+}
+.dark :is(.bg-brand\/8, .bg-brand\/10, .bg-brand\/5) {
+  background-color: rgb(255 255 255 / 0.08);
+}
+.dark :is(.ring-emerald-600\/20, .ring-emerald-600\/25) {
+  --tw-ring-color: color-mix(
+    in oklch,
+    var(--color-emerald-400) 30%,
+    transparent
+  );
+}
+.dark :is(.ring-amber-600\/20, .ring-amber-600\/25) {
+  --tw-ring-color: color-mix(in oklch, var(--color-amber-400) 30%, transparent);
+}
+
+/* White marketing cards would blind in dark mode. */
+.dark :is(.bg-white) {
+  background-color: var(--card);
+  color: var(--card-foreground);
+}
+.dark :is(.bg-white) :is(.text-secondary) {
+  color: var(--card-foreground);
+}
+.dark
+  :is(.bg-white)
+  :is(
+    .text-secondary\/60,
+    .text-secondary\/55,
+    .text-secondary\/70,
+    .text-secondary\/65
+  ) {
+  color: color-mix(in oklch, var(--card-foreground) 70%, transparent);
+}
+.dark :is(.bg-white) :is(.border-secondary\/15) {
+  border-color: rgb(255 255 255 / 0.18);
+}
+.dark :is(.bg-white) :is(.bg-accent) {
+  background-color: rgb(255 255 255 / 0.06);
+}
+
+/* Cream surfaces become navy cards in dark mode. */
+.dark :is(.bg-brand-cream) {
+  background-color: var(--card);
+  color: var(--card-foreground);
+}
+.dark :is(.bg-brand-cream) :is(.text-secondary) {
+  color: var(--card-foreground);
+}
+.dark :is(.bg-brand-cream) :is(.text-secondary\/70) {
+  color: color-mix(in oklch, var(--card-foreground) 70%, transparent);
+}
+
+/* Cream gradient headers become a subtle orange tint on navy. */
+.dark :is(.from-brand-cream) {
+  --tw-gradient-from: rgb(255 107 45 / 0.16);
+  --tw-gradient-stops: var(--tw-gradient-from), transparent;
+}
+.dark :is(.via-brand-cream\/40) {
+  --tw-gradient-via: rgb(255 107 45 / 0.08);
+}
+
+/* Slider thumb stays visible on dark track. */
+.dark :is([data-slot="slider-thumb"]) {
+  background-color: var(--card-foreground);
+  border-color: var(--primary);
 }
 
 /* Landing page animations */
@@ -181,5 +317,11 @@
       transform: scale(2.6);
       opacity: 0;
     }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }

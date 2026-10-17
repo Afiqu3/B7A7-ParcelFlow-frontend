@@ -102,16 +102,16 @@ export default function RideWithUs() {
           </RevealGroup>
 
           <Reveal delay={0.25} amount={0.4}>
-            <ol className="mt-3 grid gap-6 rounded-3xl bg-brand-cream p-6 sm:mt-4 sm:grid-cols-3 sm:gap-5 sm:p-7">
+            <ol className="mt-3 grid gap-6 rounded-3xl bg-brand-cream p-6 ring-1 ring-brand-ink/10 sm:mt-4 sm:grid-cols-3 sm:gap-5 sm:p-7 dark:bg-card dark:text-card-foreground dark:ring-white/10">
               {APPLY_STEPS.map((step, i) => (
                 <li key={step.title}>
                   <span className="font-heading text-lg font-bold text-brand-orange-ink">
                     {i + 1}
                   </span>
-                  <p className="mt-1.5 font-heading text-[15px] font-bold text-secondary">
+                  <p className="mt-1.5 font-heading text-[15px] font-bold text-secondary dark:text-card-foreground">
                     {step.title}
                   </p>
-                  <p className="mt-1.5 text-sm leading-relaxed text-secondary/70">
+                  <p className="mt-1.5 text-sm leading-relaxed text-secondary/70 dark:text-card-foreground/70">
                     {step.body}
                   </p>
                 </li>

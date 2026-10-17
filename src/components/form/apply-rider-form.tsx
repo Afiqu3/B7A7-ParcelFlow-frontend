@@ -37,8 +37,8 @@ import { useRouter } from "next/navigation";
 import { useApplyAsRider } from "@/hooks";
 import { Spinner } from "../ui/spinner";
 import { toast } from "sonner";
-import { ApplyAsRiderData, VehicleType } from "@/types";
-import { FetchError } from "ofetch";
+import type { ApplyAsRiderData, VehicleType } from "@/types";
+import type { FetchError } from "ofetch";
 
 const vehicles = [
     {
@@ -214,7 +214,7 @@ export default function ApplyRiderForm() {
                                                                 isInvalid
                                                             }
                                                             placeholder="Your name"
-                                                            className="border-2 border-gray-400"
+                                                            className="border-2 border-secondary/20"
                                                         />
                                                         <AnimatePresence>
                                                             {isInvalid && (
@@ -276,7 +276,7 @@ export default function ApplyRiderForm() {
                                                                 isInvalid
                                                             }
                                                             placeholder="you@mail.com"
-                                                            className="border-2 border-gray-400"
+                                                            className="border-2 border-secondary/20"
                                                         />
                                                         <AnimatePresence>
                                                             {isInvalid && (
@@ -343,7 +343,7 @@ export default function ApplyRiderForm() {
                                                                 isInvalid
                                                             }
                                                             placeholder="01XXXXXXXXX"
-                                                            className="border-2 border-gray-400"
+                                                            className="border-2 border-secondary/20"
                                                         />
                                                         <AnimatePresence>
                                                             {isInvalid && (
@@ -408,7 +408,7 @@ export default function ApplyRiderForm() {
                                                                 isInvalid
                                                             }
                                                             placeholder="Area, city"
-                                                            className="border-2 border-gray-400"
+                                                            className="border-2 border-secondary/20"
                                                         />
                                                         <AnimatePresence>
                                                             {isInvalid && (
@@ -481,7 +481,7 @@ export default function ApplyRiderForm() {
                                                                 isInvalid
                                                             }
                                                             placeholder="NID number"
-                                                            className="border-2 border-gray-400"
+                                                            className="border-2 border-secondary/20"
                                                         />
                                                         <AnimatePresence>
                                                             {isInvalid && (
@@ -543,8 +543,8 @@ export default function ApplyRiderForm() {
                                                             aria-invalid={
                                                                 isInvalid
                                                             }
-                                                            placeholder="As printed on your license"
-                                                            className="border-2 border-gray-400"
+                                                            placeholder="Driving license number"
+                                                            className="border-2 border-secondary/20"
                                                         />
                                                         <AnimatePresence>
                                                             {isInvalid && (
@@ -595,7 +595,7 @@ export default function ApplyRiderForm() {
                                                         onBlur={
                                                             field.handleBlur
                                                         }
-                                                        className="grid grid-cols-3 gap-3"
+                                                        className="grid sm:grid-cols-3 grid-cols-2 gap-3"
                                                         aria-invalid={isInvalid}
                                                     >
                                                         {vehicles.map(
@@ -702,7 +702,7 @@ export default function ApplyRiderForm() {
                                                             <Button
                                                                 asChild
                                                                 variant="outline"
-                                                                className="p-10"
+                                                                className="sm:p-10 p-5"
                                                             >
                                                                 <label
                                                                     htmlFor={

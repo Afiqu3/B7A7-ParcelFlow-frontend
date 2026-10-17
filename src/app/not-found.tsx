@@ -45,7 +45,7 @@ export default function NotFound() {
         <div className="absolute -bottom-40 left-1/4 size-96 rounded-full bg-brand-line/25 blur-3xl" />
         <svg
           aria-hidden="true"
-          className="absolute top-24 left-1/2 h-72 w-225 -translate-x-1/4 text-brand-line/70"
+          className="absolute top-24 left-1/2 h-72 w-4xl max-w-none -translate-x-1/4 text-brand-line/70"
           viewBox="-140 -160 900 240"
           fill="none"
         >

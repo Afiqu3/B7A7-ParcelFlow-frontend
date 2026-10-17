@@ -12,12 +12,13 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import CtaLink from "@/components/modules/landing/CtaLink";
 import BrandMark from "@/components/shared/BrandMark";
+import ThemeToggle from "@/components/shared/theme-toggle";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ROUTES } from "@/constants";
 import { useGetMe } from "@/hooks";
 import { cn } from "@/lib/utils";
 import type { LinkItem } from "@/types";
 import UserMenu from "./UserMenu";
-import { Skeleton } from "@/components/ui/skeleton";
 
 const NAV_ITEMS: LinkItem[] = [
   { label: "How it works", href: ROUTES.howItWorks, icon: CircleHelp },
@@ -95,6 +96,7 @@ export default function Header() {
         </ul>
 
         <div className="flex items-center gap-2 sm:gap-3">
+          <ThemeToggle variant="brand" />
           {isPending ? (
             <Skeleton aria-hidden className="size-9 rounded-full bg-white/15" />
           ) : user ? (
@@ -165,7 +167,7 @@ export default function Header() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="absolute inset-x-0 top-full overflow-hidden border-b border-white/10 bg-brand shadow-[0_24px_40px_-16px_rgba(3,8,30,0.7)] lg:hidden"
+            className="absolute inset-x-0 top-full max-h-[calc(100svh-4rem)] overflow-y-auto border-b border-white/10 bg-brand shadow-[0_24px_40px_-16px_rgba(3,8,30,0.7)] lg:hidden"
           >
             <ul className="mx-auto flex max-w-6xl flex-col gap-1 px-5 py-4 sm:px-8">
               {NAV_ITEMS.map((item, i) => {

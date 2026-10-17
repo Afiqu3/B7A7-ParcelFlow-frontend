@@ -55,10 +55,10 @@ export default function HowItWorks() {
               <RevealItem key={step.title} className="h-full">
                 <article
                   className={cn(
-                    "group h-full rounded-3xl p-6 transition-[transform,box-shadow] duration-300 hover:-translate-y-1 lg:min-h-72",
+                    "group h-full rounded-3xl p-6 ring-1 ring-transparent transition-[transform,box-shadow] duration-300 hover:-translate-y-1 lg:min-h-72",
                     isLast
-                      ? "bg-brand text-white shadow-[0_24px_48px_-24px_rgba(15,32,86,0.7)]"
-                      : "bg-white text-secondary hover:shadow-[0_24px_48px_-28px_rgba(15,32,86,0.35)]",
+                      ? "bg-brand text-white shadow-[0_24px_48px_-24px_rgba(15,32,86,0.7)] ring-white/10 dark:bg-card dark:text-card-foreground dark:shadow-[0_24px_48px_-24px_rgba(0,0,0,0.8)]"
+                      : "bg-white text-secondary ring-secondary/10 hover:shadow-[0_24px_48px_-28px_rgba(15,32,86,0.35)] dark:bg-card dark:text-card-foreground dark:ring-white/10 dark:hover:shadow-[0_24px_48px_-28px_rgba(0,0,0,0.8)]",
                   )}
                 >
                   <span
@@ -77,7 +77,9 @@ export default function HowItWorks() {
                   <p
                     className={cn(
                       "mt-3 text-[15px] leading-relaxed",
-                      isLast ? "text-brand-muted" : "text-secondary/70",
+                      isLast
+                        ? "text-brand-muted dark:text-card-foreground/70"
+                        : "text-secondary/70 dark:text-card-foreground/70",
                     )}
                   >
                     {step.body}

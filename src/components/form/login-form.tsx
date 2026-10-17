@@ -129,7 +129,7 @@ export default function LoginForm() {
                                                     value={field.state.value}
                                                     aria-invalid={isInvalid}
                                                     placeholder="you@mail.com"
-                                                    className="border-2 border-gray-400"
+                                                    className="border-2 border-secondary/20"
                                                 />
                                                 <AnimatePresence>
                                                     {isInvalid && (
@@ -212,7 +212,7 @@ export default function LoginForm() {
                                                             field.state.value
                                                         }
                                                         placeholder="Enter your password"
-                                                        className="border-2 border-gray-400"
+                                                        className="border-2 border-secondary/20"
                                                         aria-invalid={isInvalid}
                                                     />
                                                     <button

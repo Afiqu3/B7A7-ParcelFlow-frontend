@@ -102,8 +102,8 @@ export default function RiderFlow() {
         </RevealGroup>
 
         <Reveal delay={0.2}>
-          <p className="mt-12 max-w-xl rounded-2xl bg-white px-5 py-4 text-[15px] leading-relaxed text-secondary/75 ring-1 ring-secondary/5">
-            <span className="font-heading font-bold text-secondary">
+          <p className="mt-12 max-w-xl rounded-2xl bg-white px-5 py-4 text-[15px] leading-relaxed text-secondary/75 ring-1 ring-secondary/5 dark:bg-card dark:text-card-foreground/75 dark:ring-white/10">
+            <span className="font-heading font-bold text-secondary dark:text-card-foreground">
               Nobody home?
             </span>{" "}
             The parcel is re-attempted, up to 3 tries before it goes back to the

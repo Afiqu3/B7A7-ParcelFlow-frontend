@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function ChangePasswordPage() {
-    return 
+    return <ChangePasswordView roleLabel="SUPER_ADMIN" />;
 }

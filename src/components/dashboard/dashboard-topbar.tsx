@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useInView } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRef } from "react";
+import ThemeToggle from "@/components/shared/theme-toggle";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
   Tooltip,
@@ -99,6 +100,7 @@ export default function DashboardTopbar({ role }: { role: UserRole }) {
         </nav>
 
         <div className="flex shrink-0 items-center gap-2">
+          <ThemeToggle variant="surface" />
           <Link
             href={ROUTES.home}
             className="hidden h-9 items-center gap-1.5 rounded-xl px-3 font-heading text-sm font-semibold text-secondary/70 outline-none transition-colors hover:bg-secondary/6 hover:text-secondary focus-visible:ring-3 focus-visible:ring-brand-orange/40 sm:inline-flex"

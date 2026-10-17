@@ -45,7 +45,7 @@ function Face({
       className={cn(
         "flex h-full items-center gap-2 rounded-xl px-3 py-2.5 font-heading text-[13px] font-semibold",
         state === "pending" &&
-          "bg-white text-secondary/45 ring-1 ring-secondary/10 ring-inset",
+          "bg-white text-secondary/45 ring-1 ring-secondary/10 ring-inset dark:bg-white/8 dark:text-card-foreground/70 dark:ring-white/10",
         state === "done" && "bg-brand text-white",
         state === "final" && "bg-brand-orange text-brand-ink",
       )}

@@ -25,7 +25,7 @@ export default function LeftSide({
                         <span className="flex size-9 items-center justify-center rounded-xl text-primary-foreground transition-transform duration-300 group-hover:-rotate-6">
                             <Logo />
                         </span>
-                        <span className="font-heading text-lg font-bold tracking-tight text-popover">
+                        <span className="font-heading text-lg font-bold tracking-tight text-secondary">
                             Parcel<span className="text-chart-2">Flow</span>
                         </span>
                     </div>

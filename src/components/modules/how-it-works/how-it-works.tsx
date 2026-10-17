@@ -236,7 +236,7 @@ function Step({ id, index, title, body, isLast, children }: StepProps) {
           "relative z-10 grid size-12 place-items-center rounded-2xl font-heading text-lg font-bold transition-colors duration-300 sm:size-16 sm:text-xl",
           active
             ? "bg-brand text-brand-orange shadow-[0_16px_32px_-16px_rgba(15,32,86,0.7)]"
-            : "bg-white text-secondary/35 ring-1 ring-secondary/10",
+            : "bg-white text-secondary/35 ring-1 ring-secondary/10 dark:bg-white/8 dark:text-card-foreground/70 dark:ring-white/10",
         )}
       >
         {String(index + 1).padStart(2, "0")}
@@ -268,7 +268,7 @@ function ChipRow({ label, items }: { label: string; items: string[] }) {
         {items.map((item) => (
           <li
             key={item}
-            className="rounded-full bg-white px-3 py-1 font-heading text-[13px] font-semibold text-secondary ring-1 ring-secondary/10"
+            className="rounded-full bg-white px-3 py-1 font-heading text-[13px] font-semibold text-secondary ring-1 ring-secondary/10 dark:bg-white/8 dark:text-card-foreground dark:ring-white/10"
           >
             {item}
           </li>
@@ -288,16 +288,16 @@ function OptionTiles({
       {options.map(({ icon: Icon, title, body }) => (
         <li
           key={title}
-          className="group flex gap-3.5 rounded-2xl bg-white p-4 ring-1 ring-secondary/5 transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_32px_-24px_rgba(15,32,86,0.4)]"
+          className="group flex gap-3.5 rounded-2xl bg-white p-4 ring-1 ring-secondary/5 transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_32px_-24px_rgba(15,32,86,0.4)] dark:bg-card dark:ring-white/10"
         >
           <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-brand text-brand-orange transition-transform duration-300 group-hover:-rotate-6">
             <Icon className="size-4.5" strokeWidth={2.25} />
           </span>
           <span>
-            <span className="block font-heading text-[15px] font-bold text-secondary">
+            <span className="block font-heading text-[15px] font-bold text-secondary dark:text-card-foreground">
               {title}
             </span>
-            <span className="mt-1 block text-sm leading-relaxed text-secondary/65">
+            <span className="mt-1 block text-sm leading-relaxed text-secondary/65 dark:text-card-foreground/65">
               {body}
             </span>
           </span>
