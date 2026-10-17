@@ -223,7 +223,7 @@ export default function Merchants() {
                                 , page {safePage} of {totalPages}
                             </caption>
                             <thead>
-                                <tr className="border-b border-secondary/8 bg-secondary/[0.03] font-heading text-[11px] font-bold tracking-[0.14em] text-secondary/55 uppercase">
+                                <tr className="border-b border-secondary/8 bg-secondary/3 font-heading text-[11px] font-bold tracking-[0.14em] text-secondary/55 uppercase">
                                     <th
                                         scope="col"
                                         className="w-12 px-5 py-3.5 pr-0 font-bold sm:px-6"
@@ -274,7 +274,7 @@ export default function Merchants() {
                                     return (
                                         <tr
                                             key={merchant.id}
-                                            className="border-b border-secondary/6 transition-colors motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-1 motion-safe:duration-300 motion-safe:fill-mode-backwards last:border-0 hover:bg-secondary/[0.03]"
+                                            className="border-b border-secondary/6 transition-colors motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-1 motion-safe:duration-300 motion-safe:fill-mode-backwards last:border-0 hover:bg-secondary/3"
                                             style={{
                                                 animationDelay: `${Math.min(index, 7) * 40}ms`,
                                             }}

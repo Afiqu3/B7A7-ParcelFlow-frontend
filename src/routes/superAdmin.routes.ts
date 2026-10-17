@@ -11,7 +11,6 @@ import {
     UserRound,
     UserRoundPen,
     UserRoundPlus,
-    Users,
     UserStar,
     Wallet,
 } from "lucide-react";
