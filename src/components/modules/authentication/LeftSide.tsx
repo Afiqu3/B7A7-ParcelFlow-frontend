@@ -1,6 +1,5 @@
 import DeliveryTrajectory from "@/assets/svg/DeliveryTrajectory";
-import Logo from "@/assets/svg/Logo";
-import Link from "next/link";
+import BrandMark from "@/components/shared/BrandMark";
 import CheckIcon from "./CheckIcon";
 
 type LeftSideProps = {
@@ -17,7 +16,7 @@ export default function LeftSide({
     return (
         <div>
             <div className="flex justify-center gap-2 md:justify-start">
-                <Link
+                {/* <Link
                     href="/"
                     className="flex items-center gap-2 font-medium group"
                 >
@@ -29,7 +28,8 @@ export default function LeftSide({
                             Parcel<span className="text-chart-2">Flow</span>
                         </span>
                     </div>
-                </Link>
+                </Link> */}
+                <BrandMark />
             </div>
 
             <div className="mt-10 flex flex-col gap-4 tracking-tighter">

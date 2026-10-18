@@ -2,6 +2,7 @@ import type { SidebarItems } from "@/types";
 import {
     Bike,
     LayoutDashboard,
+    NotebookPen,
     Package,
     Receipt,
     Store,
@@ -29,6 +30,11 @@ export const superAdminRoutes: SidebarItems = [
                 title: "Available riders",
                 url: `${prefix}/available-riders`,
                 icon: UserCheck,
+            },
+            {
+                title: "Assignments",
+                url: `${prefix}/assignments`,
+                icon: NotebookPen,
             },
         ],
     },
