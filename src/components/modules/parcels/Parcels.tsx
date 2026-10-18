@@ -3,6 +3,7 @@
 import {
   ArrowRight,
   CircleAlert,
+  ClockArrowDown,
   ListFilter,
   PackagePlus,
   PackageSearch,
@@ -35,6 +36,8 @@ export default function Parcels() {
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search);
   const [page, setPage] = useState(1);
+  const [sortOrder, setSortOrder] =
+    useState<NonNullable<MyParcelsParams["sortOrder"]>>("desc");
   const [selectedId, setSelectedId] = useState("");
 
   const params: MyParcelsParams = {
@@ -42,7 +45,7 @@ export default function Parcels() {
     searchTerm: debouncedSearch.trim() || undefined,
     page,
     limit: PAGE_LIMIT,
-    sortOrder: "desc",
+    sortOrder,
   };
   const { data, isPending, isError, error, refetch, isFetching } =
     useGetAllMyParcels(params);
@@ -67,35 +70,61 @@ export default function Parcels() {
         className="flex flex-col gap-3 rounded-2xl bg-card p-4 ring-1 ring-secondary/10 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-300 motion-safe:fill-mode-backwards sm:p-5"
         style={{ animationDelay: "80ms" }}
       >
-        <div className="relative">
-          <Search
-            aria-hidden
-            className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-secondary/40"
-          />
-          <Input
-            type="search"
-            value={search}
-            onChange={(event) => {
-              setSearch(event.target.value);
-              setPage(1);
-            }}
-            placeholder="Search by tracking ID…"
-            aria-label="Search parcels by tracking ID"
-            className="h-11 rounded-xl border-secondary/15 bg-background pr-10 pl-10 text-secondary shadow-none placeholder:text-secondary/40 focus-visible:border-brand-orange focus-visible:ring-3 focus-visible:ring-brand-orange/30 [&::-webkit-search-cancel-button]:hidden"
-          />
-          {search ? (
-            <button
-              type="button"
-              onClick={() => {
-                setSearch("");
+        <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_220px]">
+          <div className="relative">
+            <Search
+              aria-hidden
+              className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-secondary/40"
+            />
+            <Input
+              type="search"
+              value={search}
+              onChange={(event) => {
+                setSearch(event.target.value);
                 setPage(1);
               }}
-              aria-label="Clear search"
-              className="absolute top-1/2 right-3 grid size-7 -translate-y-1/2 place-items-center rounded-lg text-secondary/50 outline-none transition-colors hover:bg-secondary/8 hover:text-secondary focus-visible:ring-2 focus-visible:ring-brand-orange/50"
+              placeholder="Search by tracking ID…"
+              aria-label="Search parcels by tracking ID"
+              className="h-11 rounded-xl border-secondary/15 bg-background pr-10 pl-10 text-secondary shadow-none placeholder:text-secondary/40 focus-visible:border-brand-orange focus-visible:ring-3 focus-visible:ring-brand-orange/30 [&::-webkit-search-cancel-button]:hidden"
+            />
+            {search ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearch("");
+                  setPage(1);
+                }}
+                aria-label="Clear search"
+                className="absolute top-1/2 right-3 grid size-7 -translate-y-1/2 place-items-center rounded-lg text-secondary/50 outline-none transition-colors hover:bg-secondary/8 hover:text-secondary focus-visible:ring-2 focus-visible:ring-brand-orange/50"
+              >
+                <X className="size-4" />
+              </button>
+            ) : null}
+          </div>
+
+          <label className="group flex h-11 items-center gap-2.5 rounded-xl border border-secondary/15 bg-background px-3.5 text-secondary/55 transition-colors motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-1 motion-safe:duration-300 focus-within:border-brand-orange focus-within:ring-3 focus-within:ring-brand-orange/30">
+            <ClockArrowDown
+              aria-hidden
+              className="size-4 shrink-0 text-brand-orange-ink"
+            />
+            <span className="shrink-0 text-xs font-semibold">Sort by</span>
+            <select
+              value={sortOrder}
+              onChange={(event) => {
+                setSortOrder(
+                  event.target.value as NonNullable<
+                    MyParcelsParams["sortOrder"]
+                  >,
+                );
+                setPage(1);
+              }}
+              aria-label="Sort parcels by creation date"
+              className="min-w-0 flex-1 cursor-pointer bg-transparent text-center text-sm font-semibold text-secondary outline-none"
             >
-              <X className="size-4" />
-            </button>
-          ) : null}
+              <option value="desc">Newest first</option>
+              <option value="asc">Oldest first</option>
+            </select>
+          </label>
         </div>
 
         <Tabs
@@ -231,7 +260,7 @@ export default function Parcels() {
       ) : (
         <>
           <div
-            key={`${status}|${debouncedSearch}|${safePage}`}
+            key={`${status}|${debouncedSearch}|${sortOrder}|${safePage}`}
             aria-busy={refreshing}
             className={cn(
               "grid grid-cols-1 items-start gap-4 transition-opacity sm:grid-cols-2 xl:grid-cols-3",
