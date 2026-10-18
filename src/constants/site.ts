@@ -39,6 +39,8 @@ export const SECTION_IDS = {
   // Pricing page
   rates: "rates",
   estimator: "estimator",
+  // Contact page
+  contactForm: "contact-form",
 } as const;
 
 export const SUPPORT = {
@@ -46,9 +48,7 @@ export const SUPPORT = {
   phone: "+880 1703560778",
 } as const;
 
-export type SocialPlatform =
-  | "facebook"
-  | "linkedin"
+export type SocialPlatform = "facebook" | "linkedin";
 
 export const SOCIAL_LINKS: {
   platform: SocialPlatform;

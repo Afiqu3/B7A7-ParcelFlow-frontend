@@ -79,8 +79,5 @@ export const SOCIAL_ICONS: Record<
   (props: IconProps) => React.JSX.Element
 > = {
   facebook: FacebookIcon,
-  instagram: InstagramIcon,
   linkedin: LinkedInIcon,
-  youtube: YouTubeIcon,
-  x: XIcon,
 };
