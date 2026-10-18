@@ -35,22 +35,20 @@ export const SECTION_IDS = {
   features: "features",
   riders: "riders",
   whyChooseUs: "why-choose-us",
+  faq: "faq",
   // Pricing page
   rates: "rates",
   estimator: "estimator",
 } as const;
 
 export const SUPPORT = {
-  email: "suuport.parcelflow@gmail.com",
-  phone: "01712345678",
+  email: "afiquehossain84@gmail.com",
+  phone: "+880 1703560778",
 } as const;
 
 export type SocialPlatform =
   | "facebook"
-  | "instagram"
   | "linkedin"
-  | "youtube"
-  | "x";
 
 export const SOCIAL_LINKS: {
   platform: SocialPlatform;
@@ -60,18 +58,11 @@ export const SOCIAL_LINKS: {
   {
     platform: "facebook",
     label: "Facebook",
-    href: "https://www.facebook.com/",
-  },
-  {
-    platform: "instagram",
-    label: "Instagram",
-    href: "https://www.instagram.com/",
+    href: "https://www.facebook.com/afique.hossain.J",
   },
   {
     platform: "linkedin",
     label: "LinkedIn",
-    href: "https://www.linkedin.com/",
+    href: "https://www.linkedin.com/in/md-afique-hossain",
   },
-  { platform: "youtube", label: "YouTube", href: "https://www.youtube.com/" },
-  { platform: "x", label: "X", href: "https://x.com/" },
 ];

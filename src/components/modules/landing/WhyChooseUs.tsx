@@ -121,7 +121,7 @@ export default function WhyChooseUs() {
 
         {/* Reason cards - alternating layout */}
         <RevealGroup className="mt-14 grid gap-6 lg:grid-cols-3" interval={0.1}>
-          {REASONS.map(({ title, body, icon: Icon }, index) => (
+          {REASONS.map(({ title, body, icon: Icon }) => (
             <RevealItem key={title}>
               <article className="rounded-3xl bg-brand-card p-6 ring-1 ring-white/5 transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_24px_48px_-24px_rgba(2,6,23,0.6)] hover:ring-brand-orange/30 lg:col-span-1">
                 <span className="grid size-12 place-items-center rounded-xl bg-brand-orange text-brand-ink">

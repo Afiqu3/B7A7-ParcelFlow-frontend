@@ -7,6 +7,7 @@ import Hero from "@/components/modules/landing/Hero";
 import HowItWorks from "@/components/modules/landing/HowItWorks";
 import RideWithUs from "@/components/modules/landing/RideWithUs";
 import WhyChooseUs from "@/components/modules/landing/WhyChooseUs";
+import FAQ from "@/components/modules/landing/FAQ";
 
 export const metadata: Metadata = {
     title: {
@@ -26,6 +27,7 @@ export default function HomePage() {
             <Features />
             <RideWithUs />
             <WhyChooseUs />
+            <FAQ />
             <FinalCta />
         </>
     );

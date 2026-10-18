@@ -1,6 +1,6 @@
 "use client";
 
-import { CircleHelp, LogIn, Menu, Receipt, Truck, X } from "lucide-react";
+import { CircleHelp, House, Info, LogIn, Menu, Receipt, Truck, X } from "lucide-react";
 import {
   AnimatePresence,
   motion,
@@ -21,6 +21,8 @@ import type { LinkItem } from "@/types";
 import UserMenu from "./UserMenu";
 
 const NAV_ITEMS: LinkItem[] = [
+  { label: "Home", href: ROUTES.home, icon: House },
+  { label: "About", href: ROUTES.about, icon: Info },
   { label: "How it works", href: ROUTES.howItWorks, icon: CircleHelp },
   { label: "Pricing", href: ROUTES.pricing, icon: Receipt },
   { label: "Ride with us", href: ROUTES.rideWithUs, icon: Truck },
