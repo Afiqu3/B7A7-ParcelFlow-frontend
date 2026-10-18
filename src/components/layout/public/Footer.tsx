@@ -24,8 +24,7 @@ const LINK_GROUPS = [
     links: [
       { label: "About", href: ROUTES.about },
       { label: "Contact", href: ROUTES.contact },
-      { label: "Terms", href: ROUTES.terms },
-      { label: "Privacy", href: ROUTES.privacy },
+      { label: "Rider with us", href: ROUTES.rideWithUs },
     ],
   },
 ];

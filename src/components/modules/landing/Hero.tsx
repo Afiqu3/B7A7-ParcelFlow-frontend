@@ -1,12 +1,22 @@
 "use client";
 
 import { CalendarDays, Clock, Zap } from "lucide-react";
-import { motion, stagger, type Variants } from "motion/react";
+import { motion, stagger, useReducedMotion, type Variants } from "motion/react";
+import { Autoplay, EffectFade } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { ROUTES } from "@/constants";
 import CtaLink from "./CtaLink";
 import { Container, PulseDot, RoutePath, SvgPulseDot } from "./decor";
 import { EASE_OUT } from "./motion";
 import TrackingCard from "./TrackingCard";
+import "swiper/css";
+import "swiper/css/effect-fade";
+
+const HERO_BACKGROUNDS = [
+  "/assets/banner-1.jpg",
+  "/assets/banner-2.jpg",
+  "/assets/banner-3.jpg",
+];
 
 const HEADLINE = [
   { text: "Ship it.", accent: false },
@@ -39,9 +49,45 @@ const line: Variants = {
 };
 
 export default function Hero() {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <section className="relative overflow-hidden bg-brand text-white">
-      <Container className="grid items-center gap-14 pt-12 pb-20 sm:pt-16 lg:grid-cols-[1.12fr_1fr] lg:gap-8 lg:pt-16 lg:pb-20">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <Swiper
+          modules={[Autoplay, EffectFade]}
+          className="h-full w-full"
+          autoplay={
+            shouldReduceMotion
+              ? false
+              : {
+                  delay: 5000,
+                  disableOnInteraction: false,
+                  pauseOnMouseEnter: true,
+                }
+          }
+          effect="fade"
+          fadeEffect={{ crossFade: true }}
+          loop
+          speed={1000}
+          allowTouchMove={false}
+        >
+          {HERO_BACKGROUNDS.map((image) => (
+            <SwiperSlide key={image}>
+              <div
+                className="size-full bg-cover bg-center"
+                style={{ backgroundImage: `url("${image}")` }}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-10"
+        style={{ backgroundColor: "var(--brand)", opacity: 0.55 }}
+      />
+      <Container className="relative z-20 grid items-center gap-14 pt-12 pb-20 sm:pt-16 lg:grid-cols-[1.12fr_1fr] lg:gap-8 lg:pt-16 lg:pb-20">
         <motion.div
           className="relative z-10"
           variants={container}
