@@ -384,9 +384,6 @@ export default function ApplyRiderForm() {
                                                             className="text-secondary font-heading font-bold"
                                                         >
                                                             Address
-                                                            <span className="text-brand/40">
-                                                                (optional)
-                                                            </span>
                                                         </FieldLabel>
                                                         <Input
                                                             id={field.name}
@@ -407,7 +404,8 @@ export default function ApplyRiderForm() {
                                                             aria-invalid={
                                                                 isInvalid
                                                             }
-                                                            placeholder="Area, city"
+                                                            aria-required="true"
+                                                            placeholder="House, road, area, city"
                                                             className="border-2 border-secondary/20"
                                                         />
                                                         <AnimatePresence>

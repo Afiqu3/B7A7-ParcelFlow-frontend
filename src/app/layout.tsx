@@ -37,6 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 geistMono.variable,
                 instrumentSansHeading.variable,
             )}
+            data-scroll-behavior="smooth"
             suppressHydrationWarning={true}
         >
             <body

@@ -44,7 +44,10 @@ export const riderApplicationSchema = z.object({
         .trim()
         .min(1, { error: "Phone number is required", abort: true })
         .regex(BD_PHONE_REGEX, "Please provide a valid Bangladeshi number"),
-    address: z.string().trim(),
+    address: z
+        .string()
+        .trim()
+        .min(5, "Address must be at least 5 characters long"),
     nid: z
         .string()
         .trim()
