@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useInView } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRef } from "react";
+import DashboardReportButton from "@/components/dashboard/DashboardReportButton";
 import ThemeToggle from "@/components/shared/theme-toggle";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
@@ -100,6 +101,7 @@ export default function DashboardTopbar({ role }: { role: UserRole }) {
         </nav>
 
         <div className="flex shrink-0 items-center gap-2">
+          <DashboardReportButton role={role} />
           <ThemeToggle variant="surface" />
           <Link
             href={ROUTES.home}
