@@ -15,6 +15,53 @@ one client (`src/lib/apiClient.ts`, ofetch-based) and one hook layer
 - **Binary:** invoice download uses `responseType: "blob"`
   (`apiClient<Blob, "blob">`); everything else is JSON.
 
+## AI chatbot
+
+The public chatbot uses the frontend's Next.js Route Handler at
+`POST /api/chat`. This is separate from the ParcelFlow backend API configured
+by `NEXT_PUBLIC_API_BASE_URL`.
+
+The request body is:
+
+```json
+{
+  "messages": [
+    { "role": "user", "content": "..." },
+    { "role": "assistant", "content": "..." },
+    { "role": "user", "content": "..." }
+  ]
+}
+```
+
+The route accepts 1–12 messages, requires the last message to be from the
+user, limits each message to 1,200 characters, and limits the request body
+to 20 KB. On success it returns `{ "reply": "..." }`; invalid requests
+return 400/413 and provider failures return 503.
+
+For each request, the server sends the supplied conversation and a fixed
+`SYSTEM_PROMPT` (in `src/app/api/chat/route.ts`) to the AI provider. The prompt
+describes the assistant's support role and lists useful page paths such as
+`/pricing` and `/how-it-works`. Those paths are suggestions for directing the
+user, **not content the AI has fetched or read**. The route does not crawl the
+site, query the ParcelFlow backend, or look up live account/parcel data.
+Therefore, the bot should not be relied on for current prices, policies, or
+personalized parcel status unless that information is explicitly supplied in
+the prompt or conversation.
+
+The server tries configured providers in order: Gemini, Groq, then OpenRouter,
+skipping providers without a key and falling back when a provider fails.
+Configure at least one server-only `GEMINI_API_KEY`, `GROQ_API_KEY`, or
+`OPENROUTER_API_KEY`; optional URL/model overrides and defaults are listed in
+`.env.example`. Never expose these keys through `NEXT_PUBLIC_*`. Chat content
+is sent to the configured third-party provider that handles the request, so
+users should not submit passwords, payment credentials, verification codes,
+or other sensitive information.
+
+`POST /api/chat` requires a Next.js server runtime. It is available under
+`npm run dev`, but a static export (`output: "export"`) cannot serve this
+request-dependent handler. Production deployments that need the chatbot must
+use a server-capable Next.js deployment.
+
 ## Response envelope
 
 ```ts

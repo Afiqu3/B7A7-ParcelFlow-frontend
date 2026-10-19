@@ -24,7 +24,7 @@ rider, admin, super admin).
 | Area | Choice |
 | --- | --- |
 | Framework | Next.js 16 (App Router, Turbopack) + React 19 |
-| Rendering | Fully static export (`output: "export"` → `out/`) |
+| Rendering | Static export configured; AI POST routes require a Next.js server deployment |
 | Styling | Tailwind CSS v4, shadcn/radix-ui primitives, Lucide icons |
 | Data | TanStack Query v5 + ofetch client (cookie credentials, token refresh) |
 | Forms | TanStack Form v1 + Zod v4 validation |
@@ -40,7 +40,7 @@ Core runtime dependencies (see `package.json`):
 
 | Package | Version | Purpose |
 | --- | --- | --- |
-| `next` | 16.3.6 | App Router framework, static export (`output: "export"`), Turbopack dev server |
+| `next` | 16.3.6 | App Router framework and Turbopack dev server |
 | `react` / `react-dom` | 19.2.8 | UI library |
 | `@tanstack/react-query` | ^5.103.2 | Server-state caching, queries/mutations under `src/hooks/` |
 | `ofetch` | ^1.5.1 | Typed fetch client in `src/lib/apiClient.ts` (cookies, 401 refresh retry, blob invoices) |
@@ -100,6 +100,27 @@ orange primary actions, `font-heading` titles).
   logins per role (appear only when demo env vars are set). Temp-password
   accounts are forced through change-password; deep links survive login
   via `?next=` return URLs.
+- **Ask the AI support chatbot:** the app sends the latest conversation
+  messages and a fixed ParcelFlow support prompt to `/api/chat`. The prompt
+  lists useful page links so the bot can direct users to them; it does not
+  fetch or read those pages. The bot cannot look up live parcel or account
+  data. See [API_INTEGRATION.md](./API_INTEGRATION.md#ai-chatbot) for context,
+  limits, and provider configuration.
+
+### AI chatbot configuration and context
+
+Configure one or more server-only provider keys in `.env` (see
+[`.env.example`](./.env.example)): `GEMINI_API_KEY`, `GROQ_API_KEY`, and/or
+`OPENROUTER_API_KEY`. Provider URL/model variables are optional and have
+defaults in the example file. The server tries configured providers in order
+and falls back to the next one if a request fails. Restart the dev server
+after changing these values. Never use a `NEXT_PUBLIC_` prefix for AI keys.
+
+The AI receives the conversation and the support prompt; it does not get
+automatic access to website pages, the backend database, or the signed-in
+user's account. Do not send passwords, payment credentials, verification
+codes, or other sensitive information in chat. Messages are sent to whichever
+third-party AI provider successfully handles the request.
 
 ## Auth & access
 
@@ -197,6 +218,8 @@ npx serve out
 | `NEXT_PUBLIC_API_BASE_URL` | Yes | Backend base URL |
 | `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | No | Enables Google sign-in button when set |
 | `NEXT_PUBLIC_{MERCHANT,RIDER,ADMIN,SUPER_ADMIN}_{EMAIL,PASSWORD}` | No | One-tap demo logins on the login page (buttons appear only for fully-set roles) |
+| `GEMINI_API_KEY`, `GROQ_API_KEY`, `OPENROUTER_API_KEY` | At least one for AI features | Server-only provider credentials; never expose with `NEXT_PUBLIC_` |
+| `GEMINI_API_URL`, `GROQ_API_URL`, `GROQ_MODEL`, `OPENROUTER_API_URL`, `OPENROUTER_MODEL` | No | Optional server-side provider endpoint/model overrides; defaults are in `.env.example` |
 
 > Demo credentials ship in the client bundle — use dedicated low-privilege
 > demo accounts only, never real ones.
@@ -264,8 +287,13 @@ Conventions worth knowing:
 ## Deployment
 
 `next.config.ts` sets `output: "export"`, so `npm run build` produces a
-fully static `out/` directory — host it on any static host. Constraints
-this imposes (enforced by convention, checked by the build):
+static `out/` directory that can be hosted on a static host. However, static
+exports cannot run request-dependent POST Route Handlers such as `/api/chat`
+and `/api/dashboard-report`. The AI chatbot and dashboard reports work in
+development with `npm run dev`; to enable them in production, deploy the app
+with a Next.js server runtime and remove `output: "export"` from
+`next.config.ts`. Set server-only AI variables in that runtime's environment.
+Static-export constraints include:
 
 - No server-only APIs in components (`cookies()`, `headers()`); browser
   state reads happen client-side after mount.
