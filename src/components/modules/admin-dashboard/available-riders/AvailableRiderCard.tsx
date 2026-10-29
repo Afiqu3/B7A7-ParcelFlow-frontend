@@ -43,7 +43,6 @@ export default function AvailableRiderCard({
                 <span className="relative grid size-11 shrink-0 place-items-center rounded-2xl bg-brand font-heading text-sm font-extrabold text-white">
                     <span aria-hidden>{initials(rider.name)}</span>
                     <span
-                        aria-label="Available now"
                         title="Available now"
                         className="absolute -top-1 -right-1 size-3.5 rounded-full border-2 border-card bg-emerald-500"
                     />
@@ -55,6 +54,7 @@ export default function AvailableRiderCard({
                     <span className="mt-0.5 block truncate text-xs text-secondary/55">
                         {rider.email}
                     </span>
+                    <span className="text-secondary/55 text-xs">{rider.address}</span>
                 </span>
             </div>
 
