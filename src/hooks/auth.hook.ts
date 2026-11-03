@@ -47,12 +47,12 @@ export const useGoogleOAuth = () => {
 };
 
 export const useLogout = () => {
-    const queryClient = useQueryClient();
+    //  const queryClient = useQueryClient();
     return useMutation({
         mutationFn: userLogout,
-        onSuccess: () => {
-            queryClient.setQueryData(meQueryOptions.queryKey, null);
-        },
+        // onSuccess: () => {
+        //     queryClient.setQueryData(meQueryOptions.queryKey, null);
+        // },
     });
 };
 

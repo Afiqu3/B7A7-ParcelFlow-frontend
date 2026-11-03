@@ -37,7 +37,7 @@ export default function UserMenu({ user }: { user: User }) {
         toast.success("See you again", {
           description: "Logged out successfully",
         });
-        router.replace("/");
+        window.location.replace("/");
       },
       onError: () => {
         toast.error("Logout failed", {
