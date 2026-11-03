@@ -244,7 +244,7 @@ export default function ParcelFlowChat() {
         aria-expanded={isOpen}
         aria-controls={isOpen ? "parcelflow-chat-panel" : undefined}
         onClick={() => setIsOpen((open) => !open)}
-        className="fixed right-5 bottom-[5.25rem] z-50 grid size-12 place-items-center rounded-full bg-brand text-white shadow-lg ring-1 ring-white/15 transition-[transform,background-color] hover:-translate-y-1 hover:bg-brand-card focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-orange sm:right-8"
+        className="fixed right-5 bottom-21 z-50 grid size-12 place-items-center rounded-full bg-brand text-white shadow-lg ring-1 ring-white/15 transition-[transform,background-color] hover:-translate-y-1 hover:bg-brand-card focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-orange sm:right-8"
       >
         {isOpen ? (
           <X aria-hidden="true" className="size-5" />

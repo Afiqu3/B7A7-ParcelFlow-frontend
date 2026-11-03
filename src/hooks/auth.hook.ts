@@ -25,10 +25,10 @@ const useRefreshMe = () => {
 };
 
 export const useLogin = () => {
-    const refreshMe = useRefreshMe();
+    //  const refreshMe = useRefreshMe();
     return useMutation({
         mutationFn: userLogin,
-        onSuccess: () => refreshMe(),
+        // onSuccess: () => refreshMe(),
     });
 };
 
@@ -39,10 +39,10 @@ export const useRegistration = () => {
 };
 
 export const useGoogleOAuth = () => {
-    const refreshMe = useRefreshMe();
+    //  const refreshMe = useRefreshMe();
     return useMutation({
         mutationFn: googleOAuth,
-        onSuccess: () => refreshMe(),
+        // onSuccess: () => refreshMe(),
     });
 };
 

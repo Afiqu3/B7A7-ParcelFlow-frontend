@@ -57,7 +57,7 @@ export default function LoginForm() {
             login(loginData, {
                 onSuccess: (res) => {
                     completePasswordLogin(res, {
-                        push: (url) => router.push(url),
+                        push: (url) => window.location.replace(url),
                         next,
                     });
                 },

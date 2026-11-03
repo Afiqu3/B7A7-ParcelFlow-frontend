@@ -47,10 +47,7 @@ export async function shouldForcePasswordChange(
  * rejects absolute URLs, protocol-relative URLs and backslashes, so a
  * crafted login link can never bounce users off-site (open-redirect guard).
  */
-export function resolveNextPath(
-    next: string | null,
-    fallback = "/",
-): string {
+export function resolveNextPath(next: string | null, fallback = "/"): string {
     if (
         !next ||
         !next.startsWith("/") ||
@@ -62,9 +59,7 @@ export function resolveNextPath(
     return next;
 }
 
-export async function extractRole(
-    res: unknown,
-): Promise<string | boolean> {
+export async function extractRole(res: unknown): Promise<string | boolean> {
     const direct = extractMustChangePassword(res);
     if (direct !== undefined) return direct;
     try {
@@ -112,5 +107,9 @@ export async function completePasswordLogin(
     toast.success("Login Success", {
         description: "Welcome back",
     });
+    if (!opts.next) {
+        opts.push(ROUTES.home);
+        return;
+    }
     opts.push(opts.next);
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { Bike, Crown, ShieldCheck, Store } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import type { FetchError } from "ofetch";
 import { useLogin } from "@/hooks";
@@ -22,7 +21,6 @@ const ROLE_ICONS = {
  * password form (forced-password check, `?next=` return).
  */
 export default function DemoLogins({ next }: { next: string }) {
-    const router = useRouter();
     const { mutate: login, isPending, variables } = useLogin();
 
     if (demoAccounts.length === 0) return null;
@@ -33,7 +31,7 @@ export default function DemoLogins({ next }: { next: string }) {
             {
                 onSuccess: (res) => {
                     completePasswordLogin(res, {
-                        push: (url) => router.push(url),
+                        push: (url) => window.location.replace(url),
                         next,
                     });
                 },
