@@ -63,7 +63,7 @@ export default function AvailableRiders() {
                             setSearch(event.target.value);
                             setPage(1);
                         }}
-                        placeholder="Search by name or email…"
+                        placeholder="Search by location…"
                         aria-label="Search available riders by name or email"
                         className="h-11 rounded-xl border-secondary/15 bg-background pr-10 pl-10 text-secondary shadow-none placeholder:text-secondary/40 focus-visible:border-brand-orange focus-visible:ring-3 focus-visible:ring-brand-orange/30 [&::-webkit-search-cancel-button]:hidden"
                     />

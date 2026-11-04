@@ -104,3 +104,6 @@ export interface MyAssignmentParams {
     sortOrder?: "desc" | "asc";
 }
 
+export interface FailAssignmentPayload {
+	reason: string;
+}

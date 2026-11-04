@@ -28,3 +28,11 @@ export const cancelAssignmentSchema = z.object({
             ]),
         ),
 });
+
+export const failAssignmentSchema = z.object({
+	reason: z
+		.string({ error: "A failure reason is required" })
+		.trim()
+		.min(1, "A failure reason is required")
+		.max(500, "Reason is too long"),
+});

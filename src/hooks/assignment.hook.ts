@@ -12,6 +12,7 @@ import {
 import type {
     AssignmentParams,
     CancelAssignmentPayload,
+    FailAssignmentPayload,
     MyAssignmentParams,
 } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -140,7 +141,8 @@ export const useFailAssignment = (assignmentId: string) => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: () => failAssignment(assignmentId),
+        mutationFn: (payload: FailAssignmentPayload) =>
+            failAssignment(assignmentId, payload),
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["assignments"],

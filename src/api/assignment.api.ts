@@ -5,6 +5,7 @@ import type {
     AssignmentParams,
     CancelAssignmentPayload,
     CreateAssignmentPayload,
+    FailAssignmentPayload,
     MyAssignment,
 } from "@/types";
 
@@ -64,8 +65,9 @@ export const completeAssignment = (assignmentId: string) => {
     });
 };
 
-export const failAssignment = (assignmentId: string) => {
+export const failAssignment = (assignmentId: string, reason: FailAssignmentPayload) => {
     return apiClient(`/assignment/${assignmentId}/fail`, {
         method: "PATCH",
+        body: reason,
     });
 };

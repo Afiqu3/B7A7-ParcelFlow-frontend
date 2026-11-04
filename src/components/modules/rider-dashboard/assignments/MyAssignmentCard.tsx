@@ -6,6 +6,15 @@ import {
 } from "@/components/modules/admin-dashboard/assignments/assignment-status";
 import { Button } from "@/components/ui/button";
 import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import {
     useAcceptAssignment,
     useCompleteAssignment,
     useFailAssignment,
@@ -15,6 +24,7 @@ import {
 import { formatTaka } from "@/lib/pricing";
 import type { MyAssignment } from "@/types";
 import { formatBackendDate } from "@/utils";
+import { failAssignmentSchema } from "@/validation";
 import {
     Check,
     CircleCheck,
@@ -23,6 +33,7 @@ import {
     MapPin,
     Phone,
     Play,
+    TriangleAlert,
     Truck,
     X,
 } from "lucide-react";
@@ -50,9 +61,10 @@ export default function MyAssignmentCard({
     assignment: MyAssignment;
     index: number;
 }) {
-    const [confirming, setConfirming] = useState<"reject" | "fail" | null>(
-        null,
-    );
+    const [confirming, setConfirming] = useState<"reject" | null>(null);
+    const [failureDialogOpen, setFailureDialogOpen] = useState(false);
+    const [failureReason, setFailureReason] = useState("");
+    const [failureReasonError, setFailureReasonError] = useState("");
 
     const { mutate: accept, isPending: accepting } = useAcceptAssignment(
         assignment.id,
@@ -66,23 +78,20 @@ export default function MyAssignmentCard({
     const { mutate: complete, isPending: completing } = useCompleteAssignment(
         assignment.id,
     );
-    const { mutate: fail, isPending: failing } = useFailAssignment(
-        assignment.id,
-    );
+    const { mutate: fail, isPending: failing } = useFailAssignment(assignment.id);
     const busy = accepting || rejecting || starting || completing || failing;
 
     const run = (
-        action: "accept" | "reject" | "start" | "complete" | "fail",
+        action: "accept" | "reject" | "start" | "complete",
     ) => {
         const verbs = {
             accept: ["accept", "Assignment accepted"],
             reject: ["reject", "Assignment rejected"],
             start: ["start", "Job started"],
             complete: ["complete", "Job completed"],
-            fail: ["mark as failed", "Assignment marked as failed"],
         } as const;
         const [verb, done] = verbs[action];
-        const invoke = { accept, reject, start, complete, fail }[action];
+        const invoke = { accept, reject, start, complete }[action];
         invoke(undefined, {
             onSuccess: (res) => {
                 if (
@@ -101,7 +110,49 @@ export default function MyAssignmentCard({
                 });
                 setConfirming(null);
             },
-            onError: actionError(verb + " assignment"),
+            onError: actionError(`${verb} assignment`),
+        });
+    };
+
+    const closeFailureDialog = () => {
+        if (failing) return;
+        setFailureDialogOpen(false);
+        setFailureReason("");
+        setFailureReasonError("");
+    };
+
+    const confirmFailure = () => {
+        const parsed = failAssignmentSchema.safeParse({
+            reason: failureReason,
+        });
+        if (!parsed.success) {
+            setFailureReasonError(
+                parsed.error.issues[0]?.message ?? "A failure reason is required",
+            );
+            return;
+        }
+
+        fail(parsed.data, {
+            onSuccess: (res) => {
+                if (
+                    res &&
+                    typeof res === "object" &&
+                    "success" in res &&
+                    !res.success
+                ) {
+                    toast.error("Could not mark assignment as failed", {
+                        description: "Something went wrong. Please try again.",
+                    });
+                    return;
+                }
+                toast.success("Assignment marked as failed", {
+                    description: assignment.parcel.trackingId,
+                });
+                setFailureDialogOpen(false);
+                setFailureReason("");
+                setFailureReasonError("");
+            },
+            onError: actionError("mark assignment as failed"),
         });
     };
 
@@ -254,49 +305,39 @@ export default function MyAssignmentCard({
                             </Button>
                         </motion.div>
                     ) : assignment.status === "IN_PROGRESS" ? (
-                        confirming === "fail" ? (
-                            <ConfirmStrip
-                                key="confirm-fail"
-                                label="Mark this job as failed?"
-                                confirmLabel="Confirm failure"
-                                busy={busy}
-                                pending={failing}
-                                onCancel={() => setConfirming(null)}
-                                onConfirm={() => run("fail")}
-                            />
-                        ) : (
-                            <motion.div
-                                key="progress-actions"
-                                {...swap}
-                                className="flex gap-2"
+                        <motion.div
+                            key="progress-actions"
+                            {...swap}
+                            className="flex gap-2"
+                        >
+                            <Button
+                                type="button"
+                                disabled={busy}
+                                onClick={() => run("complete")}
+                                className="h-11 flex-1 rounded-xl bg-emerald-700 font-heading text-sm font-bold text-white transition hover:brightness-110 active:scale-[0.99] disabled:opacity-70"
                             >
-                                <Button
-                                    type="button"
-                                    disabled={busy}
-                                    onClick={() => run("complete")}
-                                    className="h-11 flex-1 rounded-xl bg-emerald-700 font-heading text-sm font-bold text-white transition hover:brightness-110 active:scale-[0.99] disabled:opacity-70"
-                                >
-                                    {completing ? (
-                                        <Loader2 className="size-4 animate-spin" />
-                                    ) : (
-                                        <CircleCheck className="size-4" />
-                                    )}
-                                    {completing
-                                        ? "Completing…"
-                                        : "Mark completed"}
-                                </Button>
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    disabled={busy}
-                                    onClick={() => setConfirming("fail")}
-                                    className="h-11 flex-1 rounded-xl border-destructive/30 font-heading text-sm font-bold text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                >
-                                    <Flag className="size-4" />
-                                    Fail
-                                </Button>
-                            </motion.div>
-                        )
+                                {completing ? (
+                                    <Loader2 className="size-4 animate-spin" />
+                                ) : (
+                                    <CircleCheck className="size-4" />
+                                )}
+                                {completing ? "Completing…" : "Mark completed"}
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                disabled={busy}
+                                onClick={() => {
+                                    setFailureReason("");
+                                    setFailureReasonError("");
+                                    setFailureDialogOpen(true);
+                                }}
+                                className="h-11 flex-1 rounded-xl border-destructive/30 font-heading text-sm font-bold text-destructive hover:bg-destructive/10 hover:text-destructive"
+                            >
+                                <Flag className="size-4" />
+                                Fail
+                            </Button>
+                        </motion.div>
                     ) : (
                         <motion.p
                             key="terminal"
@@ -314,6 +355,140 @@ export default function MyAssignmentCard({
                     )}
                 </AnimatePresence>
             </div>
+            <Dialog
+                open={failureDialogOpen}
+                onOpenChange={(open) => {
+                    if (!open) closeFailureDialog();
+                }}
+            >
+                <DialogContent className="max-h-[min(90dvh,36rem)] overflow-y-auto p-5 sm:max-w-md sm:p-6">
+                    <DialogHeader className="flex-row items-start gap-3 space-y-0 text-left">
+                        <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-destructive/10 text-destructive ring-1 ring-destructive/20 ring-inset">
+                            <TriangleAlert
+                                aria-hidden="true"
+                                className="size-5"
+                                strokeWidth={2.25}
+                            />
+                        </span>
+                        <span className="min-w-0">
+                            <DialogTitle className="font-heading text-base font-extrabold tracking-tight text-secondary">
+                                Mark this {isPickup ? "pickup" : "delivery"} as
+                                failed?
+                            </DialogTitle>
+                            <DialogDescription className="mt-1 text-sm leading-relaxed text-secondary/65">
+                                Provide a reason for{" "}
+                                <span className="font-mono font-bold text-secondary">
+                                    {parcel.trackingId}
+                                </span>
+                                . This will be saved with the assignment.
+                            </DialogDescription>
+                        </span>
+                    </DialogHeader>
+
+                    <div className="flex flex-col gap-1.5">
+                        <label
+                            htmlFor={`failure-reason-${assignment.id}`}
+                            className="font-heading text-[13px] font-bold text-secondary"
+                        >
+                            Failure reason{" "}
+                            <span className="text-destructive" aria-hidden="true">
+                                *
+                            </span>
+                            <span className="sr-only">required</span>
+                        </label>
+                        <Textarea
+                            id={`failure-reason-${assignment.id}`}
+                            value={failureReason}
+                            maxLength={500}
+                            disabled={failing}
+                            aria-invalid={Boolean(failureReasonError)}
+                            aria-describedby={
+                                failureReasonError
+                                    ? `failure-reason-error-${assignment.id}`
+                                    : `failure-reason-hint-${assignment.id}`
+                            }
+                            onChange={(event) => {
+                                setFailureReason(event.target.value);
+                                if (failureReasonError) {
+                                    setFailureReasonError("");
+                                }
+                            }}
+                            placeholder="Explain why the delivery could not be completed"
+                            className="min-h-28 resize-y rounded-xl border-secondary/15 bg-background text-secondary shadow-none placeholder:text-secondary/40 focus-visible:border-brand-orange focus-visible:ring-3 focus-visible:ring-brand-orange/30"
+                        />
+                        <div className="flex items-start justify-between gap-3 text-xs">
+                            {failureReasonError ? (
+                                <p
+                                    id={`failure-reason-error-${assignment.id}`}
+                                    role="alert"
+                                    className="text-destructive"
+                                >
+                                    {failureReasonError}
+                                </p>
+                            ) : (
+                                <p
+                                    id={`failure-reason-hint-${assignment.id}`}
+                                    className="text-secondary/55"
+                                >
+                                    Required · up to 500 characters
+                                </p>
+                            )}
+                            <span
+                                aria-live="polite"
+                                className="ml-auto shrink-0 text-secondary/45"
+                            >
+                                {failureReason.length}/500
+                            </span>
+                        </div>
+                    </div>
+
+                    <DialogFooter className="gap-2.5 sm:flex-row">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            disabled={failing}
+                            onClick={closeFailureDialog}
+                            className="h-10 rounded-xl border-secondary/15 font-heading text-sm font-bold text-secondary hover:bg-secondary/5 hover:text-secondary"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="destructive"
+                            disabled={failing}
+                            onClick={confirmFailure}
+                            className="h-10 rounded-xl px-5 font-heading text-sm font-bold"
+                        >
+                            <AnimatePresence initial={false} mode="popLayout">
+                                {failing ? (
+                                    <motion.span
+                                        key="failing"
+                                        initial={{ opacity: 0, y: 8 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -8 }}
+                                        transition={{ duration: 0.18 }}
+                                        className="inline-flex items-center gap-2"
+                                    >
+                                        <Loader2 className="size-4 animate-spin" />
+                                        Marking failed…
+                                    </motion.span>
+                                ) : (
+                                    <motion.span
+                                        key="confirm-failure"
+                                        initial={{ opacity: 0, y: 8 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -8 }}
+                                        transition={{ duration: 0.18 }}
+                                        className="inline-flex items-center gap-2"
+                                    >
+                                        Confirm failure
+                                    </motion.span>
+                                )}
+                            </AnimatePresence>
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </article>
     );
 }
