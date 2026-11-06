@@ -1,24 +1,18 @@
 "use client";
 
-import {
-    CircleAlert,
-    Pencil,
-    Plus,
-    Receipt,
-    RefreshCw,
-} from "lucide-react";
+import { CircleAlert, Pencil, Plus, Receipt, RefreshCw } from "lucide-react";
 import { useMemo, useState } from "react";
 import { CATEGORIES, ZONES } from "@/components/modules/pricing/pricing-meta";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useAdminPricingRules } from "@/hooks";
+import { useGetAllPricingRuleForAdmin } from "@/hooks";
 import { formatKg, formatTaka } from "@/lib/pricing";
 import { cn } from "@/lib/utils";
-import type { PricingRule } from "@/types";
+import type { AdminPricingRule } from "@/types";
 import PricingRuleForm from "./PricingRuleForm";
 import UpdatePricingRuleDialog from "./UpdatePricingRuleDialog";
 
-const ZONE_RANK: Record<PricingRule["zoneType"], number> = {
+const ZONE_RANK: Record<AdminPricingRule["zoneType"], number> = {
     INSIDE_CITY: 0,
     SUB_CITY: 1,
     OUTSIDE_CITY: 2,
@@ -27,8 +21,8 @@ const ZONE_RANK: Record<PricingRule["zoneType"], number> = {
 /** Pricing rules management: create form + editable rule cards. */
 export default function Pricing() {
     const { data, isPending, isError, error, refetch, isFetching } =
-        useAdminPricingRules();
-    const [editing, setEditing] = useState<PricingRule | null>(null);
+        useGetAllPricingRuleForAdmin();
+    const [editing, setEditing] = useState<AdminPricingRule | null>(null);
 
     const rules = useMemo(
         () =>
@@ -49,7 +43,7 @@ export default function Pricing() {
                 className="overflow-hidden rounded-2xl bg-card ring-1 ring-secondary/10 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-300 motion-safe:fill-mode-backwards"
                 style={{ animationDelay: "80ms" }}
             >
-                <div className="flex items-center gap-3 border-b border-secondary/8 bg-gradient-to-r from-brand-cream via-brand-cream/40 to-transparent px-5 py-5 sm:px-6">
+                <div className="flex items-center gap-3 border-b border-secondary/8 bg-linear-to-r from-brand-cream via-brand-cream/40 to-transparent px-5 py-5 sm:px-6">
                     <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-brand text-white shadow-[0_12px_24px_-12px_rgba(15,32,86,0.7)]">
                         <Plus className="size-5" strokeWidth={2.25} />
                     </span>
@@ -122,18 +116,15 @@ export default function Pricing() {
                     ) : rules.length === 0 ? (
                         <div className="flex flex-col items-center gap-3 rounded-2xl bg-card px-6 py-12 text-center ring-1 ring-secondary/10">
                             <span className="grid size-12 place-items-center rounded-2xl bg-brand/8 text-brand ring-1 ring-brand/10 ring-inset">
-                                <Receipt
-                                    className="size-6"
-                                    strokeWidth={2}
-                                />
+                                <Receipt className="size-6" strokeWidth={2} />
                             </span>
                             <div>
                                 <h3 className="font-heading text-lg font-extrabold tracking-tight text-secondary">
                                     No pricing rules yet
                                 </h3>
                                 <p className="mx-auto mt-1 max-w-sm text-sm text-secondary/65">
-                                    Create the first rule above — bookings
-                                    need a rate for every zone and category.
+                                    Create the first rule above — bookings need
+                                    a rate for every zone and category.
                                 </p>
                             </div>
                         </div>
@@ -168,7 +159,7 @@ function RuleCard({
     index,
     onEdit,
 }: {
-    rule: PricingRule;
+    rule: AdminPricingRule;
     index: number;
     onEdit: () => void;
 }) {
@@ -227,7 +218,7 @@ function RuleCard({
                 </span>
             </div>
 
-            <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5 border-t border-secondary/8 pt-3 text-[13px]">
+            <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5 border-t border-secondary/8 pt-3 text-xs">
                 {charges.map((charge) => (
                     <div
                         key={charge.label}
@@ -242,6 +233,15 @@ function RuleCard({
                     </div>
                 ))}
             </dl>
+
+            <div className="mt-3 grid gap-y-1.5 border-t border-secondary/8 pt-3 text-xs">
+                <p className="truncate text-secondary/60">
+                    Created by: <span>{rule.createdBy.name}</span>
+                </p>
+                <p className="truncate text-secondary/60">
+                    Updated by: <span>{rule.updatedBy ? rule.updatedBy.name : "None"}</span>
+                </p>
+            </div>
 
             <Button
                 type="button"

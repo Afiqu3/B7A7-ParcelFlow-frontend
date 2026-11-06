@@ -15,7 +15,6 @@ export type DeliverySpeed =
 /** Prisma `Decimal` columns are serialised as strings, e.g. "60". */
 type DecimalString = string;
 
-/** A pricing rule exactly as `GET /rule` returns it. */
 export interface Pricing {
     id: string;
     name: string;
@@ -33,6 +32,29 @@ export interface Pricing {
     updatedAt: string;
 }
 
+export interface PricingForAdmin {
+    id: string;
+    name: string;
+    zoneType: ZoneType;
+    parcelCategory: ParcelCategory;
+    baseWeightKg: DecimalString;
+    baseCharge: DecimalString;
+    perKgCharge: DecimalString;
+    expressSurcharge: DecimalString;
+    sameDaySurcharge: DecimalString;
+    riderPickupCharge: DecimalString;
+    codFeePercent: DecimalString;
+    isActive: boolean;
+    createdAt: string;
+    updatedAt: string;
+    createdBy: {
+        name: string;
+    };
+    updatedBy?: {
+        name: string;
+    };
+}
+
 type DecimalField =
     | "baseWeightKg"
     | "baseCharge"
@@ -44,6 +66,9 @@ type DecimalField =
 
 /** A pricing rule with its decimal fields parsed into numbers. */
 export type PricingRule = Omit<Pricing, DecimalField> &
+    Record<DecimalField, number>;
+    
+export type AdminPricingRule = Omit<PricingForAdmin, DecimalField> &
     Record<DecimalField, number>;
 
 export interface CreatePricingRulePayload {

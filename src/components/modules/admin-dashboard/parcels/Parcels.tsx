@@ -1,8 +1,9 @@
 "use client";
 
 import {
+  ArrowDownWideNarrow,
+  ChevronDown,
   CircleAlert,
-  ClockArrowDown,
   ListFilter,
   Package,
   RefreshCw,
@@ -17,6 +18,14 @@ import {
 } from "@/components/modules/parcels/parcel-status";
 import DataPager from "@/components/shared/DataPager";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -105,29 +114,67 @@ export default function Parcels() {
             ) : null}
           </div>
 
-          <label className="group flex h-11 items-center gap-2.5 rounded-xl border border-secondary/15 bg-background px-3.5 text-secondary/55 transition-colors motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-1 motion-safe:duration-300 focus-within:border-brand-orange focus-within:ring-3 focus-within:ring-brand-orange/30">
-            <ClockArrowDown
-              aria-hidden
-              className="size-4 shrink-0 text-brand-orange-ink"
-            />
-            <span className="shrink-0 text-xs font-semibold">Sort by</span>
-            <select
-              value={sortOrder}
-              onChange={(event) => {
-                setSortOrder(
-                  event.target.value as NonNullable<
-                    MyParcelsParams["sortOrder"]
-                  >,
-                );
-                setPage(1);
-              }}
-              aria-label="Sort parcels by creation date"
-              className="min-w-0 flex-1 cursor-pointer bg-transparent text-center text-sm font-semibold text-secondary outline-none"
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                aria-label={`Sort parcels by creation date: ${sortOrder === "desc" ? "newest first" : "oldest first"}`}
+                className="group flex h-11 min-w-0 items-center gap-3 rounded-xl border border-secondary/12 bg-background px-3 text-left outline-none transition-[border-color,box-shadow] hover:border-secondary/20 focus-visible:border-brand-orange focus-visible:ring-3 focus-visible:ring-brand-orange/25"
+              >
+                <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-brand-orange/12 text-brand-orange-ink transition-colors group-hover:bg-brand-orange/18">
+                  <ArrowDownWideNarrow
+                    aria-hidden
+                    className={cn(
+                      "size-4 transition-transform duration-200",
+                      sortOrder === "asc" && "rotate-180",
+                    )}
+                  />
+                </span>
+                <span className="min-w-0 flex-1 leading-tight">
+                  <span className="block text-[10px] font-bold tracking-[0.12em] text-secondary/45 uppercase">
+                    Sort by
+                  </span>
+                  <span className="block truncate pt-0.5 font-heading text-[13px] font-bold text-secondary">
+                    {sortOrder === "desc" ? "Newest first" : "Oldest first"}
+                  </span>
+                </span>
+                <ChevronDown
+                  aria-hidden
+                  className="size-4 shrink-0 text-secondary/45 transition-[color,transform] data-[state=open]:rotate-180 group-hover:text-brand-orange-ink"
+                />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              sideOffset={8}
+              className="w-56 min-w-56 rounded-xl border border-secondary/10 bg-popover p-1.5 text-popover-foreground shadow-xl"
             >
-              <option value="desc">Newest first</option>
-              <option value="asc">Oldest first</option>
-            </select>
-          </label>
+              <DropdownMenuLabel className="px-2.5 py-2 font-heading text-[10px] font-bold tracking-[0.12em] text-secondary/45 uppercase">
+                Sort parcels by date
+              </DropdownMenuLabel>
+              <DropdownMenuRadioGroup
+                value={sortOrder}
+                onValueChange={(value) => {
+                  if (value !== "asc" && value !== "desc") return;
+                  setSortOrder(value);
+                  setPage(1);
+                }}
+              >
+                <DropdownMenuRadioItem
+                  value="desc"
+                  className="min-h-10 rounded-lg px-2.5 font-heading text-[13px] font-semibold text-secondary focus:bg-brand/8 focus:text-secondary"
+                >
+                  Newest first
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem
+                  value="asc"
+                  className="min-h-10 rounded-lg px-2.5 font-heading text-[13px] font-semibold text-secondary focus:bg-brand/8 focus:text-secondary"
+                >
+                  Oldest first
+                </DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         <Tabs

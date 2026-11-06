@@ -114,7 +114,7 @@ export default function Merchants() {
                             <TabsTrigger
                                 key={tab.value}
                                 value={tab.value}
-                                className="h-9 flex-1 rounded-lg px-4 font-heading text-[13px] font-bold whitespace-nowrap text-secondary/60 transition-colors outline-none hover:text-secondary focus-visible:ring-2 focus-visible:ring-brand-orange/50 data-active:bg-brand data-active:text-white data-active:shadow-[0_8px_20px_-10px_rgba(15,32,86,0.8)] sm:flex-none"
+                                className="h-9 flex-1 rounded-lg px-4 font-heading text-[13px] font-bold whitespace-nowrap text-secondary/60 transition-colors hover:text-brand-orange data-active:bg-brand data-active:text-white data-active:shadow-[0_8px_20px_-10px_rgba(15,32,86,0.8)]"
                             >
                                 {tab.label}
                             </TabsTrigger>

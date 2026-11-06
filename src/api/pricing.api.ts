@@ -1,8 +1,12 @@
 import apiClient from "@/lib/apiClient";
-import type { ApiResponse, CreatePricingRulePayload, Pricing, UpdatePricingRulePayload } from "@/types";
+import type { ApiResponse, CreatePricingRulePayload, Pricing, PricingForAdmin, UpdatePricingRulePayload } from "@/types";
 
 export const getAllPricingRule = () => {
     return apiClient<ApiResponse<Pricing[]>>("/rule");
+};
+
+export const getAllPricingRuleForAdmin = () => {
+    return apiClient<ApiResponse<PricingForAdmin[]>>("/rule/admin");
 };
 
 export const createPricingRule = (payload: CreatePricingRulePayload) => {

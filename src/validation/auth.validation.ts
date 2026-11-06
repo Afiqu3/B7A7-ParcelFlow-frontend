@@ -57,7 +57,7 @@ export const BD_PHONE_REGEX = /^(?:\+?880|0)1[3-9]\d{8}$/;
 
 export const loginSchema = z.object({
     email: z.email("Enter a valid email"),
-    password: z.string().min(1, "Password is required"),
+    password: z.string().trim().min(1, "Password is required"),
 });
 
 export const merchantRegistrationSchema = z.object({

@@ -7,7 +7,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import type { PricingRule } from "@/types";
+import type { AdminPricingRule } from "@/types";
 import PricingRuleForm from "./PricingRuleForm";
 
 /** Update dialog hosting the shared rule form, keyed per rule. */
@@ -15,7 +15,7 @@ export default function UpdatePricingRuleDialog({
     rule,
     onClose,
 }: {
-    rule: PricingRule | null;
+    rule: AdminPricingRule | null;
     onClose: () => void;
 }) {
     return (

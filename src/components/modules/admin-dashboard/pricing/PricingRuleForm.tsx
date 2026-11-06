@@ -1,29 +1,5 @@
 "use client";
 
-import { useForm } from "@tanstack/react-form";
-import { AnimatePresence, MotionConfig, motion } from "motion/react";
-import { Loader2, Plus, Save } from "lucide-react";
-import { toast } from "sonner";
-import type { FetchError } from "ofetch";
-import type z from "zod";
-import SegmentedControl from "@/components/modules/pricing/SegmentedControl";
-import {
-    CATEGORIES,
-    CATEGORY_ORDER,
-    ZONE_ORDER,
-    ZONES,
-} from "@/components/modules/pricing/pricing-meta";
-import { useCreatePricingRule, useUpdatePricingRule } from "@/hooks";
-import type {
-    CreatePricingRulePayload,
-    PricingRule,
-    UpdatePricingRulePayload,
-} from "@/types";
-import {
-    createPricingRuleSchema,
-    PARCEL_CATEGORIES,
-    ZONE_TYPES,
-} from "@/validation";
 import {
     containerVariants,
     errorMotion,
@@ -31,10 +7,34 @@ import {
     labelSwapMotion,
     useShake,
 } from "@/components/form/form-motion";
+import { CATEGORIES, ZONES } from "@/components/modules/pricing/pricing-meta";
+import SegmentedControl from "@/components/modules/pricing/SegmentedControl";
 import { Button } from "@/components/ui/button";
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import {
+    Field,
+    FieldError,
+    FieldGroup,
+    FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { useCreatePricingRule, useUpdatePricingRule } from "@/hooks";
+import type {
+    CreatePricingRulePayload,
+    AdminPricingRule,
+    UpdatePricingRulePayload,
+} from "@/types";
+import {
+    createPricingRuleSchema,
+    PARCEL_CATEGORIES,
+    ZONE_TYPES,
+} from "@/validation";
+import { useForm } from "@tanstack/react-form";
+import { Loader2, Plus, Save } from "lucide-react";
+import { AnimatePresence, motion, MotionConfig } from "motion/react";
+import type { FetchError } from "ofetch";
 import type { ReactNode } from "react";
+import { toast } from "sonner";
+import type z from "zod";
 
 type PricingRuleFormValues = Omit<
     z.input<typeof createPricingRuleSchema>,
@@ -54,9 +54,7 @@ function parseDecimal(raw: string): number | undefined {
     const cleaned = raw.replace(/[^\d.]/g, "");
     if (!cleaned) return undefined;
     const [whole = "", ...rest] = cleaned.split(".");
-    const out = rest.length
-        ? `${whole}.${rest.join("").slice(0, 2)}`
-        : whole;
+    const out = rest.length ? `${whole}.${rest.join("").slice(0, 2)}` : whole;
     if (out === "" || out === ".") return undefined;
     const value = Number(out);
     return Number.isFinite(value) ? value : undefined;
@@ -216,7 +214,7 @@ export default function PricingRuleForm({
     rule,
     onSuccess,
 }: {
-    rule?: PricingRule;
+    rule?: AdminPricingRule;
     onSuccess?: () => void;
 }) {
     const [formScope, shakeForm] = useShake<HTMLFormElement>();
@@ -549,9 +547,7 @@ export default function PricingRuleForm({
                                                         .isTouched &&
                                                     !field.state.meta.isValid
                                                 }
-                                                errors={
-                                                    field.state.meta.errors
-                                                }
+                                                errors={field.state.meta.errors}
                                             >
                                                 <SegmentedControl
                                                     aria-label="Rule status"
@@ -604,9 +600,7 @@ export default function PricingRuleForm({
                                             className="inline-flex items-center gap-2"
                                         >
                                             <Loader2 className="size-4 animate-spin" />
-                                            {isUpdate
-                                                ? "Saving…"
-                                                : "Creating…"}
+                                            {isUpdate ? "Saving…" : "Creating…"}
                                         </motion.span>
                                     ) : (
                                         <motion.span

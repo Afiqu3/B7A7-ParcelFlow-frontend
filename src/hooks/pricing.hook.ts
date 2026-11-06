@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createPricingRule, getAllPricingRule, updatePricingRule } from "@/api";
-import { toPricingRule } from "@/lib/pricing";
+import { createPricingRule, getAllPricingRule, getAllPricingRuleForAdmin, updatePricingRule } from "@/api";
+import { toAdminPricingRule, toPricingRule } from "@/lib/pricing";
 import type { UpdatePricingRulePayload } from "@/types";
 
 export const pricingRulesQueryKey = ["pricing-rules"] as const;
@@ -41,11 +41,11 @@ export const useUpdatePricingRule = (ruleId: string) => {
 };
 
 /** Every rule including inactive ones, for the admin management page. */
-export const useAdminPricingRules = () => {
+export const useGetAllPricingRuleForAdmin = () => {
     return useQuery({
         queryKey: [...pricingRulesQueryKey, "admin"],
-        queryFn: getAllPricingRule,
-        select: (res) => res.data.map(toPricingRule),
+        queryFn: getAllPricingRuleForAdmin,
+        select: (res) => res.data.map(toAdminPricingRule),
         retry: 1,
     });
 };

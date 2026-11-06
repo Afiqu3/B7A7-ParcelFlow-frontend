@@ -38,16 +38,22 @@ export default function AboutUs() {
         <Reveal amount={0.3}>
           <div className="group relative">
             <div className="overflow-hidden rounded-3xl shadow-[0_24px_48px_-28px_rgba(2,6,23,0.5)] ring-1 ring-white/10">
-              {/* biome-ignore lint/performance/noImgElement: static export (output: "export") has no image optimizer; explicit width/height keeps CLS at zero. */}
-              <img
-                src="/assets/about-us.jpg"
-                alt="A delivery van in motion on a tree-lined street"
-                width={6240}
-                height={4160}
-                loading="lazy"
-                decoding="async"
-                className="aspect-3/2 w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-              />
+              <picture>
+                <source
+                  type="image/webp"
+                  srcSet="/assets/about-us-640.webp 640w, /assets/about-us-1080.webp 1080w"
+                  sizes="(min-width: 1200px) 526px, (min-width: 1024px) 50vw, (min-width: 640px) calc(100vw - 4rem), calc(100vw - 2.5rem)"
+                />
+                <img
+                  src="/assets/about-us.jpg"
+                  alt="A delivery van in motion on a tree-lined street"
+                  width={6240}
+                  height={4160}
+                  loading="lazy"
+                  decoding="async"
+                  className="aspect-3/2 w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                />
+              </picture>
             </div>
 
             {/* Floating caption pinned over the photo's bottom edge */}

@@ -68,7 +68,7 @@ export default function Assignments() {
                             >
                                 <TabsTrigger
                                     value="ALL"
-                                    className="h-9 shrink-0 rounded-lg px-3.5 font-heading text-[13px] font-bold whitespace-nowrap text-secondary/60 transition-colors hover:text-secondary data-active:bg-brand data-active:text-white data-active:shadow-[0_8px_20px_-10px_rgba(15,32,86,0.8)]"
+                                    className="h-9 shrink-0 rounded-lg px-3.5 font-heading text-[13px] font-bold whitespace-nowrap text-secondary/60 transition-colors hover:text-brand-orange data-active:bg-brand data-active:text-white data-active:shadow-[0_8px_20px_-10px_rgba(15,32,86,0.8)]"
                                 >
                                     All
                                 </TabsTrigger>
@@ -195,7 +195,7 @@ export default function Assignments() {
                         key={`${status}|${safePage}`}
                         aria-busy={refreshing}
                         className={cn(
-                            "grid grid-cols-1 items-start gap-4 transition-opacity sm:grid-cols-2 xl:grid-cols-3",
+                            "grid auto-rows-fr grid-cols-1 items-stretch gap-4 transition-opacity sm:grid-cols-2 xl:grid-cols-3",
                             refreshing && "opacity-70",
                         )}
                     >
@@ -223,7 +223,7 @@ function AssignmentGridSkeleton() {
     return (
         <div
             aria-hidden
-            className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 xl:grid-cols-3"
+            className="grid auto-rows-fr grid-cols-1 items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-3"
         >
             {Array.from({ length: 6 }).map((_, index) => (
                 <div

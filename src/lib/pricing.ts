@@ -1,7 +1,9 @@
 import type {
+  AdminPricingRule,
   DeliverySpeed,
   ParcelCategory,
   Pricing,
+  PricingForAdmin,
   PricingRule,
   ZoneType,
 } from "@/types";
@@ -16,6 +18,19 @@ const toNumber = (value: string | number) => {
 
 /** Parses the decimal strings of an API pricing rule into numbers. */
 export function toPricingRule(rule: Pricing): PricingRule {
+  return {
+    ...rule,
+    baseWeightKg: toNumber(rule.baseWeightKg),
+    baseCharge: toNumber(rule.baseCharge),
+    perKgCharge: toNumber(rule.perKgCharge),
+    expressSurcharge: toNumber(rule.expressSurcharge),
+    sameDaySurcharge: toNumber(rule.sameDaySurcharge),
+    riderPickupCharge: toNumber(rule.riderPickupCharge),
+    codFeePercent: toNumber(rule.codFeePercent),
+  };
+}
+
+export function toAdminPricingRule(rule: PricingForAdmin): AdminPricingRule {
   return {
     ...rule,
     baseWeightKg: toNumber(rule.baseWeightKg),

@@ -2,8 +2,8 @@
 
 import { MapPin, Package, Phone, Truck } from "lucide-react";
 import { initials } from "@/components/dashboard/nav";
-import { formatBackendDate } from "@/utils";
 import type { Assignment } from "@/types";
+import { formatBackendDate } from "@/utils";
 import AssignmentCancel from "./AssignmentCancel";
 import {
     ASSIGNMENT_STATUS_META,
@@ -23,7 +23,7 @@ export default function AssignmentCard({
     return (
         <article
             aria-label={`Assignment of ${parcel.trackingId} to ${rider.name}`}
-            className="flex min-w-0 flex-col rounded-2xl bg-card p-4 ring-1 ring-secondary/10 transition-[box-shadow,transform] motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-300 motion-safe:fill-mode-backwards hover:shadow-[0_20px_40px_-28px_rgba(15,32,86,0.5)] sm:p-5"
+            className="flex h-full min-w-0 flex-col rounded-2xl bg-card p-4 ring-1 ring-secondary/10 transition-[box-shadow,transform] motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-300 motion-safe:fill-mode-backwards hover:shadow-[0_20px_40px_-28px_rgba(15,32,86,0.5)] sm:p-5"
             style={{ animationDelay: `${Math.min(index, 7) * 50}ms` }}
         >
             {/* Rider */}
@@ -88,14 +88,22 @@ export default function AssignmentCard({
                     </span>
                     <AssignmentCancel assignment={assignment} />
                 </p>
-                {assignment.failureReason ? (
-                    <p className="rounded-xl bg-destructive/8 px-3 py-2 text-xs leading-relaxed text-destructive ring-1 ring-destructive/15 ring-inset">
-                        <span className="font-heading font-bold">
-                            Failed:{" "}
-                        </span>
-                        {assignment.failureReason}
-                    </p>
-                ) : null}
+                <div
+                    aria-hidden={!assignment.failureReason}
+                    className="h-16 shrink-0"
+                >
+                    {assignment.failureReason ? (
+                        <p
+                            title={assignment.failureReason}
+                            className="line-clamp-3 h-full overflow-hidden rounded-xl bg-destructive/8 px-3 py-2 text-xs leading-relaxed text-destructive ring-1 ring-destructive/15 ring-inset"
+                        >
+                            <span className="font-heading font-bold">
+                                Failed:{" "}
+                            </span>
+                            {assignment.failureReason}
+                        </p>
+                    ) : null}
+                </div>
             </div>
         </article>
     );
