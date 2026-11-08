@@ -355,10 +355,7 @@ function RiderEditCard({ profile }: { profile: RiderProfileData }) {
                                                     htmlFor={field.name}
                                                     className="font-heading font-bold text-secondary"
                                                 >
-                                                    Address{" "}
-                                                    <span className="font-medium text-secondary/45">
-                                                        (optional)
-                                                    </span>
+                                                    Address
                                                 </FieldLabel>
                                                 <div className="relative">
                                                     <MapPin

@@ -165,13 +165,13 @@ export default function MyAssignmentCard({
         ? parcel.pickupContactPhone
         : parcel.recipientPhone;
     const address = isPickup
-        ? `${parcel.pickupAddressLine}, ${parcel.pickupDistrict}, ${parcel.pickupCity}`
-        : `${parcel.deliveryAddressLine}, ${parcel.deliveryDistrict}, ${parcel.deliveryCity}`;
+        ? `${parcel.pickupAddressLine}, ${parcel.pickupCity}, ${parcel.pickupDistrict}`
+        : `${parcel.deliveryAddressLine}, ${parcel.deliveryCity}, ${parcel.deliveryDistrict}`;
 
     return (
         <article
             aria-label={`Assignment ${parcel.trackingId}`}
-            className="flex min-w-0 flex-col rounded-2xl bg-card p-4 ring-1 ring-secondary/10 transition-[box-shadow,transform] motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-300 motion-safe:fill-mode-backwards hover:shadow-[0_20px_40px_-28px_rgba(15,32,86,0.5)] sm:p-5"
+            className="flex h-full min-w-0 flex-col rounded-2xl bg-card p-4 ring-1 ring-secondary/10 transition-[box-shadow,transform] motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-300 motion-safe:fill-mode-backwards hover:shadow-[0_20px_40px_-28px_rgba(15,32,86,0.5)] sm:p-5"
             style={{ animationDelay: `${Math.min(index, 7) * 50}ms` }}
         >
             {/* Status row */}
@@ -244,7 +244,7 @@ export default function MyAssignmentCard({
             ) : null}
 
             {/* Next-step actions */}
-            <div className="mt-3 border-t border-secondary/8 pt-3">
+            <div className="mt-auto border-t border-secondary/8 pt-3">
                 <AnimatePresence mode="wait" initial={false}>
                     {assignment.status === "ASSIGNED" ? (
                         confirming === "reject" ? (

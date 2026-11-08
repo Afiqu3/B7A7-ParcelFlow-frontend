@@ -158,7 +158,7 @@ export default function AdminParcelCard({
                         {parcel.recipientName}
                     </span>
                     <span className="block truncate">
-                        {parcel.deliveryDistrict}, {parcel.deliveryCity}
+                        {parcel?.deliveryCity?.district?.name}, {parcel?.deliveryCity?.name}
                     </span>
                 </span>
             </p>

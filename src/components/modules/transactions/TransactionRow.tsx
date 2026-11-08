@@ -27,7 +27,7 @@ export default function TransactionRow({
 
     return (
         <li
-            className="flex min-w-0 flex-col gap-2.5 px-5 py-4 transition-colors motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-300 motion-safe:fill-mode-backwards hover:bg-secondary/[0.03] sm:flex-row sm:items-center sm:gap-4 sm:px-6"
+            className="flex min-w-0 flex-col gap-2.5 px-5 py-4 transition-colors motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-300 motion-safe:fill-mode-backwards hover:bg-secondary/3 sm:flex-row sm:items-center sm:gap-4 sm:px-6"
             style={{ animationDelay: `${Math.min(index, 7) * 50}ms` }}
         >
             <span className="grid size-10 shrink-0 place-items-center self-start rounded-xl bg-brand/8 text-brand ring-1 ring-brand/10 ring-inset sm:self-center">

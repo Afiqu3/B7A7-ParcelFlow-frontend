@@ -1,9 +1,11 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
-import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import {
+    Check,
     CheckCircle2,
+    ChevronDown,
+    ChevronUp,
     Loader2,
     Mail,
     MapPinned,
@@ -15,11 +17,12 @@ import {
     UserRound,
     Wallet,
 } from "lucide-react";
-import { useState, type ReactNode } from "react";
-import { toast } from "sonner";
+import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import type { FetchError } from "ofetch";
+import { Select as SelectPrimitive } from "radix-ui";
+import { type ReactNode, useState } from "react";
+import { toast } from "sonner";
 import type z from "zod";
-import SegmentedControl from "@/components/modules/pricing/SegmentedControl";
 import {
     CATEGORIES,
     CATEGORY_ORDER,
@@ -27,10 +30,14 @@ import {
     PICKUP_METHODS,
     SPEED_ORDER,
     SPEEDS,
-    ZONE_ORDER,
-    ZONES,
 } from "@/components/modules/pricing/pricing-meta";
-import { useCreateParcel } from "@/hooks";
+import SegmentedControl from "@/components/modules/pricing/SegmentedControl";
+import {
+    useCreateParcel,
+    useGetAllCities,
+    useGetAllDistricts,
+    useGetAllDivisions,
+} from "@/hooks";
 import type { CreateParcelPayload } from "@/types";
 import {
     CreateParcelZodValidationSchema,
@@ -38,8 +45,11 @@ import {
     ParcelCategory,
     PaymentType,
     PickupMode,
-    ZoneType,
 } from "@/validation";
+import { Button } from "../ui/button";
+import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 import {
     containerVariants,
     errorMotion,
@@ -47,10 +57,6 @@ import {
     labelSwapMotion,
     useShake,
 } from "./form-motion";
-import { Button } from "../ui/button";
-import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
 
 type ParcelFormValues = Omit<
     z.input<typeof CreateParcelZodValidationSchema>,
@@ -66,6 +72,13 @@ const inputClass =
 
 const textAreaClass =
     "min-h-20 rounded-xl border-secondary/15 bg-background text-secondary shadow-none placeholder:text-secondary/40 focus-visible:border-brand-orange focus-visible:ring-3 focus-visible:ring-brand-orange/30 aria-invalid:border-destructive/60";
+
+const LOCATION_PARAMS = { page: 1, limit: 100 };
+
+type LocationOption = {
+    id: string;
+    name: string;
+};
 
 /** Empty or invalid decimal text → undefined (never NaN: NaN breaks
  *  referential equality in store selectors, and the schema reports
@@ -179,21 +192,141 @@ function FieldShell({
     );
 }
 
+function LocationSelect({
+    name,
+    label,
+    value,
+    options,
+    placeholder,
+    disabled,
+    isLoading,
+    isError,
+    invalid = false,
+    errors = [],
+    onChange,
+    onBlur,
+    onRetry,
+}: {
+    name: string;
+    label: string;
+    value: string;
+    options: LocationOption[];
+    placeholder: string;
+    disabled?: boolean;
+    isLoading?: boolean;
+    isError?: boolean;
+    invalid?: boolean;
+    errors?: React.ComponentProps<typeof FieldError>["errors"];
+    onChange: (value: string) => void;
+    onBlur?: () => void;
+    onRetry?: () => void;
+}) {
+    return (
+        <FieldShell
+            label={label}
+            htmlFor={name}
+            invalid={invalid}
+            errors={errors}
+        >
+            <SelectPrimitive.Root
+                value={value}
+                onValueChange={onChange}
+                disabled={disabled || isLoading || isError}
+            >
+                <SelectPrimitive.Trigger
+                    id={name}
+                    name={name}
+                    onBlur={onBlur}
+                    aria-invalid={invalid || isError}
+                    aria-busy={isLoading}
+                    className="group flex h-11 w-full items-center justify-between gap-3 rounded-xl border border-secondary/15 bg-background px-3.5 text-left text-sm text-secondary shadow-sm outline-none transition-[border-color,box-shadow,background-color] hover:border-secondary/25 hover:bg-accent/35 focus-visible:border-brand-orange focus-visible:ring-3 focus-visible:ring-brand-orange/25 aria-invalid:border-destructive/60 aria-invalid:focus-visible:ring-destructive/20 disabled:cursor-not-allowed disabled:opacity-55"
+                >
+                    <SelectPrimitive.Value placeholder={placeholder} />
+                    <SelectPrimitive.Icon asChild>
+                        <ChevronDown
+                            aria-hidden
+                            className="size-4 shrink-0 text-secondary/45 transition-transform duration-200 group-data-[state=open]:rotate-180 group-hover:text-brand-orange-ink"
+                        />
+                    </SelectPrimitive.Icon>
+                </SelectPrimitive.Trigger>
+                <SelectPrimitive.Portal>
+                    <SelectPrimitive.Content
+                        position="popper"
+                        sideOffset={6}
+                        collisionPadding={12}
+                        className="z-50 max-h-[min(20rem,var(--radix-select-content-available-height))] min-w-(--radix-select-trigger-width) overflow-hidden rounded-xl border border-secondary/10 bg-popover text-popover-foreground shadow-xl ring-1 ring-secondary/8 data-[state=closed]:animate-out data-[state=open]:animate-in data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95"
+                    >
+                        <SelectPrimitive.ScrollUpButton className="flex h-8 cursor-default items-center justify-center bg-popover text-secondary/50">
+                            <ChevronUp aria-hidden className="size-4" />
+                        </SelectPrimitive.ScrollUpButton>
+                        <SelectPrimitive.Viewport className="max-h-[min(20rem,var(--radix-select-content-available-height))] overflow-y-auto p-1.5">
+                            {options.map((option) => (
+                                <SelectPrimitive.Item
+                                    key={option.id}
+                                    value={option.id}
+                                    textValue={option.name}
+                                    className="relative flex min-h-10 cursor-default items-center rounded-lg py-2 pr-9 pl-3 font-heading text-[13px] font-semibold text-secondary outline-none transition-colors data-highlighted:bg-brand/8 data-highlighted:text-secondary data-[state=checked]:bg-brand-orange/10 data-[state=checked]:text-brand-orange-ink"
+                                >
+                                    <SelectPrimitive.ItemText>
+                                        {option.name}
+                                    </SelectPrimitive.ItemText>
+                                    <span className="absolute right-3 flex size-4 items-center justify-center text-brand-orange-ink">
+                                        <SelectPrimitive.ItemIndicator>
+                                            <Check
+                                                aria-hidden
+                                                className="size-4"
+                                                strokeWidth={2.5}
+                                            />
+                                        </SelectPrimitive.ItemIndicator>
+                                    </span>
+                                </SelectPrimitive.Item>
+                            ))}
+                        </SelectPrimitive.Viewport>
+                        <SelectPrimitive.ScrollDownButton className="flex h-8 cursor-default items-center justify-center bg-popover text-secondary/50">
+                            <ChevronDown aria-hidden className="size-4" />
+                        </SelectPrimitive.ScrollDownButton>
+                    </SelectPrimitive.Content>
+                </SelectPrimitive.Portal>
+            </SelectPrimitive.Root>
+            {isLoading ? (
+                <output className="text-xs text-secondary/55">
+                    Loading {label.toLowerCase()}...
+                </output>
+            ) : null}
+            {isError ? (
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                    <p role="alert" className="text-xs text-destructive">
+                        Could not load {label.toLowerCase()}.
+                    </p>
+                    {onRetry ? (
+                        <Button
+                            type="button"
+                            variant="link"
+                            size="sm"
+                            onClick={onRetry}
+                            className="h-auto p-0 text-xs text-brand-orange"
+                        >
+                            Try again
+                        </Button>
+                    ) : null}
+                </div>
+            ) : null}
+        </FieldShell>
+    );
+}
+
 const defaultValues: ParcelFormValues = {
     pickupContactName: "",
     pickupContactPhone: "",
     pickupAddressLine: "",
-    pickupDistrict: "",
-    pickupCity: "",
+    pickupCityId: "",
     pickupMode: PickupMode.RIDER_PICKUP,
     note: "",
     recipientName: "",
     recipientPhone: "",
     recipientEmail: "",
     deliveryAddressLine: "",
-    deliveryDistrict: "",
-    deliveryCity: "",
-    deliveryZoneType: ZoneType.INSIDE_CITY,
+    deliveryCityId: "",
     parcelCategory: ParcelCategory.PARCEL,
     weightKg: 1,
     itemDescription: "",
@@ -219,7 +352,33 @@ function extractTrackingRef(res: unknown): string | null {
 export default function CreateParcelForm() {
     const [formScope, shakeForm] = useShake<HTMLFormElement>();
     const [bookingRef, setBookingRef] = useState<string | null>(null);
+    const [pickupDivisionId, setPickupDivisionId] = useState("");
+    const [pickupDistrictId, setPickupDistrictId] = useState("");
+    const [deliveryDivisionId, setDeliveryDivisionId] = useState("");
+    const [deliveryDistrictId, setDeliveryDistrictId] = useState("");
     const { mutate: create, isPending } = useCreateParcel();
+    const divisionsQuery = useGetAllDivisions();
+    const pickupDistrictsQuery = useGetAllDistricts(
+        pickupDivisionId,
+        LOCATION_PARAMS,
+    );
+    const pickupCitiesQuery = useGetAllCities(
+        pickupDistrictId,
+        LOCATION_PARAMS,
+    );
+    const deliveryDistrictsQuery = useGetAllDistricts(
+        deliveryDivisionId,
+        LOCATION_PARAMS,
+    );
+    const deliveryCitiesQuery = useGetAllCities(
+        deliveryDistrictId,
+        LOCATION_PARAMS,
+    );
+    const divisions = divisionsQuery.data?.data ?? [];
+    const pickupDistricts = pickupDistrictsQuery.data?.data ?? [];
+    const pickupCities = pickupCitiesQuery.data?.data ?? [];
+    const deliveryDistricts = deliveryDistrictsQuery.data?.data ?? [];
+    const deliveryCities = deliveryCitiesQuery.data?.data ?? [];
 
     const form = useForm({
         defaultValues,
@@ -242,17 +401,14 @@ export default function CreateParcelForm() {
                 pickupContactName: value.pickupContactName.trim(),
                 pickupContactPhone: value.pickupContactPhone.trim(),
                 pickupAddressLine: value.pickupAddressLine.trim(),
-                pickupDistrict: value.pickupDistrict.trim(),
-                pickupCity: value.pickupCity.trim(),
+                pickupCityId: value.pickupCityId,
                 pickupMode: value.pickupMode ?? PickupMode.RIDER_PICKUP,
                 note: value.note?.trim() || undefined,
                 recipientName: value.recipientName.trim(),
                 recipientPhone: value.recipientPhone.trim(),
                 recipientEmail: value.recipientEmail.trim(),
                 deliveryAddressLine: value.deliveryAddressLine.trim(),
-                deliveryDistrict: value.deliveryDistrict.trim(),
-                deliveryCity: value.deliveryCity.trim(),
-                deliveryZoneType: value.deliveryZoneType,
+                deliveryCityId: value.deliveryCityId,
                 parcelCategory: value.parcelCategory,
                 weightKg: value.weightKg,
                 itemDescription: value.itemDescription.trim(),
@@ -286,6 +442,10 @@ export default function CreateParcelForm() {
                     });
                     setBookingRef(extractTrackingRef(res));
                     form.reset();
+                    setPickupDivisionId("");
+                    setPickupDistrictId("");
+                    setDeliveryDivisionId("");
+                    setDeliveryDistrictId("");
                 },
                 onError: (err: FetchError) => {
                     shakeForm();
@@ -487,79 +647,72 @@ export default function CreateParcelForm() {
                                     }}
                                 </form.Field>
 
-                                <div className="grid gap-5 sm:grid-cols-2">
-                                    <form.Field name="pickupDistrict">
-                                        {(field) => {
-                                            const isInvalid =
-                                                field.state.meta.isTouched &&
-                                                !field.state.meta.isValid;
-                                            return (
-                                                <FieldShell
-                                                    label="District"
-                                                    htmlFor={field.name}
-                                                    invalid={isInvalid}
-                                                    errors={
-                                                        field.state.meta.errors
-                                                    }
-                                                >
-                                                    <Input
-                                                        id={field.name}
-                                                        name={field.name}
-                                                        placeholder="e.g. Dhaka"
-                                                        value={
-                                                            field.state.value
-                                                        }
-                                                        onChange={(e) =>
-                                                            field.handleChange(
-                                                                e.target.value,
-                                                            )
-                                                        }
-                                                        onBlur={
-                                                            field.handleBlur
-                                                        }
-                                                        aria-invalid={isInvalid}
-                                                        className={inputClass}
-                                                    />
-                                                </FieldShell>
-                                            );
+                                <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                                    <LocationSelect
+                                        name="pickupDivisionId"
+                                        label="Division"
+                                        value={pickupDivisionId}
+                                        options={divisions}
+                                        placeholder="Select a division"
+                                        isLoading={divisionsQuery.isLoading}
+                                        isError={divisionsQuery.isError}
+                                        onRetry={() => divisionsQuery.refetch()}
+                                        onChange={(divisionId) => {
+                                            setPickupDivisionId(divisionId);
+                                            setPickupDistrictId("");
+                                            form.setFieldValue("pickupCityId", "");
                                         }}
-                                    </form.Field>
+                                    />
 
-                                    <form.Field name="pickupCity">
-                                        {(field) => {
-                                            const isInvalid =
-                                                field.state.meta.isTouched &&
-                                                !field.state.meta.isValid;
-                                            return (
-                                                <FieldShell
-                                                    label="City"
-                                                    htmlFor={field.name}
-                                                    invalid={isInvalid}
-                                                    errors={
-                                                        field.state.meta.errors
-                                                    }
-                                                >
-                                                    <Input
-                                                        id={field.name}
-                                                        name={field.name}
-                                                        placeholder="e.g. Dhaka"
-                                                        value={
-                                                            field.state.value
-                                                        }
-                                                        onChange={(e) =>
-                                                            field.handleChange(
-                                                                e.target.value,
-                                                            )
-                                                        }
-                                                        onBlur={
-                                                            field.handleBlur
-                                                        }
-                                                        aria-invalid={isInvalid}
-                                                        className={inputClass}
-                                                    />
-                                                </FieldShell>
-                                            );
+                                    <LocationSelect
+                                        name="pickupDistrictId"
+                                        label="District"
+                                        value={pickupDistrictId}
+                                        options={pickupDistricts}
+                                        placeholder={
+                                            pickupDivisionId
+                                                ? "Select a district"
+                                                : "Select a division first"
+                                        }
+                                        disabled={!pickupDivisionId}
+                                        isLoading={pickupDistrictsQuery.isLoading}
+                                        isError={pickupDistrictsQuery.isError}
+                                        onRetry={() =>
+                                            pickupDistrictsQuery.refetch()
+                                        }
+                                        onChange={(districtId) => {
+                                            setPickupDistrictId(districtId);
+                                            form.setFieldValue("pickupCityId", "");
                                         }}
+                                    />
+
+                                    <form.Field name="pickupCityId">
+                                        {(field) => (
+                                            <LocationSelect
+                                                name={field.name}
+                                                label="City"
+                                                value={field.state.value}
+                                                options={pickupCities}
+                                                placeholder={
+                                                    pickupDistrictId
+                                                        ? "Select a city"
+                                                        : "Select a district first"
+                                                }
+                                                disabled={!pickupDistrictId}
+                                                isLoading={pickupCitiesQuery.isLoading}
+                                                isError={pickupCitiesQuery.isError}
+                                                invalid={
+                                                    field.state.meta.isTouched &&
+                                                    !field.state.meta.isValid
+                                                }
+                                                errors={field.state.meta.errors}
+                                                onRetry={() =>
+                                                    pickupCitiesQuery.refetch()
+                                                }
+                                                onChange={field.handleChange}
+                                                onBlur={field.handleBlur}
+                                            />
+                                        )}
                                     </form.Field>
                                 </div>
 
@@ -826,115 +979,74 @@ export default function CreateParcelForm() {
                                     }}
                                 </form.Field>
 
-                                <div className="grid gap-5 sm:grid-cols-2">
-                                    <form.Field name="deliveryDistrict">
-                                        {(field) => {
-                                            const isInvalid =
-                                                field.state.meta.isTouched &&
-                                                !field.state.meta.isValid;
-                                            return (
-                                                <FieldShell
-                                                    label="District"
-                                                    htmlFor={field.name}
-                                                    invalid={isInvalid}
-                                                    errors={
-                                                        field.state.meta.errors
-                                                    }
-                                                >
-                                                    <Input
-                                                        id={field.name}
-                                                        name={field.name}
-                                                        placeholder="e.g. Chattogram"
-                                                        value={
-                                                            field.state.value
-                                                        }
-                                                        onChange={(e) =>
-                                                            field.handleChange(
-                                                                e.target.value,
-                                                            )
-                                                        }
-                                                        onBlur={
-                                                            field.handleBlur
-                                                        }
-                                                        aria-invalid={isInvalid}
-                                                        className={inputClass}
-                                                    />
-                                                </FieldShell>
-                                            );
+                                <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                                    <LocationSelect
+                                        name="deliveryDivisionId"
+                                        label="Division"
+                                        value={deliveryDivisionId}
+                                        options={divisions}
+                                        placeholder="Select a division"
+                                        isLoading={divisionsQuery.isLoading}
+                                        isError={divisionsQuery.isError}
+                                        onRetry={() => divisionsQuery.refetch()}
+                                        onChange={(divisionId) => {
+                                            setDeliveryDivisionId(divisionId);
+                                            setDeliveryDistrictId("");
+                                            form.setFieldValue("deliveryCityId", "");
                                         }}
-                                    </form.Field>
+                                    />
 
-                                    <form.Field name="deliveryCity">
-                                        {(field) => {
-                                            const isInvalid =
-                                                field.state.meta.isTouched &&
-                                                !field.state.meta.isValid;
-                                            return (
-                                                <FieldShell
-                                                    label="City"
-                                                    htmlFor={field.name}
-                                                    invalid={isInvalid}
-                                                    errors={
-                                                        field.state.meta.errors
-                                                    }
-                                                >
-                                                    <Input
-                                                        id={field.name}
-                                                        name={field.name}
-                                                        placeholder="e.g. Chattogram"
-                                                        value={
-                                                            field.state.value
-                                                        }
-                                                        onChange={(e) =>
-                                                            field.handleChange(
-                                                                e.target.value,
-                                                            )
-                                                        }
-                                                        onBlur={
-                                                            field.handleBlur
-                                                        }
-                                                        aria-invalid={isInvalid}
-                                                        className={inputClass}
-                                                    />
-                                                </FieldShell>
-                                            );
+                                    <LocationSelect
+                                        name="deliveryDistrictId"
+                                        label="District"
+                                        value={deliveryDistrictId}
+                                        options={deliveryDistricts}
+                                        placeholder={
+                                            deliveryDivisionId
+                                                ? "Select a district"
+                                                : "Select a division first"
+                                        }
+                                        disabled={!deliveryDivisionId}
+                                        isLoading={deliveryDistrictsQuery.isLoading}
+                                        isError={deliveryDistrictsQuery.isError}
+                                        onRetry={() =>
+                                            deliveryDistrictsQuery.refetch()
+                                        }
+                                        onChange={(districtId) => {
+                                            setDeliveryDistrictId(districtId);
+                                            form.setFieldValue("deliveryCityId", "");
                                         }}
+                                    />
+
+                                    <form.Field name="deliveryCityId">
+                                        {(field) => (
+                                            <LocationSelect
+                                                name={field.name}
+                                                label="City"
+                                                value={field.state.value}
+                                                options={deliveryCities}
+                                                placeholder={
+                                                    deliveryDistrictId
+                                                        ? "Select a city"
+                                                        : "Select a district first"
+                                                }
+                                                disabled={!deliveryDistrictId}
+                                                isLoading={deliveryCitiesQuery.isLoading}
+                                                isError={deliveryCitiesQuery.isError}
+                                                invalid={
+                                                    field.state.meta.isTouched &&
+                                                    !field.state.meta.isValid
+                                                }
+                                                errors={field.state.meta.errors}
+                                                onRetry={() =>
+                                                    deliveryCitiesQuery.refetch()
+                                                }
+                                                onChange={field.handleChange}
+                                                onBlur={field.handleBlur}
+                                            />
+                                        )}
                                     </form.Field>
                                 </div>
-
-                                <form.Field name="deliveryZoneType">
-                                    {(field) => (
-                                        <FieldShell
-                                            label="Delivery zone"
-                                            htmlFor={field.name}
-                                            invalid={
-                                                field.state.meta.isTouched &&
-                                                !field.state.meta.isValid
-                                            }
-                                            errors={field.state.meta.errors}
-                                            hint={
-                                                ZONES[field.state.value]
-                                                    ?.description
-                                            }
-                                        >
-                                            <SegmentedControl
-                                                aria-label="Delivery zone"
-                                                value={field.state.value}
-                                                onValueChange={(next) => {
-                                                    field.handleChange(next);
-                                                    field.handleBlur();
-                                                }}
-                                                options={ZONE_ORDER.map(
-                                                    (zone) => ({
-                                                        value: zone,
-                                                        label: ZONES[zone]
-                                                            .label,
-                                                    }),
-                                                )}
-                                            />
-                                        </FieldShell>
-                                    )}
-                                </form.Field>
                             </Section>
 
                             {/* ── 3 · Parcel ─────────────────────────── */}

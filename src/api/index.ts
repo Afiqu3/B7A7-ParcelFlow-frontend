@@ -1,6 +1,7 @@
 export * from "./admin.api";
 export * from "./assignment.api";
 export * from "./auth.api";
+export * from "./location.api";
 export * from "./merchant.api";
 export * from "./parcel.api";
 export * from "./pricing.api";

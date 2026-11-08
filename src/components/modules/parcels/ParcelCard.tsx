@@ -55,11 +55,12 @@ export default function ParcelCard({
 }) {
     const { copiedId, copy } = useCopyTracking();
     const copied = copiedId === parcel.id;
+    const paymentRequired = needsPayment(parcel);
 
     return (
         <article
             aria-label={`Parcel ${parcel.trackingId}`}
-            className="flex min-w-0 flex-col rounded-2xl bg-card p-4 ring-1 ring-secondary/10 transition-[box-shadow,transform] motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-300 motion-safe:fill-mode-backwards hover:shadow-[0_20px_40px_-28px_rgba(15,32,86,0.5)] sm:p-5"
+            className="flex h-full min-w-0 flex-col rounded-2xl bg-card p-4 ring-1 ring-secondary/10 transition-[box-shadow,transform] motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-300 motion-safe:fill-mode-backwards hover:shadow-[0_20px_40px_-28px_rgba(15,32,86,0.5)] sm:p-5"
             style={{ animationDelay: `${Math.min(index, 7) * 50}ms` }}
         >
             {/* Tracking + copy */}
@@ -112,13 +113,13 @@ export default function ParcelCard({
                         {parcel.recipientName}
                     </span>
                     <span className="block truncate">
-                        {parcel.deliveryDistrict}, {parcel.deliveryCity}
+                        {parcel?.deliveryCity?.district.name}, {parcel?.deliveryCity?.name}
                     </span>
                 </span>
             </p>
 
             {/* Charge + date */}
-            <div className="mt-3 flex items-end justify-between gap-2 border-t border-secondary/8 pt-3">
+            <div className="mt-auto flex items-end justify-between gap-2 border-t border-secondary/8 pt-3">
                 <div className="min-w-0 flex-1">
                     <p className="font-heading text-lg leading-none font-extrabold tracking-tight text-secondary">
                         {formatTaka(parcel.totalCharge)}
@@ -153,7 +154,7 @@ export default function ParcelCard({
                     </Button>
                 </span>
             </div>
-            {needsPayment(parcel) ? (
+            {paymentRequired ? (
                 <ParcelPayNowButton
                     parcelId={parcel.id}
                     trackingId={parcel.trackingId}

@@ -30,8 +30,7 @@ export interface CreateParcelPayload {
     pickupContactName: string;
     pickupContactPhone: string;
     pickupAddressLine: string;
-    pickupDistrict: string;
-    pickupCity: string;
+    pickupCityId: string;
     pickupMode?: PickupMode; // defaults to RIDER_PICKUP
     note?: string;
 
@@ -40,11 +39,7 @@ export interface CreateParcelPayload {
     recipientPhone: string;
     recipientEmail: string;
     deliveryAddressLine: string;
-    deliveryDistrict: string;
-    deliveryCity: string;
-    // Zone that pricing is resolved against. Supplied by the client for now;
-    // can later be derived server-side from delivery district/city.
-    deliveryZoneType: ZoneType;
+    deliveryCityId: string;
 
     // ── Shipment / item ───────────────────────────────────────
     parcelCategory: ParcelCategory;
@@ -68,15 +63,23 @@ export interface Parcel {
     pickupContactPhone: string;
     pickupAddressLine: string;
     pickupMode: PickupMode;
-    pickupDistrict: string;
-    pickupCity: string;
+    pickupCity: {
+        name: string;
+        district: {
+            name: string;
+        };
+    };
     note?: string;
     recipientName: string;
     recipientPhone: string;
     recipientEmail: string;
     deliveryAddressLine: string;
-    deliveryDistrict: string;
-    deliveryCity: string;
+    deliveryCity: {
+        name: string;
+        district: {
+            name: string;
+        };
+    };
     parcelCategory: ParcelCategory;
     weightKg: number;
     itemDescription: string;
@@ -154,5 +157,5 @@ export interface ParcelTrackResponse {
 }
 
 export interface ParcelStatusUpdateByAdminPayload {
-	status: "AT_HUB" | "IN_TRANSIT";
+    status: "AT_HUB" | "IN_TRANSIT";
 }

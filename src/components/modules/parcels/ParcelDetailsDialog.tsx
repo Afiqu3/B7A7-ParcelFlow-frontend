@@ -255,14 +255,14 @@ function ParcelDetailsBody({ parcel }: { parcel: Parcel }) {
 
             <div className="grid gap-5 sm:grid-cols-2">
                 <Block icon={MapPin} title="Pickup">
-                    <dl className="flex flex-col gap-2 rounded-xl bg-secondary/[0.04] p-3.5 ring-1 ring-secondary/8 ring-inset">
+                    <dl className="flex flex-col gap-2 rounded-xl bg-secondary/4 p-3.5 ring-1 ring-secondary/8 ring-inset">
                         <DetailRow
                             label="Contact"
                             value={`${parcel.pickupContactName} · ${parcel.pickupContactPhone}`}
                         />
                         <DetailRow
                             label="Address"
-                            value={`${parcel.pickupAddressLine}, ${parcel.pickupDistrict}, ${parcel.pickupCity}`}
+                            value={`${parcel.pickupAddressLine}, ${parcel.pickupCity?.district?.name}, ${parcel?.pickupCity?.name}`}
                         />
                         <DetailRow
                             label="Mode"
@@ -276,7 +276,7 @@ function ParcelDetailsBody({ parcel }: { parcel: Parcel }) {
                 </Block>
 
                 <Block icon={ArrowRight} title="Delivery">
-                    <dl className="flex flex-col gap-2 rounded-xl bg-secondary/[0.04] p-3.5 ring-1 ring-secondary/8 ring-inset">
+                    <dl className="flex flex-col gap-2 rounded-xl bg-secondary/4 p-3.5 ring-1 ring-secondary/8 ring-inset">
                         <DetailRow
                             label="Recipient"
                             value={`${parcel.recipientName} · ${parcel.recipientPhone}`}
@@ -288,13 +288,13 @@ function ParcelDetailsBody({ parcel }: { parcel: Parcel }) {
                         />
                         <DetailRow
                             label="Address"
-                            value={`${parcel.deliveryAddressLine}, ${parcel.deliveryDistrict}, ${parcel.deliveryCity}`}
+                            value={`${parcel.deliveryAddressLine}, ${parcel?.deliveryCity?.district?.name}, {parcel?.deliveryCity?.name}`}
                         />
                     </dl>
                 </Block>
 
                 <Block icon={Package} title="Parcel">
-                    <dl className="grid grid-cols-2 gap-x-4 gap-y-2 rounded-xl bg-secondary/[0.04] p-3.5 ring-1 ring-secondary/8 ring-inset">
+                    <dl className="grid grid-cols-2 gap-x-4 gap-y-2 rounded-xl bg-secondary/4 p-3.5 ring-1 ring-secondary/8 ring-inset">
                         <DetailRow
                             label="Category"
                             value={CATEGORIES[parcel.parcelCategory].label}
@@ -335,7 +335,7 @@ function ParcelDetailsBody({ parcel }: { parcel: Parcel }) {
                 </Block>
 
                 <Block icon={Banknote} title="Charges">
-                    <dl className="flex flex-col gap-1 rounded-xl bg-secondary/[0.04] p-3.5 text-sm ring-1 ring-secondary/8 ring-inset">
+                    <dl className="flex flex-col gap-1 rounded-xl bg-secondary/4 p-3.5 text-sm ring-1 ring-secondary/8 ring-inset">
                         {charges.map((line) => (
                             <div
                                 key={line.label}
@@ -367,7 +367,7 @@ function ParcelDetailsBody({ parcel }: { parcel: Parcel }) {
 
                 <div className="sm:col-span-2">
                     <Block icon={Wallet} title="Payment">
-                        <dl className="grid grid-cols-2 gap-x-4 gap-y-2 rounded-xl bg-secondary/[0.04] p-3.5 ring-1 ring-secondary/8 ring-inset sm:grid-cols-4">
+                        <dl className="grid grid-cols-2 gap-x-4 gap-y-2 rounded-xl bg-secondary/4 p-3.5 ring-1 ring-secondary/8 ring-inset sm:grid-cols-4">
                             <DetailRow
                                 label="Type"
                                 value={
@@ -443,7 +443,7 @@ function ParcelDetailsBody({ parcel }: { parcel: Parcel }) {
                 (parcel.reattemptCount ?? 0) > 0 ? (
                     <div className="sm:col-span-2">
                         <Block icon={RefreshCw} title="Delivery activity">
-                            <dl className="grid grid-cols-2 gap-x-4 gap-y-2 rounded-xl bg-secondary/[0.04] p-3.5 ring-1 ring-secondary/8 ring-inset sm:grid-cols-4">
+                            <dl className="grid grid-cols-2 gap-x-4 gap-y-2 rounded-xl bg-secondary/4 p-3.5 ring-1 ring-secondary/8 ring-inset sm:grid-cols-4">
                                 {parcel.deliveredAt ? (
                                     <DetailRow
                                         label="Delivered at"

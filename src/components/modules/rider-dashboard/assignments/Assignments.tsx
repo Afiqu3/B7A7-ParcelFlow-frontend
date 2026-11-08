@@ -195,7 +195,7 @@ export default function Assignments() {
                         key={`${status}|${safePage}`}
                         aria-busy={refreshing}
                         className={cn(
-                            "grid grid-cols-1 items-start gap-4 transition-opacity sm:grid-cols-2 xl:grid-cols-3",
+                            "grid auto-rows-fr grid-cols-1 items-stretch gap-4 transition-opacity sm:grid-cols-2 xl:grid-cols-3",
                             refreshing && "opacity-70",
                         )}
                     >
@@ -223,13 +223,13 @@ function AssignmentGridSkeleton() {
     return (
         <div
             aria-hidden
-            className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 xl:grid-cols-3"
+            className="grid auto-rows-fr grid-cols-1 items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-3"
         >
             {Array.from({ length: 6 }).map((_, index) => (
                 <div
                     // biome-ignore lint/suspicious/noArrayIndexKey: static skeleton placeholders
                     key={index}
-                    className="flex flex-col gap-3 rounded-2xl bg-card p-4 ring-1 ring-secondary/10 sm:p-5"
+                    className="flex h-full flex-col gap-3 rounded-2xl bg-card p-4 ring-1 ring-secondary/10 sm:p-5"
                 >
                     <div className="flex gap-1.5">
                         <Skeleton className="h-6 w-24 rounded-full" />

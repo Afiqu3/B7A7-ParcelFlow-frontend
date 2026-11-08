@@ -52,7 +52,7 @@ export default function AssignmentCard({
             </div>
 
             {/* Parcel + leg */}
-            <div className="mt-3 flex flex-col gap-2 border-t border-secondary/8 pt-3 text-[13px]">
+            <div className="mt-3 flex flex-1 flex-col gap-2 border-t border-secondary/8 pt-3 text-[13px]">
                 <p className="flex min-w-0 items-center gap-1.5 text-secondary/70">
                     <Package
                         aria-hidden
@@ -79,23 +79,20 @@ export default function AssignmentCard({
                         {assignment.leg === "PICKUP" ? "Pickup" : "Delivery"}
                     </span>
                 </p>
-                <p className="flex items-center justify-between gap-3 text-xs text-secondary/55">
-                    <span>
-                        Assigned {formatBackendDate(assignment.assignedAt)}
-                        {assignment.attemptNumber > 1
-                            ? ` · attempt ${assignment.attemptNumber}`
-                            : ""}
-                    </span>
-                    <AssignmentCancel assignment={assignment} />
-                </p>
-                <div
-                    aria-hidden={!assignment.failureReason}
-                    className="h-16 shrink-0"
-                >
+                <div className="mt-auto flex flex-col gap-2">
+                    <p className="flex items-center justify-between gap-3 text-xs text-secondary/55">
+                        <span>
+                            Assigned {formatBackendDate(assignment.assignedAt)}
+                            {assignment.attemptNumber > 1
+                                ? ` · attempt ${assignment.attemptNumber}`
+                                : ""}
+                        </span>
+                        <AssignmentCancel assignment={assignment} />
+                    </p>
                     {assignment.failureReason ? (
                         <p
                             title={assignment.failureReason}
-                            className="line-clamp-3 h-full overflow-hidden rounded-xl bg-destructive/8 px-3 py-2 text-xs leading-relaxed text-destructive ring-1 ring-destructive/15 ring-inset"
+                            className="line-clamp-3 max-h-16 overflow-hidden rounded-xl bg-destructive/8 px-3 py-2 text-xs leading-relaxed text-destructive ring-1 ring-destructive/15 ring-inset"
                         >
                             <span className="font-heading font-bold">
                                 Failed:{" "}

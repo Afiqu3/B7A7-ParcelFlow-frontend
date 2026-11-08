@@ -1,9 +1,5 @@
 "use client";
 
-import { Check, Copy, Landmark, ReceiptText, Undo2, Wallet } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
-import type { ReactNode } from "react";
 import {
     Dialog,
     DialogContent,
@@ -14,8 +10,19 @@ import {
 } from "@/components/ui/dialog";
 import { formatTaka } from "@/lib/pricing";
 import { cn } from "@/lib/utils";
-import { formatBackendDate, formatBackendDateTime } from "@/utils";
 import type { Transaction } from "@/types";
+import { formatBackendDateTime } from "@/utils";
+import {
+    Check,
+    Copy,
+    Landmark,
+    ReceiptText,
+    Undo2,
+    Wallet,
+} from "lucide-react";
+import type { ReactNode } from "react";
+import { useState } from "react";
+import { toast } from "sonner";
 import {
     parseTransactionAmount,
     TRANSACTION_STATUS_TONE,
@@ -164,7 +171,7 @@ export default function TransactionDetailsDialog({
 
                         <div className="grid gap-5">
                             <Block icon={ReceiptText} title="Transaction">
-                                <dl className="grid grid-cols-2 gap-x-4 gap-y-2.5 rounded-xl bg-secondary/[0.04] p-3.5 ring-1 ring-secondary/8 ring-inset">
+                                <dl className="grid grid-cols-2 gap-x-4 gap-y-2.5 rounded-xl bg-secondary/4 p-3.5 ring-1 ring-secondary/8 ring-inset">
                                     <DetailRow
                                         label="Transaction ID"
                                         value={transaction.id}
@@ -194,7 +201,7 @@ export default function TransactionDetailsDialog({
                             </Block>
 
                             <Block icon={Landmark} title="Gateway">
-                                <dl className="grid grid-cols-2 gap-x-4 gap-y-2.5 rounded-xl bg-secondary/[0.04] p-3.5 ring-1 ring-secondary/8 ring-inset">
+                                <dl className="grid grid-cols-2 gap-x-4 gap-y-2.5 rounded-xl bg-secondary/4 p-3.5 ring-1 ring-secondary/8 ring-inset">
                                     {transaction.bkashTrxID ? (
                                         <div className="col-span-2 flex items-end justify-between gap-2">
                                             <DetailRow
@@ -219,7 +226,7 @@ export default function TransactionDetailsDialog({
                             {transaction.refundedAmount !== undefined ||
                             transaction.refundReason ? (
                                 <Block icon={Undo2} title="Refund">
-                                    <dl className="grid grid-cols-2 gap-x-4 gap-y-2.5 rounded-xl bg-secondary/[0.04] p-3.5 ring-1 ring-secondary/8 ring-inset">
+                                    <dl className="grid grid-cols-2 gap-x-4 gap-y-2.5 rounded-xl bg-secondary/4 p-3.5 ring-1 ring-secondary/8 ring-inset">
                                         <DetailRow
                                             label="Refunded amount"
                                             value={(() => {
@@ -256,7 +263,7 @@ export default function TransactionDetailsDialog({
                             ) : null}
 
                             <Block icon={Wallet} title="Parcel">
-                                <dl className="grid grid-cols-2 gap-x-4 gap-y-2.5 rounded-xl bg-secondary/[0.04] p-3.5 ring-1 ring-secondary/8 ring-inset">
+                                <dl className="grid grid-cols-2 gap-x-4 gap-y-2.5 rounded-xl bg-secondary/4 p-3.5 ring-1 ring-secondary/8 ring-inset">
                                     <div className="col-span-2 flex items-end justify-between gap-2">
                                         <DetailRow
                                             label="Tracking ID"
