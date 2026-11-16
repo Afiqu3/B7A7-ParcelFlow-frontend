@@ -349,11 +349,16 @@ export default function LoginForm() {
                         </Marker>
                     </motion.div>
 
-                    <motion.div variants={itemVariants}>
-                        <GoogleLoginComponent
-                            text="continue_with"
-                            next={next}
-                        />
+                    <motion.div
+                        variants={itemVariants}
+                        className="flex items-center justify-center"
+                    >
+                        <div className="flex-1">
+                            <GoogleLoginComponent
+                                text="continue_with"
+                                next={next}
+                            />
+                        </div>
                     </motion.div>
 
                     <motion.div variants={itemVariants}>
