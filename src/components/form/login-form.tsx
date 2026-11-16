@@ -357,6 +357,7 @@ export default function LoginForm() {
                             <GoogleLoginComponent
                                 text="continue_with"
                                 next={next}
+                                fullWidth
                             />
                         </div>
                     </motion.div>
